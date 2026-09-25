@@ -32,10 +32,10 @@ export default function ContactForm() {
   }
 
   const inputClass =
-    'w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/30'
+    'w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-app/50 focus:outline-none focus:ring-2 focus:ring-app/30'
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-lg space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="name" className="mb-1 block text-sm font-medium text-slate-300">
           Name
@@ -81,14 +81,14 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === 'sending'}
-        className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-indigo-500 to-cyan-500 px-4 py-2.5 text-sm font-medium text-white transition-transform hover:scale-[1.02] disabled:opacity-60"
+        className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-app to-data px-5 py-2.5 text-sm font-semibold text-ink transition-transform hover:scale-[1.02] disabled:opacity-60"
       >
         {status === 'sending' ? 'Sending…' : 'Send message'}
       </button>
       {status === 'success' && (
-        <p className="text-sm text-emerald-400">Thanks — your message has been sent. I&apos;ll get back to you soon.</p>
+        <p role="status" className="text-sm text-emerald-400">Thanks — your message has been sent. I&apos;ll get back to you soon.</p>
       )}
-      {status === 'error' && <p className="text-sm text-red-400">{errorMsg}</p>}
+      {status === 'error' && <p role="alert" className="text-sm text-red-400">{errorMsg}</p>}
     </form>
   )
 }

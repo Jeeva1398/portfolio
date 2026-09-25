@@ -1,1 +1,14 @@
 node_modules/
+
+# Build output - made by `npm run build`, deployed from there, never committed.
+dist/
+
+# Secrets.
+.env
+.env.*
+!.env.example
+
+# Contact-form submissions: visitors' names, emails and messages.
+server/data/
+
+*.log

@@ -1,27 +1,42 @@
+import StatusBadge from './StatusBadge'
+import Tilt from './Tilt'
+
+const TRACK = {
+  app: { label: 'Application stack', dot: 'bg-app', text: 'text-app', glare: 'rgb(34 211 238 / 0.12)', ring: 'hover:border-app/30' },
+  data: { label: 'Data stack', dot: 'bg-data', text: 'text-data', glare: 'rgb(167 139 250 / 0.14)', ring: 'hover:border-data/30' },
+  tools: { label: 'Workflow', dot: 'bg-slate-400', text: 'text-slate-400', glare: 'rgb(148 163 184 / 0.10)', ring: 'hover:border-white/20' },
+}
+
 export default function SkillGroup({ group }) {
+  const track = TRACK[group.track] ?? TRACK.tools
   const isBuilding = group.status === 'building'
+
   return (
-    <div className="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-      <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-slate-100">{group.title}</h3>
-        {isBuilding && (
-          <span className="rounded bg-amber-400/10 px-2 py-0.5 text-xs font-medium text-amber-400">
-            Building
-          </span>
-        )}
+    <Tilt className={`group glass rounded-2xl p-6 transition-colors ${track.ring}`} glare={track.glare}>
+      <div style={{ transform: 'translateZ(24px)' }}>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className={`flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider ${track.text}`}>
+              <span className={`h-1.5 w-1.5 rounded-full ${track.dot}`} aria-hidden="true" />
+              {track.label}
+            </p>
+            <h3 className="mt-2 font-display text-lg font-semibold text-slate-100">{group.title}</h3>
+          </div>
+          <StatusBadge status={isBuilding ? 'Building' : 'Proven'} />
+        </div>
+        <ul className="mt-4 flex flex-wrap gap-2">
+          {group.items.map((item) => (
+            <li
+              key={item}
+              className={`chip border ${
+                isBuilding ? 'border-build/20 bg-build/5 text-amber-100' : 'border-white/10 bg-white/5 text-slate-200'
+              }`}
+            >
+              {item}
+            </li>
+          ))}
+        </ul>
       </div>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {group.items.map((item) => (
-          <span
-            key={item}
-            className={`rounded-md px-2.5 py-1 text-sm ${
-              isBuilding ? 'bg-amber-400/10 text-amber-300' : 'bg-white/5 text-slate-300'
-            }`}
-          >
-            {item}
-          </span>
-        ))}
-      </div>
-    </div>
+    </Tilt>
   )
 }

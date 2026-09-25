@@ -1,4 +1,22 @@
 @import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/jetbrains-mono";
+
+/* Two tracks, two accents: cyan = application stack, violet = data stack, amber = "building" */
+@theme {
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Space Grotesk Variable", "Inter Variable", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-ink: #04060c;
+  --color-panel: #0a0f1c;
+  --color-app: #22d3ee;
+  --color-app-soft: #67e8f9;
+  --color-data: #a78bfa;
+  --color-data-soft: #c4b5fd;
+  --color-build: #fbbf24;
+}
 
 :root {
   color-scheme: dark;
@@ -6,13 +24,16 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  background: #020617;
-  color: #e2e8f0;
+  font-family: var(--font-sans);
+  background: var(--color-ink);
+  color: #cbd5e1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 #root {
@@ -21,8 +42,67 @@ body {
   flex-direction: column;
 }
 
+::selection {
+  background: rgb(34 211 238 / 0.3);
+  color: #f8fafc;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-app);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@layer components {
+  .glass {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.055), rgb(255 255 255 / 0.02));
+    border: 1px solid rgb(255 255 255 / 0.08);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .section {
+    position: relative;
+    margin-inline: auto;
+    width: 100%;
+    max-width: 72rem;
+    padding: 6rem 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .section {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+  }
+}
+
+/* Faint blueprint grid behind the whole page */
+.grid-overlay {
+  background-image:
+    linear-gradient(rgb(148 163 184 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(148 163 184 / 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 75%);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

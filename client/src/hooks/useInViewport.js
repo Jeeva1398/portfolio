@@ -1,0 +1,18 @@
+import { useEffect, useState } from 'react'
+
+// True while the element is on screen — used to pause 3D render loops that aren't visible.
+export default function useInViewport(ref, rootMargin = '100px') {
+  const [inView, setInView] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), {
+      rootMargin,
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [ref, rootMargin])
+
+  return inView
+}
