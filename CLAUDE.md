@@ -22,7 +22,7 @@ Both tracks must be equally easy to find. A recruiter for either role should und
 - Content lives in `client/src/data/content.js` (skills, projects, architecture layers). Edit data there, not in components.
 
 ## Commands
-- `npm run install:all` then `npm run dev` from the repo root (Vite client on :5173, Express API on :5000).
+- `npm run install:all` then `npm run dev` from the repo root (Vite client on :5173). Needs `client/.env.local` with the ZenithDesk widget key for the contact form and chat.
 - `npm run build --prefix client`, `npm run lint --prefix client` (oxlint).
 
 ---
@@ -159,7 +159,7 @@ Must work on desktop, laptop, tablet, and mobile. On mobile, simplify the 3D exp
 ---
 
 ## Existing Portfolio Inventory (Step 0, done 2026-09-24)
-- **Framework / deps:** MERN monorepo. `client/`: React 19, Vite 8, Tailwind v4, Framer Motion, three + R3F + Drei, oxlint. `server/`: Express 5 with `/api/contact` (saves to `server/data/submissions.json`, no email delivery yet) and `/api/projects` (stale summary copy, no longer used by the client).
+- **Framework / deps:** Static site, `client/` only: React 19, Vite 8, Tailwind v4, Framer Motion, three + R3F + Drei, oxlint. No server of its own (removed 2026-09-25): the contact form posts to the ZenithDesk chat server's `POST /enquiries` (`client/src/lib/zenithdesk.js`), which files it as an enquiry, and the ZenithDesk chat widget is loaded on the page. Configured by `VITE_CHATBOT_URL` / `VITE_CHAT_WIDGET_KEY`.
 - **Pages / sections:** single page. Old: Hero, About, Skills, Experience, Projects, Building (ZenithDesk). New: Hero, About, Skills, Experience, Projects, Architecture, Resume, Contact (Building merged into Projects).
 - **Projects:** professional: EMR & Telehealth, CRM, E-commerce (Crackers) with Admin Panel (no public links). Personal: ZenithDesk, ZenithDesk chatbot, E-commerce sales data pipeline (all in progress).
 - **Technologies listed:** see `skillGroups` in `client/src/data/content.js`.
@@ -177,7 +177,7 @@ Must work on desktop, laptop, tablet, and mobile. On mobile, simplify the 3D exp
 - PostgreSQL and Data Warehousing were kept from the old portfolio but not in the owner's confirmed list. Confirm or remove.
 - Contact copy said "June/July 2026 cycle", which has passed; replaced with "Open to backend, full-stack, and data engineering roles". Confirm.
 - Production domain + hosting (needed for canonical URL, og:url, og:image, sitemap.xml).
-- Contact-form email delivery: SMTP/Resend credentials for `server/.env`.
+- Contact-form email delivery: handled by ZenithDesk's enquiry alert email (needs RESEND_API_KEY on the ZenithDesk main app and "Send new enquiries to" set in its Settings → Chatbot).
 - Resume PDF: is it current? Is there a separate Data Engineering resume?
 
 ## Progress Log

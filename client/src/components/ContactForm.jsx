@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import { sendContactMessage } from '../lib/zenithdesk'
 
-const initialState = { name: '', email: '', message: '' }
+const initialState = { name: '', email: '', message: '', website: '' }
 
 export default function ContactForm() {
   const [form, setForm] = useState(initialState)
@@ -16,13 +17,7 @@ export default function ContactForm() {
     setStatus('sending')
     setErrorMsg('')
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Something went wrong')
+      await sendContactMessage(form)
       setStatus('success')
       setForm(initialState)
     } catch (err) {
@@ -36,6 +31,19 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Anti-spam: hidden from people, filled in by bots, and ignored when set. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={form.website}
+          onChange={handleChange}
+        />
+      </div>
       <div>
         <label htmlFor="name" className="mb-1 block text-sm font-medium text-slate-300">
           Name
