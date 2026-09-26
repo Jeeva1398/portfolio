@@ -1,11 +1,11 @@
-# Portfolio — Jeevaananthan M
+# Portfolio - Jeevaananthan M
 
 Developer portfolio site. Content architecture and reasoning behind the structure live in
 [`portfolio-context-architecture.md`](./portfolio-context-architecture.md).
 
 ## Stack
 
-- **Site:** React (Vite) + Tailwind CSS — `client/`, built to static files.
+- **Site:** React (Vite) + Tailwind CSS - `client/`, built to static files.
 - **Contact form and chat:** [ZenithDesk](https://zenithdesk.site). The form files each message as a
   ZenithDesk enquiry (Enquiries page + alert email), and the ZenithDesk chat widget runs on the page.
   There is no server of our own.
@@ -34,7 +34,7 @@ on **Take enquiries** in Settings → Chatbot.
 
 ## Content
 
-All site copy lives in `client/src/data/content.js` — profile, about, skills, experience, projects,
+All site copy lives in `client/src/data/content.js` - profile, about, skills, experience, projects,
 and the ZenithDesk deep-dive. Edit that file to update content without touching components.
 
 **Still TODO** (see `portfolio-context-architecture.md` §5):

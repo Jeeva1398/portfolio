@@ -51,7 +51,7 @@ export default function About() {
             <Tilt className="group glass rounded-xl p-5" max={4}>
               <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">Currently</p>
               <p className="mt-2 text-sm text-slate-300">
-                {profile.role} at Pentabay Softwares, Chennai — designing REST APIs, Express middleware, and
+                {profile.role} at Pentabay Softwares, Chennai - designing REST APIs, Express middleware, and
                 MongoDB schemas, and owning deployment for production releases.
               </p>
             </Tilt>

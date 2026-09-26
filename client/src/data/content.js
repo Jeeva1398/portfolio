@@ -3,7 +3,7 @@ export const profile = {
   shortName: 'Jeeva',
   role: 'MERN Stack Developer',
   headline: 'MERN Full-Stack & Backend Developer | Building in Data Engineering',
-  positioning: 'Backend Developer — building toward Data Engineering & DevOps',
+  positioning: 'Backend Developer - building toward Data Engineering & DevOps',
   location: 'Chennai / Coimbatore, Tamil Nadu, India',
   email: 'jeevamp0799@gmail.com',
   phone: '+91 94888 16066',
@@ -13,7 +13,7 @@ export const profile = {
   pitch:
     "I'm a backend-leaning full-stack developer with about 3 years of experience building and shipping production MERN applications across healthcare, CRM, and e-commerce. I design RESTful APIs, model MongoDB schemas for scale, and I'm now extending that foundation into DevOps (Docker, CI/CD, AWS) and data engineering (ETL, warehousing, orchestration).",
   currentlyBuildingTeaser:
-    'ZenithDesk is live — a multi-tenant support ticketing SaaS with an AI chatbot widget.',
+    'ZenithDesk is live - a multi-tenant support ticketing SaaS with an AI chatbot widget.',
   coreStack: ['Node.js', 'Express.js', 'React.js', 'MongoDB', 'REST APIs'],
   domainExperience: ['Healthcare (EMR/Telehealth)', 'CRM', 'E-commerce'],
 }
@@ -22,11 +22,11 @@ export const about = {
   summary:
     "I'm a full-stack developer working primarily in the MERN stack, with close to 3 years split across two product teams in Chennai. Most of that work has been backend-leaning: designing REST APIs, shaping MongoDB schemas, and getting features from local development through to a deployed server.",
   domainParagraph:
-    "That work has landed me in three different domains — a healthcare EMR/telehealth platform, a CRM with role-based lead management, and an e-commerce platform with an admin panel — so I've had to adapt to different data models and compliance/business constraints rather than build the same CRUD app three times.",
+    "That work has landed me in three different domains - a healthcare EMR/telehealth platform, a CRM with role-based lead management, and an e-commerce platform with an admin panel - so I've had to adapt to different data models and compliance/business constraints rather than build the same CRUD app three times.",
   direction:
     "I'm now building toward two related but distinct tracks: DevOps (Docker, CI/CD, AWS) as the deployment layer on top of my backend work, and data engineering (ETL, warehousing, orchestration) as a data layer on top of the applications I already build. ZenithDesk, now live in production, is where both of those show up in practice.",
   pivotNote:
-    "Before engineering, I spent 2020–2021 as a Medical Billing Specialist at KMCH, Coimbatore — hands-on exposure to healthcare operations and insurance workflows that now shapes how I think about the EMR/telehealth systems I build as a developer.",
+    "Before engineering, I spent 2020–2021 as a Medical Billing Specialist at KMCH, Coimbatore - hands-on exposure to healthcare operations and insurance workflows that now shapes how I think about the EMR/telehealth systems I build as a developer.",
   education: {
     institution: 'Hindustan College of Arts and Science, Coimbatore',
     degree: 'Bachelor of Commerce (Corporate Secretaryship)',
@@ -108,7 +108,7 @@ export const experience = [
     start: 'May 2025',
     end: 'Present',
     bullets: [
-      'Design and build RESTful APIs and Express middleware — request validation, error handling, and auth — powering production MERN applications.',
+      'Design and build RESTful APIs and Express middleware - request validation, error handling, and auth - powering production MERN applications.',
       'Model and optimize MongoDB schemas with Mongoose, adding indexing strategies to keep query performance stable as data grows.',
       'Build reusable, stateful React interfaces with hooks and the Context API, with React Router driving multi-view navigation.',
       'Own deployment: build processes, environment configuration, and server setup for production releases.',
@@ -123,14 +123,14 @@ export const experience = [
     bullets: [
       'Delivered responsive, cross-browser React front-ends integrated against Node/Express REST APIs.',
       'Built and maintained CRUD APIs and middleware for request validation and error handling.',
-      'Managed MongoDB data models via Mongoose — schema design, validation, and day-to-day data operations.',
+      'Managed MongoDB data models via Mongoose - schema design, validation, and day-to-day data operations.',
       'Worked across the full release cycle, from local development through environment configuration and deployment.',
     ],
   },
 ]
 
 // kind: 'professional' (client/employer work) or 'personal' (own portfolio projects)
-// track: 'app' or 'data' — drives the Projects filter and accent colour
+// track: 'app' or 'data' - drives the Projects filter and accent colour
 // status: 'In progress' | 'Completed' | 'Live' | 'Planned' (personal projects only)
 export const projects = [
   {
@@ -142,7 +142,7 @@ export const projects = [
     // Also listed under the Data Engineering filter: it ships a real warehouse + ETL layer.
     alsoTrack: 'data',
     name: 'ZenithDesk',
-    tagline: 'Multi-tenant customer support SaaS — agent portal, customer portal, knowledge base, and a warehouse-backed analytics dashboard',
+    tagline: 'Multi-tenant customer support SaaS - agent portal, customer portal, knowledge base, and a warehouse-backed analytics dashboard',
     domain: 'SaaS · Portfolio project',
     stack: ['React', 'Vite', 'Tailwind CSS', 'Node.js', 'Express.js', 'MySQL', 'Knex', 'JWT', 'Playwright', 'GitHub Actions'],
     highlights: [
@@ -157,7 +157,7 @@ export const projects = [
       },
       {
         heading: 'Multi-tenancy',
-        text: 'Shared-database, shared-schema multi-tenancy by org_id. All tenant queries go through a forOrg() scoping helper, and a fail-closed tenancy guard checks every SQL statement at the connection layer — hand-written org_id clauses in services went from 58 to 0.',
+        text: 'Shared-database, shared-schema multi-tenancy by org_id. All tenant queries go through a forOrg() scoping helper, and a fail-closed tenancy guard checks every SQL statement at the connection layer - hand-written org_id clauses in services went from 58 to 0.',
       },
       {
         heading: 'Auth & security',
@@ -178,13 +178,13 @@ export const projects = [
           'Customer self-service portal to raise and follow tickets',
           'Knowledge base with a custom per-org BM25 search that the chatbot answers from',
           'Enquiries (lead capture) from the chatbot, with email alerts',
-          'Per-org chat widget settings — theme, home screen, allowed domains, bot purposes — with a live preview',
+          'Per-org chat widget settings - theme, home screen, allowed domains, bot purposes - with a live preview',
           'Org admins and agents, plus platform-level super-admin API endpoints across tenants',
         ],
       },
       {
         heading: 'Data layer',
-        text: 'A separate MySQL warehouse schema in a star layout — dim_organization, dim_agent, dim_category, and a fact_ticket_daily table (tickets created/resolved, average first-response and resolution hours). A hand-written Node + SQL ETL loads it incrementally from a watermark, rebuilding only affected org-day partitions, on a node-cron schedule with overlap protection. The dashboard reads trends and breakdowns from the warehouse, not the operational tables.',
+        text: 'A separate MySQL warehouse schema in a star layout - dim_organization, dim_agent, dim_category, and a fact_ticket_daily table (tickets created/resolved, average first-response and resolution hours). A hand-written Node + SQL ETL loads it incrementally from a watermark, rebuilding only affected org-day partitions, on a node-cron schedule with overlap protection. The dashboard reads trends and breakdowns from the warehouse, not the operational tables.',
       },
       {
         heading: 'Testing & CI',
@@ -203,7 +203,7 @@ export const projects = [
     track: 'app',
     status: 'Live',
     name: 'ZenithDesk Chatbot Widget',
-    tagline: 'Multi-org AI support widget — answers from the knowledge base, raises tickets and enquiries, and lets customers track tickets',
+    tagline: 'Multi-org AI support widget - answers from the knowledge base, raises tickets and enquiries, and lets customers track tickets',
     domain: 'AI · Portfolio project',
     stack: ['React', 'Shadow DOM', 'Vite (library build)', 'Express.js', 'Groq', 'Ollama', 'Zod', 'SQLite'],
     highlights: ['GPT-OSS 20B & 120B on Groq, Qwen 2.5 fallback', 'Grounded knowledge-base answers', 'Ticket tracking via email + OTP'],
@@ -214,14 +214,14 @@ export const projects = [
       },
       {
         heading: 'Multi-org',
-        text: 'One chatbot deployment serves every org. The widget key identifies the org, the request origin must be on that org’s allowed-sites list, and each org chooses what its bot does — support tickets, enquiries, knowledge answers, and/or ticket status.',
+        text: 'One chatbot deployment serves every org. The widget key identifies the org, the request origin must be on that org’s allowed-sites list, and each org chooses what its bot does - support tickets, enquiries, knowledge answers, and/or ticket status.',
       },
       {
         heading: 'Model layer',
         list: [
           'Provider abstraction: GPT-OSS 20B on Groq for intent and extraction, GPT-OSS 120B for knowledge-base answers, and a local Qwen 2.5 (1.5B) model on Ollama as the fallback (Groq is skipped while rate-limited)',
           'Intent routing (create ticket, check status, ask a question, enquiry) with a keyword pass first, validated with Zod',
-          'Zod-validated structured ticket extraction — category, priority, summary, missing fields — with a retry and a rule-based fallback',
+          'Zod-validated structured ticket extraction - category, priority, summary, missing fields - with a retry and a rule-based fallback',
           'Knowledge-base answers grounded in the org’s articles: the answer must quote evidence, lists its sources, and escalates to a ticket if it does not help',
         ],
       },
@@ -254,17 +254,17 @@ export const projects = [
       {
         heading: 'Flow',
         list: [
-          'Source — operational sales data in MySQL',
-          'Extract & load — Python scripts',
-          'Orchestration — Apache Airflow DAGs',
-          'Warehouse — local PostgreSQL running in Docker',
-          'Transform — dbt models',
-          'Dashboard — Metabase',
+          'Source - operational sales data in MySQL',
+          'Extract & load - Python scripts',
+          'Orchestration - Apache Airflow DAGs',
+          'Warehouse - local PostgreSQL running in Docker',
+          'Transform - dbt models',
+          'Dashboard - Metabase',
         ],
       },
       {
         heading: 'Status',
-        text: 'A portfolio project, currently being built. It runs locally on sample data — there is no production traffic behind it.',
+        text: 'A portfolio project, currently being built. It runs locally on sample data - there is no production traffic behind it.',
       },
     ],
     links: { repo: null, demo: null },
@@ -274,7 +274,7 @@ export const projects = [
     kind: 'professional',
     track: 'app',
     name: 'EMR & Telehealth Platform',
-    tagline: 'Patient care operations platform — appointments, EMR, and virtual consultations',
+    tagline: 'Patient care operations platform - appointments, EMR, and virtual consultations',
     domain: 'Healthcare',
     stack: ['MongoDB', 'Express.js', 'React', 'Node.js'],
     details: [
@@ -365,7 +365,7 @@ export const architecture = {
         id: 'client',
         label: 'Client',
         tech: 'Browser · Embeddable widget',
-        what: 'Where requests start — the web app in the browser, or the ZenithDesk chat widget embedded on a host site.',
+        what: 'Where requests start - the web app in the browser, or the ZenithDesk chat widget embedded on a host site.',
         usedIn: ['ZenithDesk', 'ZenithDesk Chatbot Widget'],
       },
       {
@@ -386,7 +386,7 @@ export const architecture = {
         id: 'api',
         label: 'REST APIs',
         tech: 'RESTful API design',
-        what: 'Resource-oriented endpoints for patients, appointments, leads, products, orders, and tickets — plus super-admin endpoints across tenants.',
+        what: 'Resource-oriented endpoints for patients, appointments, leads, products, orders, and tickets - plus super-admin endpoints across tenants.',
         usedIn: ['EMR & Telehealth', 'CRM', 'E-commerce', 'ZenithDesk'],
       },
       {
@@ -420,28 +420,28 @@ export const architecture = {
         id: 'source',
         label: 'Source Systems',
         tech: 'MySQL · Application DB',
-        what: 'Operational data where it is created — ZenithDesk ticket data in its MySQL OLTP schema, and sales data in MySQL.',
+        what: 'Operational data where it is created - ZenithDesk ticket data in its MySQL OLTP schema, and sales data in MySQL.',
         usedIn: ['ZenithDesk', 'E-commerce Sales Data Pipeline (in progress)'],
       },
       {
         id: 'extract',
         label: 'Extract & Load',
         tech: 'Python · Node.js · SQL',
-        what: 'Jobs pull data out of the source database and land it in the warehouse — incrementally from a watermark in ZenithDesk (Node + SQL), and with Python in the sales pipeline.',
+        what: 'Jobs pull data out of the source database and land it in the warehouse - incrementally from a watermark in ZenithDesk (Node + SQL), and with Python in the sales pipeline.',
         usedIn: ['ZenithDesk', 'E-commerce Sales Data Pipeline (in progress)'],
       },
       {
         id: 'orchestrate',
         label: 'Orchestration',
         tech: 'Apache Airflow · node-cron',
-        what: 'Scheduled, repeatable runs — a node-cron ETL schedule with overlap protection in ZenithDesk, and Airflow DAGs in the sales pipeline.',
+        what: 'Scheduled, repeatable runs - a node-cron ETL schedule with overlap protection in ZenithDesk, and Airflow DAGs in the sales pipeline.',
         usedIn: ['ZenithDesk', 'E-commerce Sales Data Pipeline (in progress)'],
       },
       {
         id: 'warehouse',
         label: 'Warehouse',
         tech: 'MySQL star schema · PostgreSQL · Docker',
-        what: 'Analytics storage kept apart from operational tables — a MySQL star schema (dimensions + fact_ticket_daily) in ZenithDesk, and a PostgreSQL warehouse in Docker for the sales pipeline.',
+        what: 'Analytics storage kept apart from operational tables - a MySQL star schema (dimensions + fact_ticket_daily) in ZenithDesk, and a PostgreSQL warehouse in Docker for the sales pipeline.',
         usedIn: ['ZenithDesk', 'E-commerce Sales Data Pipeline (in progress)'],
       },
       {
@@ -455,7 +455,7 @@ export const architecture = {
         id: 'bi',
         label: 'BI Dashboard',
         tech: 'Metabase · React dashboard',
-        what: 'Dashboards on top of the modelled tables — the part a business user actually looks at. ZenithDesk’s analytics dashboard reads from its warehouse; the sales pipeline uses Metabase.',
+        what: 'Dashboards on top of the modelled tables - the part a business user actually looks at. ZenithDesk’s analytics dashboard reads from its warehouse; the sales pipeline uses Metabase.',
         usedIn: ['ZenithDesk', 'E-commerce Sales Data Pipeline (in progress)'],
       },
     ],

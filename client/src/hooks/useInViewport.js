@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-// True while the element is on screen — used to pause 3D render loops that aren't visible.
+// True while the element is on screen - used to pause 3D render loops that aren't visible.
 export default function useInViewport(ref, rootMargin = '100px') {
   const [inView, setInView] = useState(false)
 
