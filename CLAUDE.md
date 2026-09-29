@@ -64,7 +64,7 @@ These come from the owner's current work. Add them as projects/skills only with 
 - **E-commerce sales data pipeline** (Data Engineering): MySQL source, Python pipeline, Airflow orchestration, dbt models, local Postgres warehouse in Docker, Metabase dashboard. Show current build status honestly.
 - **DevPilot** (planned): AI-powered backend engineering assistant (React, Node/Express, Python FastAPI, RAG). Show only as "Planned" if included at all.
 
-**Data Engineering skill group (confirmed):** Python, Apache Airflow, dbt, ETL/ELT, SQL, Docker. Kept from the existing portfolio: Data Warehousing, PostgreSQL. Not listed as skills (unconfirmed): Metabase, dimensional modeling.
+**Data Engineering skill group (confirmed):** Python, Apache Spark, PySpark (added 2026-09-28), Apache Airflow, dbt, ETL/ELT, SQL, Docker. Kept from the existing portfolio: Data Warehousing. PostgreSQL removed from the skill lists by the owner (2026-09-28). Not listed as skills (unconfirmed): Metabase, dimensional modeling.
 
 ---
 
@@ -100,7 +100,7 @@ Animated 3D skill cards or a technology constellation (not a plain list). Groups
 - **Databases:** MongoDB, MySQL, PostgreSQL
 - **Frontend:** React, JavaScript, HTML, CSS
 - **Data Engineering:** see the confirmed list above
-- **DevOps / Cloud:** Docker, AWS EC2, AWS S3, Azure, Linux, Nginx, GitHub Actions, CI/CD (confirmed)
+- **DevOps / Cloud:** Docker, AWS EC2, AWS S3, Azure, Linux, Nginx, GitHub Actions (confirmed; CI/CD removed from skill lists by the owner 2026-09-28)
 - Also keep the existing TypeScript/Tailwind/Bootstrap (Frontend) and Tools & Collaboration items, and the Proven / Building status per group.
 
 ### Experience

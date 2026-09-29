@@ -59,7 +59,7 @@ export const skillGroups = [
     title: 'Frontend',
     track: 'app',
     status: 'proven',
-    items: ['HTML5', 'CSS3', 'Bootstrap', 'Tailwind CSS', 'JavaScript', 'TypeScript', 'React.js'],
+    items: ['HTML5', 'CSS3', 'Bootstrap', 'Tailwind CSS', 'JavaScript', 'React.js'],
   },
   {
     title: 'Data Engineering',
@@ -67,11 +67,12 @@ export const skillGroups = [
     status: 'building',
     items: [
       'Python',
+      'Apache Spark',
+      'PySpark',
       'Apache Airflow',
       'dbt',
       'ETL / ELT Pipelines',
       'Data Warehousing',
-      'PostgreSQL',
       'SQL for Analytics',
       'Docker',
     ],
@@ -89,7 +90,6 @@ export const skillGroups = [
       'Nginx',
       'Environment Configuration',
       'GitHub Actions',
-      'CI/CD',
     ],
   },
   {
