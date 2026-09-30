@@ -6,6 +6,7 @@ import { ArrowIcon, DownloadIcon, GitHubIcon, LinkedInIcon } from '../components
 import HeroCoreFallback from '../three/HeroCoreFallback'
 import useCapability from '../hooks/useCapability'
 import useInViewport from '../hooks/useInViewport'
+import profilePhoto from '../assets/profile.webp'
 
 const HeroCore = lazy(() => import('../three/HeroCore'))
 
@@ -30,13 +31,24 @@ export default function Hero() {
             <span className="text-app">~/jeeva</span> <span className="text-slate-600">$</span> whoami
           </motion.p>
 
-          <motion.h1
-            {...rise(0.05)}
-            id="hero-title"
-            className="mt-4 font-display text-[2.5rem] leading-[1.05] font-semibold tracking-tight text-slate-50 sm:text-6xl"
-          >
-            {profile.name}
-          </motion.h1>
+          <motion.div {...rise(0.05)} className="mt-4 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5">
+            <span className="relative shrink-0 rounded-full bg-gradient-to-br from-app to-data p-[2px] shadow-lg shadow-app/20">
+              <img
+                src={profilePhoto}
+                alt={`Portrait of ${profile.name}`}
+                width="80"
+                height="80"
+                fetchPriority="high"
+                className="h-16 w-16 rounded-full bg-ink object-cover object-top sm:h-20 sm:w-20"
+              />
+            </span>
+            <h1
+              id="hero-title"
+              className="font-display text-[2.5rem] leading-[1.05] font-semibold tracking-tight text-slate-50 sm:text-5xl lg:text-[2.75rem] xl:text-5xl"
+            >
+              {profile.name}
+            </h1>
+          </motion.div>
 
           <motion.p {...rise(0.12)} className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 font-display text-lg sm:text-xl">
             <span className="text-app-soft">{appTrack}</span>
