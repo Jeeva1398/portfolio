@@ -163,13 +163,13 @@ Must work on desktop, laptop, tablet, and mobile. On mobile, simplify the 3D exp
 - **Pages / sections:** single page. Old: Hero, About, Skills, Experience, Projects, Building (ZenithDesk). New: Hero, About, Skills, Experience, Projects, Architecture, Resume, Contact (Building merged into Projects).
 - **Projects:** professional: EMR & Telehealth (Pentabay Softwares), CRM and E-commerce (Crackers) with Admin Panel (both Faces Sync), owner-confirmed 2026-09-30; no public links. Card dates come from the matching `experience` entry. The E-commerce feature list no longer repeats the CRM's CSV-upload / invoice bullets (they were copied from the CRM). Personal: ZenithDesk, ZenithDesk chatbot, E-commerce sales data pipeline (all in progress).
 - **Technologies listed:** see `skillGroups` in `client/src/data/content.js`.
-- **Assets:** `client/public/Jeevaananthan-M-Resume.pdf`, `favicon.svg`, `og-image.jpg` (1200x630, from the hero). Profile photo `client/src/assets/profile.webp` (source `profile.png`, transparent background) shown in the hero and About. Screenshot: `client/src/assets/projects/sales-dashboard.webp` (live Streamlit dashboard).
+- **Assets:** `client/public/Jeevaananthan-M-Resume.pdf`, `favicon.svg`, `og-image.jpg` (1200x630, from the hero). Profile photo `client/src/assets/profile.webp` (source `profile.png`, transparent background) shown in the hero and About. Screenshots: `client/src/assets/projects/sales-dashboard.webp` (live Streamlit dashboard, on the card), plus `sales-airflow-dag.webp` and `sales-metabase.webp` in the pipeline's `gallery` (details view only). Full-size originals live in the E-Commerce-Sales repo under `docs/screenshots/`.
 - **Links:** GitHub github.com/Jeeva1398, LinkedIn linkedin.com/in/jeevaananthan-m, email jeevamp0799@gmail.com, phone +91 94888 16066. Production domain: https://iamjeeva.in/ (canonical, og:url, sitemap.xml set).
 - **Contact form present?:** yes (kept).
 - **Education:** B.Com (Corporate Secretaryship), Hindustan College of Arts and Science, Coimbatore, 2015 – 2018.
 
 ## Open Questions / Missing Assets
-- Screenshots still missing: ZenithDesk dashboard, chatbot widget, Metabase dashboard, Airflow DAG (Streamlit dashboard done).
+- Screenshots still missing: ZenithDesk dashboard, chatbot widget (the sales pipeline has Streamlit, Airflow and Metabase).
 - Pipeline repo + live demo links added 2026-09-30. ZenithDesk and chatbot repo links added 2026-09-25.
 - Does the sales pipeline use data from the Crackers e-commerce project?
 - Chatbot model wording: now "Groq-hosted models with a local Ollama fallback" (matches code). Confirm which provider production uses.

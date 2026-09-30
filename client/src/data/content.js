@@ -1,4 +1,6 @@
 import salesDashboard from '../assets/projects/sales-dashboard.webp'
+import salesAirflowDag from '../assets/projects/sales-airflow-dag.webp'
+import salesMetabase from '../assets/projects/sales-metabase.webp'
 
 export const profile = {
   name: 'Jeevaananthan M',
@@ -284,6 +286,23 @@ export const projects = [
       },
     ],
     image: { src: salesDashboard, alt: 'Streamlit dashboard: revenue, orders, customers and average order value tiles above revenue and order volume by month' },
+    // extra screenshots, shown in the details view only
+    gallery: [
+      {
+        src: salesAirflowDag,
+        width: 670,
+        height: 100,
+        alt: 'Airflow graph view of the ecom_pipeline DAG: extract_to_raw, dbt_run and dbt_test, each marked success',
+        caption: 'Local stack - the Airflow DAG: extract, dbt run, dbt test',
+      },
+      {
+        src: salesMetabase,
+        width: 1080,
+        height: 690,
+        alt: 'Metabase dashboard: revenue and order volume by month, top 10 products by revenue, and a customer lifetime value table',
+        caption: 'Local stack - the Metabase dashboard, provisioned from a script',
+      },
+    ],
     links: { repo: 'https://github.com/Jeeva1398/E-Commerce-Sales', demo: 'https://jeeva-ecom-sales.streamlit.app/' },
   },
   {

@@ -115,6 +115,30 @@ export default function ProjectModal({ project, onClose }) {
               ))}
             </div>
 
+            {project.gallery && (
+              <div className="mt-8">
+                <h4 className="font-mono text-xs uppercase tracking-wider text-slate-200">Screenshots</h4>
+                <div className="mt-3 space-y-5">
+                  {project.gallery.map((shot) => (
+                    <figure key={shot.caption}>
+                      <a href={shot.src} target="_blank" rel="noreferrer" className="block">
+                        <img
+                          src={shot.src}
+                          alt={shot.alt}
+                          width={shot.width}
+                          height={shot.height}
+                          loading="lazy"
+                          className="w-full rounded-lg border border-white/10"
+                        />
+                        <span className="sr-only">(opens full size in a new tab)</span>
+                      </a>
+                      <figcaption className="mt-2 text-sm text-slate-400">{shot.caption}</figcaption>
+                    </figure>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {(project.links?.repo || project.links?.demo) && (
               <div className="mt-8 flex flex-wrap gap-3 border-t border-white/10 pt-6">
                 {project.links.repo && (
