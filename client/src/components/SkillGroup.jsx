@@ -35,6 +35,12 @@ export default function SkillGroup({ group }) {
               {item}
             </li>
           ))}
+          {group.learning?.map((item) => (
+            <li key={item} className="chip inline-flex items-center gap-1.5 border border-dashed border-build/30 text-amber-100/80">
+              {item}
+              <span className="rounded bg-build/15 px-1 font-mono text-[10px] uppercase tracking-wider text-build">learning</span>
+            </li>
+          ))}
         </ul>
       </div>
     </Tilt>

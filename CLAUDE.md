@@ -64,7 +64,7 @@ These come from the owner's current work. Add them as projects/skills only with 
 - **E-commerce sales data pipeline** (Data Engineering, portfolio project, Live since 2026-09-30): MySQL source (Faker-seeded), Python extract via COPY into a Postgres raw schema, dbt staging/intermediate/marts star schema with tests. Local: Docker Compose with Airflow DAG + Metabase. Cloud: daily GitHub Actions workflow (throwaway MySQL service container) into Supabase Postgres, Streamlit dashboard on Streamlit Community Cloud, keep-awake job every 5h. Sample data only, no real users. Repo: github.com/Jeeva1398/E-Commerce-Sales.
 - **DevPilot** (planned): AI-powered backend engineering assistant (React, Node/Express, Python FastAPI, RAG). Show only as "Planned" if included at all.
 
-**Data Engineering skill group (confirmed):** Python, Apache Spark, PySpark (added 2026-09-28), Apache Airflow, dbt, ETL/ELT, SQL, Docker. Kept from the existing portfolio: Data Warehousing. PostgreSQL removed from the skill lists by the owner (2026-09-28). Not listed as skills (unconfirmed): Metabase, dimensional modeling.
+**Data Engineering skill group (confirmed):** Python, Apache Spark, PySpark (added 2026-09-28), Apache Airflow, dbt, ETL/ELT, SQL, Docker. Kept from the existing portfolio: Data Warehousing. PostgreSQL removed from the skill lists by the owner (2026-09-28). Apache Spark and PySpark are not used in any project yet: they sit in the group's `learning` list and render with a "learning" tag (owner-confirmed 2026-09-30). Not listed as skills (unconfirmed): Metabase, dimensional modeling.
 
 ---
 
@@ -100,7 +100,7 @@ Animated 3D skill cards or a technology constellation (not a plain list). Groups
 - **Databases:** MongoDB, MySQL, PostgreSQL
 - **Frontend:** React, JavaScript, HTML, CSS
 - **Data Engineering:** see the confirmed list above
-- **DevOps / Cloud:** Docker, AWS EC2, AWS S3, Azure, Linux, Nginx, GitHub Actions (confirmed; CI/CD removed from skill lists by the owner 2026-09-28)
+- **DevOps / Cloud:** Docker, AWS EC2, AWS S3, Azure, Linux, Nginx, GitHub Actions (confirmed; CI/CD removed from skill lists by the owner 2026-09-28). GitHub Actions is shown under Tools & Collaboration (Proven) since 2026-09-30, because ZenithDesk CI and the sales pipeline both run on it
 - Also keep the existing TypeScript/Tailwind/Bootstrap (Frontend) and Tools & Collaboration items, and the Proven / Building status per group.
 
 ### Experience
@@ -161,24 +161,22 @@ Must work on desktop, laptop, tablet, and mobile. On mobile, simplify the 3D exp
 ## Existing Portfolio Inventory (Step 0, done 2026-09-24)
 - **Framework / deps:** Static site, `client/` only: React 19, Vite 8, Tailwind v4, Framer Motion, three + R3F + Drei, oxlint. No server of its own (removed 2026-09-25): the contact form posts to the ZenithDesk chat server's `POST /enquiries` (`client/src/lib/zenithdesk.js`), which files it as an enquiry, and the ZenithDesk chat widget is loaded on the page. Configured by `VITE_CHATBOT_URL` / `VITE_CHAT_WIDGET_KEY`.
 - **Pages / sections:** single page. Old: Hero, About, Skills, Experience, Projects, Building (ZenithDesk). New: Hero, About, Skills, Experience, Projects, Architecture, Resume, Contact (Building merged into Projects).
-- **Projects:** professional: EMR & Telehealth, CRM, E-commerce (Crackers) with Admin Panel (no public links). Personal: ZenithDesk, ZenithDesk chatbot, E-commerce sales data pipeline (all in progress).
+- **Projects:** professional: EMR & Telehealth (Pentabay Softwares), CRM and E-commerce (Crackers) with Admin Panel (both Faces Sync), owner-confirmed 2026-09-30; no public links. Card dates come from the matching `experience` entry. The E-commerce feature list no longer repeats the CRM's CSV-upload / invoice bullets (they were copied from the CRM). Personal: ZenithDesk, ZenithDesk chatbot, E-commerce sales data pipeline (all in progress).
 - **Technologies listed:** see `skillGroups` in `client/src/data/content.js`.
-- **Assets:** `client/public/Jeevaananthan-M-Resume.pdf`, `favicon.svg`. Photo is only `avatar-placeholder.svg` (not shown). No screenshots, no OG image.
-- **Links:** GitHub github.com/Jeeva1398, LinkedIn linkedin.com/in/jeevaananthan-m, email jeevamp0799@gmail.com, phone +91 94888 16066. No live demo URLs.
+- **Assets:** `client/public/Jeevaananthan-M-Resume.pdf`, `favicon.svg`, `og-image.jpg` (1200x630, from the hero). Profile photo `client/src/assets/profile.webp` (source `profile.png`, transparent background) shown in the hero and About. Screenshot: `client/src/assets/projects/sales-dashboard.webp` (live Streamlit dashboard).
+- **Links:** GitHub github.com/Jeeva1398, LinkedIn linkedin.com/in/jeevaananthan-m, email jeevamp0799@gmail.com, phone +91 94888 16066. Production domain: https://iamjeeva.in/ (canonical, og:url, sitemap.xml set).
 - **Contact form present?:** yes (kept).
 - **Education:** B.Com (Corporate Secretaryship), Hindustan College of Arts and Science, Coimbatore, 2015 – 2018.
 
 ## Open Questions / Missing Assets
-- Profile photo (hero currently has none; the placeholder avatar was removed).
-- Screenshots: ZenithDesk dashboard, chatbot widget, Metabase / Streamlit dashboard, Airflow DAG.
+- Screenshots still missing: ZenithDesk dashboard, chatbot widget, Metabase dashboard, Airflow DAG (Streamlit dashboard done).
 - Pipeline repo + live demo links added 2026-09-30. ZenithDesk and chatbot repo links added 2026-09-25.
 - Does the sales pipeline use data from the Crackers e-commerce project?
 - Chatbot model wording: now "Groq-hosted models with a local Ollama fallback" (matches code). Confirm which provider production uses.
 - PostgreSQL and Data Warehousing were kept from the old portfolio but not in the owner's confirmed list. Confirm or remove.
 - Contact copy said "June/July 2026 cycle", which has passed; replaced with "Open to backend, full-stack, and data engineering roles". Confirm.
-- Production domain + hosting (needed for canonical URL, og:url, og:image, sitemap.xml).
 - Contact-form email delivery: handled by ZenithDesk's enquiry alert email (needs RESEND_API_KEY on the ZenithDesk main app and "Send new enquiries to" set in its Settings → Chatbot).
-- Resume PDF: is it current? Is there a separate Data Engineering resume?
+- Resume PDF (owner will rewrite it themselves): it lacks the sales pipeline, Pentabay and Faces Sync have identical bullets, and its E-commerce section still says "lead tracking".
 
 ## Progress Log
 - [x] Step 0: Inventory existing portfolio
@@ -191,6 +189,6 @@ Must work on desktop, laptop, tablet, and mobile. On mobile, simplify the 3D exp
 - [x] Architecture (application view and data pipeline view)
 - [x] Resume, Contact
 - [x] Mobile / reduced-motion fallbacks (2D hero + architecture; 3D only on capable desktops)
-- [ ] Performance, accessibility, and SEO pass (Lighthouse). Head tags + JSON-LD + robots.txt done; canonical/sitemap/og:image wait on domain
-- [ ] Add assets when provided (photo, screenshots, OG image), then wire contact email delivery
+- [ ] Performance, accessibility, and SEO pass (Lighthouse). Head tags, JSON-LD, robots.txt, canonical, sitemap and og:image done
+- [ ] Add remaining screenshots when provided, then wire contact email delivery (photo, OG image and dashboard screenshot done 2026-09-30)
 - [ ] Optional: role toggle ("Full-Stack" / "Data Engineering") in hero

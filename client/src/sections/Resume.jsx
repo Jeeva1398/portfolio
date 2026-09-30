@@ -50,7 +50,9 @@ export default function Resume() {
                         {group.title}
                         {group.status === 'building' && <span className="ml-2 text-xs text-build">(building)</span>}
                       </dt>
-                      <dd className="mt-1 text-sm leading-relaxed text-slate-400">{group.items.join(' · ')}</dd>
+                      <dd className="mt-1 text-sm leading-relaxed text-slate-400">
+                        {[...group.items, ...(group.learning ?? []).map((item) => `${item} (learning)`)].join(' · ')}
+                      </dd>
                     </div>
                   ))}
               </dl>

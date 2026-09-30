@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import StatusBadge from './StatusBadge'
 import { PipelineStrip } from './ProjectCard'
+import { companyLine } from '../lib/projects'
 import { GitHubIcon } from './Icons'
 
 export default function ProjectModal({ project, onClose }) {
@@ -62,7 +63,22 @@ export default function ProjectModal({ project, onClose }) {
             <h3 id="project-modal-title" className="mt-3 font-display text-2xl font-semibold text-slate-50">
               {project.name}
             </h3>
+            {project.company && <p className="mt-1 text-sm text-slate-500">{companyLine(project)}</p>}
             <p className="mt-2 text-slate-400">{project.tagline}</p>
+
+            {project.image && (
+              <a href={project.links?.demo ?? project.image.src} target="_blank" rel="noreferrer" className="mt-5 block">
+                <img
+                  src={project.image.src}
+                  alt={project.image.alt}
+                  width="1280"
+                  height="800"
+                  loading="lazy"
+                  className="w-full rounded-lg border border-white/10"
+                />
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
+            )}
 
             {project.pipeline && (
               <div className="mt-5">

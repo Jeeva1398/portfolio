@@ -1,3 +1,5 @@
+import salesDashboard from '../assets/projects/sales-dashboard.webp'
+
 export const profile = {
   name: 'Jeevaananthan M',
   shortName: 'Jeeva',
@@ -13,7 +15,7 @@ export const profile = {
   pitch:
     "I'm a backend-leaning full-stack developer with about 3 years of experience building and shipping production MERN applications across healthcare, CRM, and e-commerce. I design RESTful APIs, model MongoDB schemas for scale, and I'm now extending that foundation into DevOps (Docker, CI/CD, AWS) and data engineering (ETL, warehousing, orchestration).",
   currentlyBuildingTeaser:
-    'ZenithDesk is live - a multi-tenant support ticketing SaaS with an AI chatbot widget.',
+    'Now live: ZenithDesk, a multi-tenant support SaaS with an AI chatbot, and an e-commerce sales data pipeline with a daily-refreshed dashboard.',
   coreStack: ['Node.js', 'Express.js', 'React.js', 'MongoDB', 'REST APIs'],
   domainExperience: ['Healthcare (EMR/Telehealth)', 'CRM', 'E-commerce'],
 }
@@ -24,9 +26,11 @@ export const about = {
   domainParagraph:
     "That work has landed me in three different domains - a healthcare EMR/telehealth platform, a CRM with role-based lead management, and an e-commerce platform with an admin panel - so I've had to adapt to different data models and compliance/business constraints rather than build the same CRUD app three times.",
   direction:
-    "I'm now building toward two related but distinct tracks: DevOps (Docker, CI/CD, AWS) as the deployment layer on top of my backend work, and data engineering (ETL, warehousing, orchestration) as a data layer on top of the applications I already build. ZenithDesk, now live in production, is where both of those show up in practice.",
+    "I'm now building toward two related but distinct tracks: DevOps (Docker, CI/CD, AWS) as the deployment layer on top of my backend work, and data engineering (ETL, warehousing, orchestration) as a data layer on top of the applications I already build. ZenithDesk, now live in production, is where both of those show up in practice, and the e-commerce sales data pipeline - MySQL into a dbt star schema, scheduled with Airflow locally and GitHub Actions in the cloud - is my first dedicated data engineering build.",
   pivotNote:
     "Before engineering, I spent 2020–2021 as a Medical Billing Specialist at KMCH, Coimbatore - hands-on exposure to healthcare operations and insurance workflows that now shapes how I think about the EMR/telehealth systems I build as a developer.",
+  currently:
+    'MERN Stack Developer at Pentabay Softwares, Chennai - designing REST APIs, Express middleware, and MongoDB schemas, and owning deployment for production releases.',
   education: {
     institution: 'Hindustan College of Arts and Science, Coimbatore',
     degree: 'Bachelor of Commerce (Corporate Secretaryship)',
@@ -67,8 +71,6 @@ export const skillGroups = [
     status: 'building',
     items: [
       'Python',
-      'Apache Spark',
-      'PySpark',
       'Apache Airflow',
       'dbt',
       'ETL / ELT Pipelines',
@@ -76,6 +78,8 @@ export const skillGroups = [
       'SQL for Analytics',
       'Docker',
     ],
+    // listed, but not used in a project yet - shown with their own "learning" tag
+    learning: ['Apache Spark', 'PySpark'],
   },
   {
     title: 'DevOps & Cloud',
@@ -89,14 +93,14 @@ export const skillGroups = [
       'Linux Server Administration',
       'Nginx',
       'Environment Configuration',
-      'GitHub Actions',
     ],
   },
   {
     title: 'Tools & Collaboration',
     track: 'tools',
     status: 'proven',
-    items: ['Git', 'GitHub', 'VS Code', 'Postman', 'ClickUp', 'Slack'],
+    // GitHub Actions sits here, not under DevOps (building): it runs CI for ZenithDesk and the sales pipeline's schedule
+    items: ['Git', 'GitHub', 'GitHub Actions', 'VS Code', 'Postman', 'ClickUp', 'Slack'],
   },
 ]
 
@@ -279,6 +283,7 @@ export const projects = [
         text: 'A portfolio project running on generated sample data (about 2,000 customers, 300 products, and 8,000 orders) - there are no real users or production traffic behind it.',
       },
     ],
+    image: { src: salesDashboard, alt: 'Streamlit dashboard: revenue, orders, customers and average order value tiles above revenue and order volume by month' },
     links: { repo: 'https://github.com/Jeeva1398/E-Commerce-Sales', demo: 'https://jeeva-ecom-sales.streamlit.app/' },
   },
   {
@@ -286,6 +291,7 @@ export const projects = [
     kind: 'professional',
     track: 'app',
     name: 'EMR & Telehealth Platform',
+    company: 'Pentabay Softwares',
     tagline: 'Patient care operations platform - appointments, EMR, and virtual consultations',
     domain: 'Healthcare',
     stack: ['MongoDB', 'Express.js', 'React', 'Node.js'],
@@ -314,6 +320,7 @@ export const projects = [
     kind: 'professional',
     track: 'app',
     name: 'Customer Relationship Management (CRM)',
+    company: 'Faces Sync',
     tagline: 'Lead management system with role-based access and automated workflows',
     domain: 'CRM',
     stack: ['MongoDB', 'Express.js', 'React', 'Node.js'],
@@ -342,6 +349,7 @@ export const projects = [
     kind: 'professional',
     track: 'app',
     name: 'E-commerce Platform (Crackers) with Admin Panel',
+    company: 'Faces Sync',
     tagline: 'Product catalog, order processing, and inventory management for an online store',
     domain: 'E-commerce',
     stack: ['MongoDB', 'Express.js', 'React', 'Node.js'],
@@ -357,10 +365,10 @@ export const projects = [
       {
         heading: 'Key features',
         list: [
-          'Bulk data upload via CSV with validation for duplicates and missing entries',
-          'Invoice number auto-generation and order tracking with a detailed activity log',
-          'Category-based navigation and search filters',
-          'Inventory and refund management',
+          'Dynamic product listings with category-based navigation and search filters',
+          'Discount calculation on orders',
+          'Inventory management',
+          'Refund processing',
         ],
       },
     ],

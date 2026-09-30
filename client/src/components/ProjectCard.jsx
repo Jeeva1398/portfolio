@@ -1,6 +1,7 @@
 import StatusBadge from './StatusBadge'
 import Tilt from './Tilt'
 import { ArrowIcon } from './Icons'
+import { companyLine } from '../lib/projects'
 
 export function PipelineStrip({ steps }) {
   return (
@@ -28,6 +29,17 @@ export default function ProjectCard({ project, onSelect }) {
   return (
     <Tilt className={`group glass flex h-full flex-col rounded-2xl transition-colors ${accent.hover}`} glare={accent.glare} max={4}>
       <div className={`h-px w-full rounded-t-2xl bg-gradient-to-r ${accent.line} to-transparent`} aria-hidden="true" />
+      {project.image && (
+        <img
+          src={project.image.src}
+          alt={project.image.alt}
+          width="1280"
+          height="800"
+          loading="lazy"
+          decoding="async"
+          className="aspect-[16/9] w-full border-b border-white/10 object-cover object-top"
+        />
+      )}
       <div className="flex flex-1 flex-col p-6" style={{ transform: 'translateZ(20px)' }}>
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className={`font-mono text-[11px] uppercase tracking-wider ${accent.text}`}>{project.domain}</p>
@@ -35,6 +47,7 @@ export default function ProjectCard({ project, onSelect }) {
         </div>
 
         <h3 className="mt-4 font-display text-xl font-semibold text-slate-50">{project.name}</h3>
+        {project.company && <p className="mt-1 text-xs text-slate-500">{companyLine(project)}</p>}
         <p className="mt-2 text-sm leading-relaxed text-slate-400">{project.tagline}</p>
 
         {project.pipeline && (
