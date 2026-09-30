@@ -10,14 +10,14 @@ Owner: Jeevaananthan M (goes by Jeeva)
 
 **Headline positioning (use consistently in hero, meta tags, and resume section):**
 `MERN Full-Stack & Backend Developer | Building in Data Engineering`
-(Owner chose this honest version on 2026-09-24. Do not upgrade to "Data Engineer" until a data project is completed.)
+(Owner chose this honest version on 2026-09-24, and kept it on 2026-09-30 after the sales pipeline went live. Do not change it unless the owner asks.)
 Both tracks must be equally easy to find. A recruiter for either role should understand the fit within seconds.
 
 ## Decisions (owner-confirmed 2026-09-24)
 - This file is the source of truth; it wins over `portfolio-context-architecture.md` when they disagree.
 - Stay on **JavaScript (JSX)**, no TypeScript migration.
 - **React Three Fiber + Drei** approved; they replaced the old plain-three `Scene3D.jsx`.
-- Projects shown as **Live** (deployed to prod, owner-confirmed 2026-09-25): ZenithDesk (https://portal.zenithdesk.site/), ZenithDesk chatbot widget (embedded on this site via `chat.zenithdesk.site/widget.js` in `client/index.html`). **In progress**: E-commerce sales data pipeline. **DevPilot is not shown.**
+- Projects shown as **Live** (deployed to prod, owner-confirmed 2026-09-25): ZenithDesk (https://portal.zenithdesk.site/), ZenithDesk chatbot widget (embedded on this site via `chat.zenithdesk.site/widget.js` in `client/index.html`), E-commerce sales data pipeline (live dashboard https://jeeva-ecom-sales.streamlit.app/, repo github.com/Jeeva1398/E-Commerce-Sales; owner-confirmed 2026-09-30). **DevPilot is not shown.**
 - Confirmed skills added: Python, Apache Airflow, dbt, ETL/ELT, Docker, SQL, Azure, AWS EC2, AWS S3.
 - Content lives in `client/src/data/content.js` (skills, projects, architecture layers). Edit data there, not in components.
 
@@ -61,7 +61,7 @@ These come from the owner's current work. Add them as projects/skills only with 
 - **Domain experience:** healthcare (EMR/telehealth), CRM, e-commerce. Cross-check wording against the old portfolio's Experience section.
 - **ZenithDesk** (MERN, portfolio project): multi-tenant support-ticket SaaS. Vite + React client, Express server, MySQL with Knex, JWT auth, agents/tickets/tags/views, super-admin endpoints, Zendesk-inspired agent dashboard, faker-seeded data. Multi-tenancy via `org_id` on tenant tables. Warehouse/ETL layer is built (verified in repo 2026-09-25): MySQL star schema (dim_organization/agent/category + fact_ticket_daily), incremental Node + SQL ETL on node-cron, dashboard reads from it. Also built: refresh tokens, tenancy guard, macros, SLAs, search, KB, enquiries, attachments, ~155 Playwright E2E tests in GitHub Actions CI. No Docker, no real-time. Repo: github.com/Jeeva1398/zenithDesk.
 - **ZenithDesk chatbot** (companion repo): embeddable chat widget (React, Shadow DOM, Vite library build) with an Express backend, local LLM via Ollama, Zod-validated structured extraction with retry and rule-based fallback, and real ticket-API integration. Verified 2026-09-25: Groq primary + Ollama fallback, intent routing, KB-grounded answers, multi-org via widget key, enquiries, attachments, and ticket tracking via email + OTP are all built. No streaming, no tests. Repo: github.com/Jeeva1398/zenithDesk-chat.
-- **E-commerce sales data pipeline** (Data Engineering): MySQL source, Python pipeline, Airflow orchestration, dbt models, local Postgres warehouse in Docker, Metabase dashboard. Show current build status honestly.
+- **E-commerce sales data pipeline** (Data Engineering, portfolio project, Live since 2026-09-30): MySQL source (Faker-seeded), Python extract via COPY into a Postgres raw schema, dbt staging/intermediate/marts star schema with tests. Local: Docker Compose with Airflow DAG + Metabase. Cloud: daily GitHub Actions workflow (throwaway MySQL service container) into Supabase Postgres, Streamlit dashboard on Streamlit Community Cloud, keep-awake job every 5h. Sample data only, no real users. Repo: github.com/Jeeva1398/E-Commerce-Sales.
 - **DevPilot** (planned): AI-powered backend engineering assistant (React, Node/Express, Python FastAPI, RAG). Show only as "Planned" if included at all.
 
 **Data Engineering skill group (confirmed):** Python, Apache Spark, PySpark (added 2026-09-28), Apache Airflow, dbt, ETL/ELT, SQL, Docker. Kept from the existing portfolio: Data Warehousing. PostgreSQL removed from the skill lists by the owner (2026-09-28). Not listed as skills (unconfirmed): Metabase, dimensional modeling.
@@ -170,8 +170,8 @@ Must work on desktop, laptop, tablet, and mobile. On mobile, simplify the 3D exp
 
 ## Open Questions / Missing Assets
 - Profile photo (hero currently has none; the placeholder avatar was removed).
-- Screenshots: ZenithDesk dashboard, chatbot widget, Metabase dashboard, Airflow DAG.
-- Repo/demo for the pipeline (currently `null`, so buttons are hidden). ZenithDesk and chatbot repo links added 2026-09-25.
+- Screenshots: ZenithDesk dashboard, chatbot widget, Metabase / Streamlit dashboard, Airflow DAG.
+- Pipeline repo + live demo links added 2026-09-30. ZenithDesk and chatbot repo links added 2026-09-25.
 - Does the sales pipeline use data from the Crackers e-commerce project?
 - Chatbot model wording: now "Groq-hosted models with a local Ollama fallback" (matches code). Confirm which provider production uses.
 - PostgreSQL and Data Warehousing were kept from the old portfolio but not in the owner's confirmed list. Confirm or remove.
