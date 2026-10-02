@@ -2,9 +2,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, Html, RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
-
-const APP = '#22d3ee'
-const DATA = '#a78bfa'
+import usePalette from './palette'
 
 // Node anchors: app cluster on the left, data cluster on the right.
 const P = {
@@ -25,15 +23,16 @@ function arc(a, b, lift = 0.5) {
 }
 
 const ROUTES = [
-  { curve: arc(P.client, P.api, 0.3), color: APP, speed: 0.35 },
-  { curve: arc(P.api, P.db, 0), color: APP, speed: 0.45 },
-  { curve: arc(P.db, P.src2, -0.2), color: '#94a3b8', speed: 0.22 },
-  { curve: arc(P.src1, P.warehouse, 0.2), color: DATA, speed: 0.3 },
-  { curve: arc(P.src2, P.warehouse, 0.1), color: DATA, speed: 0.38 },
-  { curve: arc(P.etl, P.warehouse, -0.2), color: DATA, speed: 0.33 },
+  { curve: arc(P.client, P.api, 0.3), color: 'app', speed: 0.35 },
+  { curve: arc(P.api, P.db, 0), color: 'app', speed: 0.45 },
+  { curve: arc(P.db, P.src2, -0.2), color: 'neutral', speed: 0.22 },
+  { curve: arc(P.src1, P.warehouse, 0.2), color: 'data', speed: 0.3 },
+  { curve: arc(P.src2, P.warehouse, 0.1), color: 'data', speed: 0.38 },
+  { curve: arc(P.etl, P.warehouse, -0.2), color: 'data', speed: 0.33 },
 ]
 
-function Route({ curve, color, speed, offset }) {
+function Route({ curve, color: tone, speed, offset }) {
+  const color = usePalette()[tone]
   const packet = useRef()
   const geometry = useMemo(
     () => new THREE.BufferGeometry().setFromPoints(curve.getPoints(40)),
@@ -74,14 +73,15 @@ function Label({ children, position, color }) {
 }
 
 function ServerRack() {
+  const { app: APP, appBody, glow } = usePalette()
   return (
     <group position={P.api}>
       {[0.3, 0, -0.3].map((y, i) => (
         <RoundedBox key={y} args={[1.15, 0.22, 0.7]} radius={0.05} position={[0, y, 0]}>
           <meshStandardMaterial
-            color="#0b1324"
+            color={appBody}
             emissive={APP}
-            emissiveIntensity={i === 1 ? 0.35 : 0.12}
+            emissiveIntensity={(i === 1 ? 0.35 : 0.12) * glow}
             metalness={0.6}
             roughness={0.35}
           />
@@ -101,12 +101,13 @@ function ServerRack() {
 }
 
 function Database() {
+  const { app: APP, appBody, glow } = usePalette()
   return (
     <group position={P.db}>
       {[0.14, -0.1].map((y) => (
         <mesh key={y} position={[0, y, 0]}>
           <cylinderGeometry args={[0.38, 0.38, 0.2, 32]} />
-          <meshStandardMaterial color="#0b1324" emissive={APP} emissiveIntensity={0.22} metalness={0.5} roughness={0.4} />
+          <meshStandardMaterial color={appBody} emissive={APP} emissiveIntensity={0.22 * glow} metalness={0.5} roughness={0.4} />
         </mesh>
       ))}
       <Label position={[0, -0.48, 0]} color={APP}>
@@ -117,6 +118,7 @@ function Database() {
 }
 
 function Warehouse() {
+  const { data: DATA, dataBody, glow } = usePalette()
   const inner = useRef()
   useFrame((_, delta) => {
     if (inner.current) inner.current.rotation.y += delta * 0.4
@@ -133,7 +135,7 @@ function Warehouse() {
       </lineSegments>
       <mesh ref={inner}>
         <boxGeometry args={[0.42, 0.42, 0.42]} />
-        <meshStandardMaterial color="#1e1036" emissive={DATA} emissiveIntensity={0.6} />
+        <meshStandardMaterial color={dataBody} emissive={DATA} emissiveIntensity={0.6 * glow} />
       </mesh>
       <Label position={[0, -0.8, 0]} color={DATA}>
         postgres warehouse
@@ -143,11 +145,12 @@ function Warehouse() {
 }
 
 function PipelineNode({ position, label }) {
+  const { data: DATA, dataBody, glow } = usePalette()
   return (
     <group position={position}>
       <mesh>
         <octahedronGeometry args={[0.16, 0]} />
-        <meshStandardMaterial color="#1e1036" emissive={DATA} emissiveIntensity={0.7} flatShading />
+        <meshStandardMaterial color={dataBody} emissive={DATA} emissiveIntensity={0.7 * glow} flatShading />
       </mesh>
       {label && (
         <Label position={[0, 0.34, 0]} color={DATA}>
@@ -159,11 +162,12 @@ function PipelineNode({ position, label }) {
 }
 
 function Client() {
+  const { app: APP, appBody, glow } = usePalette()
   return (
     <group position={P.client}>
       <mesh>
         <sphereGeometry args={[0.13, 20, 20]} />
-        <meshStandardMaterial color="#0b1324" emissive={APP} emissiveIntensity={0.9} />
+        <meshStandardMaterial color={appBody} emissive={APP} emissiveIntensity={0.9 * glow} />
       </mesh>
       <Label position={[0, 0.34, 0]} color={APP}>
         react client
@@ -193,6 +197,17 @@ function Rig({ children }) {
   return <group ref={group}>{children}</group>
 }
 
+function Lights() {
+  const { app, data, glow } = usePalette()
+  return (
+    <>
+      <ambientLight intensity={glow < 1 ? 1.1 : 0.35} />
+      <pointLight position={[-4, 2, 4]} intensity={30} color={app} />
+      <pointLight position={[4, -1, 4]} intensity={30} color={data} />
+    </>
+  )
+}
+
 export default function HeroCore({ active }) {
   return (
     <Canvas
@@ -201,9 +216,7 @@ export default function HeroCore({ active }) {
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       frameloop={active ? 'always' : 'never'}
     >
-      <ambientLight intensity={0.35} />
-      <pointLight position={[-4, 2, 4]} intensity={30} color={APP} />
-      <pointLight position={[4, -1, 4]} intensity={30} color={DATA} />
+      <Lights />
       <Rig>
         <Float speed={1.2} rotationIntensity={0.12} floatIntensity={0.35}>
           <Client />

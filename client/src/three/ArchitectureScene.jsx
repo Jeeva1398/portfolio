@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Html, RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
+import usePalette from './palette'
 
 // Zig-zag the layers left → right so the flow reads like a request (or a batch) moving through the stack.
 function layout(count) {
@@ -12,6 +13,7 @@ function layout(count) {
 }
 
 function Node({ layer, index, position, color, selected, onSelect }) {
+  const { appBody } = usePalette()
   const mesh = useRef()
   const [hovered, setHovered] = useState(false)
   const lift = selected ? 0.35 : hovered ? 0.15 : 0
@@ -51,7 +53,7 @@ function Node({ layer, index, position, color, selected, onSelect }) {
           onPointerOut={() => setHovered(false)}
         >
           <meshStandardMaterial
-            color="#0b1324"
+            color={appBody}
             emissive={color}
             emissiveIntensity={selected ? 0.9 : hovered ? 0.5 : 0.18}
             metalness={0.5}
@@ -73,9 +75,9 @@ function Node({ layer, index, position, color, selected, onSelect }) {
         <span
           className="block whitespace-nowrap rounded-md border px-2 py-1 text-center font-mono text-[11px] backdrop-blur transition-colors"
           style={{
-            color: selected ? '#f8fafc' : color,
+            color: selected ? 'var(--color-slate-50)' : color,
             borderColor: selected ? color : `${color}40`,
-            background: selected ? `${color}30` : 'rgb(4 6 12 / 0.7)',
+            background: selected ? `${color}30` : 'color-mix(in srgb, var(--color-ink) 70%, transparent)',
           }}
         >
           {String(index + 1).padStart(2, '0')}

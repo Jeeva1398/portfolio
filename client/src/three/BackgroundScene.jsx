@@ -1,14 +1,11 @@
 import { useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-
-const APP = new THREE.Color('#22d3ee')
-const DATA = new THREE.Color('#a78bfa')
-const NEUTRAL = new THREE.Color('#64748b')
+import usePalette from './palette'
 
 function buildNetwork(count, maxDist, maxLinks) {
   const positions = new Float32Array(count * 3)
-  const colors = new Float32Array(count * 3)
+  const tones = []
   for (let i = 0; i < count; i++) {
     const radius = 6 + Math.random() * 10
     const theta = Math.random() * Math.PI * 2
@@ -16,8 +13,7 @@ function buildNetwork(count, maxDist, maxLinks) {
     const x = radius * Math.sin(phi) * Math.cos(theta)
     positions.set([x, radius * Math.sin(phi) * Math.sin(theta) * 0.6, radius * Math.cos(phi)], i * 3)
     // Left half leans cyan (app), right half violet (data), with neutral nodes mixed in.
-    const c = i % 5 === 0 ? NEUTRAL : x < 0 ? APP : DATA
-    colors.set([c.r, c.g, c.b], i * 3)
+    tones.push(i % 5 === 0 ? 'neutral' : x < 0 ? 'app' : 'data')
   }
 
   const links = []
@@ -31,7 +27,7 @@ function buildNetwork(count, maxDist, maxLinks) {
       }
     }
   }
-  return { positions, colors, links: new Float32Array(links) }
+  return { positions, tones, links: new Float32Array(links) }
 }
 
 // Soft round sprite so particles render as dots rather than squares.
@@ -55,10 +51,16 @@ function Network({ count }) {
   const dot = useDotTexture()
   const group = useRef()
   const scroll = useRef(0)
-  const { positions, colors, links } = useMemo(
-    () => buildNetwork(count, 2.8, count),
-    [count],
-  )
+  const palette = usePalette()
+  const { positions, tones, links } = useMemo(() => buildNetwork(count, 2.8, count), [count])
+  const colors = useMemo(() => {
+    const out = new Float32Array(tones.length * 3)
+    tones.forEach((tone, i) => {
+      const c = new THREE.Color(palette[tone])
+      out.set([c.r, c.g, c.b], i * 3)
+    })
+    return out
+  }, [tones, palette])
 
   useFrame((state, delta) => {
     const g = group.current
@@ -77,7 +79,7 @@ function Network({ count }) {
       <points>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-          <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+          <bufferAttribute key={palette.app} attach="attributes-color" args={[colors, 3]} />
         </bufferGeometry>
         <pointsMaterial map={dot} alphaTest={0.01} size={0.12} vertexColors transparent opacity={0.8} sizeAttenuation depthWrite={false} />
       </points>
@@ -85,7 +87,7 @@ function Network({ count }) {
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[links, 3]} />
         </bufferGeometry>
-        <lineBasicMaterial color="#475569" transparent opacity={0.16} depthWrite={false} />
+        <lineBasicMaterial color={palette.link} transparent opacity={palette.linkOpacity} depthWrite={false} />
       </lineSegments>
     </group>
   )

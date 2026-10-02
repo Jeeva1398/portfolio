@@ -10,6 +10,14 @@ const facts = [
   { value: '2', label: 'Tracks: application stack + data stack', color: 'text-data' },
 ]
 
+// Pinned to the arch edges: application stack on the left, data stack on the right
+const portraitChips = [
+  { label: 'node.js', className: 'left-0 top-28 border-app/40 text-app', delay: '0s' },
+  { label: 'mongodb', className: 'left-0 top-48 border-app/40 text-app', delay: '-3s' },
+  { label: 'python', className: 'right-0 top-32 border-data/40 text-data', delay: '-1.5s' },
+  { label: 'airflow', className: 'right-0 top-52 border-data/40 text-data', delay: '-4.5s' },
+]
+
 export default function About() {
   return (
     <section id="about" aria-labelledby="about-title" className="section">
@@ -38,24 +46,46 @@ export default function About() {
 
         <div className="space-y-4">
           <Reveal>
-            <div className="glass relative overflow-hidden rounded-2xl">
-              <div aria-hidden="true" className="absolute inset-x-6 bottom-0 h-3/4 rounded-t-full bg-gradient-to-t from-app/25 via-data/15 to-transparent blur-2xl" />
-              <img
-                src={profilePhoto}
-                alt={`${profile.name}, ${profile.role}`}
-                width="423"
-                height="590"
-                loading="lazy"
-                decoding="async"
-                className="relative mx-auto h-72 w-auto object-contain object-bottom pt-4 sm:h-80"
-              />
-              <div className="relative border-t border-white/10 bg-ink/60 px-5 py-3 backdrop-blur">
-                <p className="font-display font-semibold text-slate-100">{profile.name}</p>
-                <p className="text-sm text-slate-400">
-                  {profile.role} · {profile.location}
-                </p>
+            <figure className="glass relative overflow-hidden rounded-2xl">
+              <div className="relative mx-auto mt-6 h-80 max-w-sm sm:h-96">
+                <div aria-hidden="true" className="portrait-arch absolute inset-x-12 bottom-0 top-20 rounded-t-full sm:inset-x-16 sm:top-24" />
+                <div className="portrait-window absolute inset-x-12 bottom-0 top-0 sm:inset-x-16">
+                  <img
+                    src={profilePhoto}
+                    alt={`${profile.name}, ${profile.role}`}
+                    width="423"
+                    height="590"
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute bottom-0 left-1/2 h-[106%] w-auto max-w-none -translate-x-1/2"
+                  />
+                </div>
+                {portraitChips.map((chip) => (
+                  <span
+                    key={chip.label}
+                    aria-hidden="true"
+                    className={`portrait-chip absolute z-10 inline-flex items-center gap-1.5 rounded-full border bg-panel/90 px-2.5 py-1 font-mono text-[11px] shadow-lg shadow-black/20 backdrop-blur-md ${chip.className}`}
+                    style={{ animationDelay: chip.delay }}
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                    {chip.label}
+                  </span>
+                ))}
               </div>
-            </div>
+              <figcaption className="relative flex flex-wrap items-end justify-between gap-x-4 gap-y-1 border-t border-white/10 bg-ink/60 px-5 py-4 backdrop-blur">
+                <div>
+                  <p className="font-display text-lg font-semibold text-slate-50">{profile.name}</p>
+                  <p className="text-sm text-app-soft">{profile.role}</p>
+                </div>
+                <p className="inline-flex items-center gap-1.5 text-xs text-slate-400">
+                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z" />
+                    <circle cx="12" cy="9.5" r="2.5" />
+                  </svg>
+                  {profile.location}
+                </p>
+              </figcaption>
+            </figure>
           </Reveal>
 
           <div className="grid grid-cols-3 gap-3">

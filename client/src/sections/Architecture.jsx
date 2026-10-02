@@ -5,12 +5,13 @@ import Reveal from '../components/Reveal'
 import SectionHeading from '../components/SectionHeading'
 import useCapability from '../hooks/useCapability'
 import useInViewport from '../hooks/useInViewport'
+import usePalette from '../three/palette'
 
 const ArchitectureScene = lazy(() => import('../three/ArchitectureScene'))
 
 const VIEWS = {
-  app: { ...architecture.app, color: '#22d3ee', text: 'text-app', border: 'border-app', bg: 'bg-app' },
-  data: { ...architecture.data, color: '#a78bfa', text: 'text-data', border: 'border-data', bg: 'bg-data' },
+  app: { ...architecture.app, tone: 'app', text: 'text-app', border: 'border-app', bg: 'bg-app' },
+  data: { ...architecture.data, tone: 'data', text: 'text-data', border: 'border-data', bg: 'bg-data' },
 }
 
 // The layer list is both the keyboard-accessible control and the 2D diagram on mobile / reduced motion.
@@ -93,6 +94,7 @@ function LayerDetail({ view, layer, index }) {
 }
 
 export default function Architecture() {
+  const palette = usePalette()
   const { use3D } = useCapability()
   const [viewId, setViewId] = useState('app')
   const [selection, setSelection] = useState({ app: 'server', data: 'orchestrate' })
@@ -150,7 +152,7 @@ export default function Architecture() {
                   <ArchitectureScene
                     key={viewId}
                     layers={view.layers}
-                    color={view.color}
+                    color={palette[view.tone]}
                     selectedId={selectedId}
                     onSelect={select}
                     active={inView}

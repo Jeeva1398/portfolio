@@ -32,15 +32,17 @@ export default function Hero() {
           </motion.p>
 
           <motion.div {...rise(0.05)} className="mt-4 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5">
-            <span className="relative shrink-0 rounded-full bg-gradient-to-br from-app to-data p-[2px] shadow-lg shadow-app/20">
-              <img
-                src={profilePhoto}
-                alt={`Portrait of ${profile.name}`}
-                width="80"
-                height="80"
-                fetchPriority="high"
-                className="h-16 w-16 rounded-full bg-ink object-cover object-top sm:h-20 sm:w-20"
-              />
+            <span className="avatar-ring relative grid h-20 w-20 shrink-0 place-items-center rounded-full p-[3px] sm:h-24 sm:w-24">
+              <span className="relative h-full w-full overflow-hidden rounded-full bg-gradient-to-b from-app/30 via-panel to-data/30">
+                <img
+                  src={profilePhoto}
+                  alt={`Portrait of ${profile.name}`}
+                  width="423"
+                  height="590"
+                  fetchPriority="high"
+                  className="absolute left-1/2 top-[-20%] w-[135%] max-w-none -translate-x-1/2"
+                />
+              </span>
             </span>
             <h1
               id="hero-title"

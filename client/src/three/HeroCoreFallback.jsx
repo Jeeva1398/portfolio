@@ -1,6 +1,5 @@
 // Static 2D version of the hero "system core" for mobile, low-power devices, and reduced motion.
-const APP = '#22d3ee'
-const DATA = '#a78bfa'
+import usePalette from './palette'
 
 function Tag({ x, y, color, children }) {
   return (
@@ -11,6 +10,7 @@ function Tag({ x, y, color, children }) {
 }
 
 export default function HeroCoreFallback() {
+  const { app: APP, data: DATA, appBody, dataBody } = usePalette()
   return (
     <svg
       viewBox="0 0 420 320"
@@ -35,17 +35,17 @@ export default function HeroCoreFallback() {
       </g>
 
       {/* app cluster */}
-      <circle cx="50" cy="52" r="9" fill="#0b1324" stroke={APP} strokeWidth="2" />
+      <circle cx="50" cy="52" r="9" fill={appBody} stroke={APP} strokeWidth="2" />
       <Tag x={50} y={32} color={APP}>react client</Tag>
       {[110, 132, 154].map((y, i) => (
         <g key={y}>
-          <rect x="95" y={y} width="90" height="16" rx="4" fill="#0b1324" stroke={APP} strokeOpacity={i === 1 ? 0.9 : 0.45} />
+          <rect x="95" y={y} width="90" height="16" rx="4" fill={appBody} stroke={APP} strokeOpacity={i === 1 ? 0.9 : 0.45} />
           <rect x="160" y={y + 6} width="14" height="3" rx="1.5" fill={APP} />
         </g>
       ))}
       <Tag x={140} y={100} color={APP}>node / express api</Tag>
-      <ellipse cx="140" cy="215" rx="30" ry="8" fill="#0b1324" stroke={APP} strokeOpacity="0.7" />
-      <path d="M110 215 v18 a30 8 0 0 0 60 0 v-18" fill="#0b1324" stroke={APP} strokeOpacity="0.7" />
+      <ellipse cx="140" cy="215" rx="30" ry="8" fill={appBody} stroke={APP} strokeOpacity="0.7" />
+      <path d="M110 215 v18 a30 8 0 0 0 60 0 v-18" fill={appBody} stroke={APP} strokeOpacity="0.7" />
       <Tag x={140} y={262} color={APP}>mongodb · mysql</Tag>
 
       {/* data cluster */}
@@ -54,12 +54,12 @@ export default function HeroCoreFallback() {
         [270, 178],
         [258, 252],
       ].map(([x, y]) => (
-        <path key={`${x}-${y}`} d={`M${x} ${y - 11} L${x + 11} ${y} L${x} ${y + 11} L${x - 11} ${y} Z`} fill="#1e1036" stroke={DATA} strokeWidth="1.5" />
+        <path key={`${x}-${y}`} d={`M${x} ${y - 11} L${x + 11} ${y} L${x} ${y + 11} L${x - 11} ${y} Z`} fill={dataBody} stroke={DATA} strokeWidth="1.5" />
       ))}
       <Tag x={262} y={62} color={DATA}>python extract</Tag>
       <Tag x={258} y={282} color={DATA}>airflow · dbt</Tag>
       <rect x="318" y="135" width="72" height="72" rx="6" fill={DATA} fillOpacity="0.08" stroke={DATA} strokeWidth="1.5" />
-      <rect x="340" y="157" width="28" height="28" rx="3" fill="#1e1036" stroke={DATA} />
+      <rect x="340" y="157" width="28" height="28" rx="3" fill={dataBody} stroke={DATA} />
       <Tag x={354} y={228} color={DATA}>postgres warehouse</Tag>
 
       <style>{`@keyframes dash { to { stroke-dashoffset: -40; } }`}</style>

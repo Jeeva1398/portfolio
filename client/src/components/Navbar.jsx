@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { profile } from '../data/content'
 import useActiveSection from '../hooks/useActiveSection'
+import ThemeToggle from './ThemeToggle'
 
 const links = [
   { id: 'home', label: 'Home' },
@@ -71,23 +72,26 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <a
-          href={`/${profile.resumeFile}`}
-          download
-          className="hidden rounded-md border border-white/15 px-3 py-1.5 text-sm font-medium text-slate-200 transition-colors hover:border-app/50 hover:text-app lg:inline-flex"
-        >
-          Resume
-        </a>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <a
+            href={`/${profile.resumeFile}`}
+            download
+            className="hidden rounded-md border border-white/15 px-3 py-1.5 text-sm font-medium text-slate-200 transition-colors hover:border-app/50 hover:text-app lg:inline-flex"
+          >
+            Resume
+          </a>
 
-        <button
-          onClick={() => setMenuOpen((prev) => !prev)}
-          aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-nav"
-          className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 text-slate-200 lg:hidden"
-        >
-          <span aria-hidden="true">{menuOpen ? '✕' : '☰'}</span>
-        </button>
+          <button
+            onClick={() => setMenuOpen((prev) => !prev)}
+            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav"
+            className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 text-slate-200 lg:hidden"
+          >
+            <span aria-hidden="true">{menuOpen ? '✕' : '☰'}</span>
+          </button>
+        </div>
       </nav>
 
       <AnimatePresence>
