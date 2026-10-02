@@ -20,11 +20,14 @@ export function PipelineStrip({ steps }) {
   )
 }
 
+const ACCENTS = {
+  app: { text: 'text-app', line: 'from-app/70', glare: 'rgb(34 211 238 / 0.12)', hover: 'hover:border-app/35' },
+  data: { text: 'text-data', line: 'from-data/70', glare: 'rgb(167 139 250 / 0.14)', hover: 'hover:border-data/35' },
+  ai: { text: 'text-ai', line: 'from-ai/70', glare: 'rgb(244 114 182 / 0.12)', hover: 'hover:border-ai/35' },
+}
+
 export default function ProjectCard({ project, onSelect }) {
-  const isData = project.track === 'data'
-  const accent = isData
-    ? { text: 'text-data', line: 'from-data/70', glare: 'rgb(167 139 250 / 0.14)', hover: 'hover:border-data/35' }
-    : { text: 'text-app', line: 'from-app/70', glare: 'rgb(34 211 238 / 0.12)', hover: 'hover:border-app/35' }
+  const accent = ACCENTS[project.track] ?? ACCENTS.app
 
   return (
     <Tilt className={`group glass flex h-full flex-col rounded-2xl transition-colors ${accent.hover}`} glare={accent.glare} max={4}>

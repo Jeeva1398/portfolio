@@ -3,7 +3,7 @@
 @import "@fontsource-variable/space-grotesk";
 @import "@fontsource-variable/jetbrains-mono";
 
-/* Two tracks, two accents: cyan = application stack, violet = data stack, amber = "building" */
+/* One accent per stack: cyan = application, violet = data, pink = AI; amber = "building" */
 @theme {
   --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-display: "Space Grotesk Variable", "Inter Variable", system-ui, sans-serif;
@@ -16,6 +16,8 @@
   --color-data: #a78bfa;
   --color-data-soft: #c4b5fd;
   --color-build: #fbbf24;
+  --color-ai: #f472b6;
+  --color-ai-soft: #f9a8d4;
 }
 
 :root {
@@ -33,6 +35,8 @@
   --color-data: #7c3aed;
   --color-data-soft: #6d28d9;
   --color-build: #b45309;
+  --color-ai: #db2777;
+  --color-ai-soft: #be185d;
   --color-white: #0f172a;
   --color-slate-50: #020617;
   --color-slate-100: #0f172a;

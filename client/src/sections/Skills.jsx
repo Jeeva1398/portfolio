@@ -10,12 +10,12 @@ export default function Skills() {
         index="02"
         eyebrow="skills"
         id="skills-title"
-        title="Two stacks, one engineer."
+        title="Full-stack, AI, and data - one engineer."
         intro={
           <>
             Skills marked <span className="text-slate-200">Proven</span> come from shipped, production
             work. Skills marked <span className="text-build">Building</span> are ones I&apos;m actively developing
-            as I move toward DevOps and data engineering.
+            as I grow in AI, data engineering, and DevOps.
           </>
         }
       />
@@ -26,6 +26,9 @@ export default function Skills() {
         </span>
         <span className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-data" /> data stack
+        </span>
+        <span className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-ai" /> AI stack
         </span>
       </div>
 

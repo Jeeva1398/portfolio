@@ -24,7 +24,7 @@ export default function ProjectModal({ project, onClose }) {
     }
   }, [project, onClose])
 
-  const accent = project?.track === 'data' ? 'text-data' : 'text-app'
+  const accent = { data: 'text-data', ai: 'text-ai' }[project?.track] ?? 'text-app'
 
   return (
     <AnimatePresence>

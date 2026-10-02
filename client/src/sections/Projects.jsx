@@ -8,6 +8,7 @@ import SectionHeading from '../components/SectionHeading'
 const FILTERS = [
   { id: 'all', label: 'All' },
   { id: 'app', label: 'MERN / Full-Stack' },
+  { id: 'ai', label: 'AI' },
   { id: 'data', label: 'Data Engineering' },
 ]
 
@@ -71,7 +72,7 @@ export default function Projects() {
               <motion.span
                 layoutId="project-filter"
                 className={`absolute inset-0 rounded-lg ${
-                  f.id === 'data' ? 'bg-data' : f.id === 'app' ? 'bg-app' : 'bg-slate-100'
+                  f.id === 'data' ? 'bg-data' : f.id === 'app' ? 'bg-app' : f.id === 'ai' ? 'bg-ai' : 'bg-slate-100'
                 }`}
                 transition={{ type: 'spring', stiffness: 400, damping: 32 }}
               />

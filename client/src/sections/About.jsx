@@ -7,7 +7,7 @@ import profilePhoto from '../assets/profile.webp'
 const facts = [
   { value: '~3 yrs', label: 'Building production MERN apps', color: 'text-app' },
   { value: '3', label: 'Domains: healthcare, CRM, e-commerce', color: 'text-app' },
-  { value: '2', label: 'Tracks: application stack + data stack', color: 'text-data' },
+  { value: '3', label: 'Stacks: application, AI, and data', color: 'text-ai' },
 ]
 
 // Sit on the orbit rings: application stack on the left, data stack on the right

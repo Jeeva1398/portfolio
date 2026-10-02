@@ -4,6 +4,7 @@ import Tilt from './Tilt'
 const TRACK = {
   app: { label: 'Application stack', dot: 'bg-app', text: 'text-app', glare: 'rgb(34 211 238 / 0.12)', ring: 'hover:border-app/30' },
   data: { label: 'Data stack', dot: 'bg-data', text: 'text-data', glare: 'rgb(167 139 250 / 0.14)', ring: 'hover:border-data/30' },
+  ai: { label: 'AI stack', dot: 'bg-ai', text: 'text-ai', glare: 'rgb(244 114 182 / 0.12)', ring: 'hover:border-ai/30' },
   tools: { label: 'Workflow', dot: 'bg-slate-400', text: 'text-slate-400', glare: 'rgb(148 163 184 / 0.10)', ring: 'hover:border-white/20' },
 }
 

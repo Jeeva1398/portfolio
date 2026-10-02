@@ -20,7 +20,7 @@ export default function Contact() {
         eyebrow="contact"
         id="contact-title"
         title="Let's talk."
-        intro="Open to backend, full-stack, and data engineering roles. Reach out directly or use the form."
+        intro="Open to full-stack, AI, and data engineering roles. Reach out directly or use the form."
       />
 
       <div className="mt-10 grid gap-10 md:grid-cols-[1fr_1.2fr]">
@@ -43,17 +43,6 @@ export default function Contact() {
                 </a>
               </li>
             ))}
-            <li className="glass flex items-center gap-4 rounded-xl p-4">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/5 font-mono text-xs text-slate-300">
-                ☎
-              </span>
-              <span>
-                <span className="block font-mono text-[11px] uppercase tracking-wider text-slate-500">Phone</span>
-                <a href={`tel:${profile.phone.replace(/\s/g, '')}`} className="text-sm text-slate-100 hover:text-app">
-                  {profile.phone}
-                </a>
-              </span>
-            </li>
             <li>
               <a
                 href={`/${profile.resumeFile}`}

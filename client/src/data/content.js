@@ -17,7 +17,6 @@ export const profile = {
   positioning: 'Full-Stack Engineer - AI applications & data engineering',
   location: 'Chennai / Coimbatore, Tamil Nadu, India',
   email: 'jeevamp0799@gmail.com',
-  phone: '+91 94888 16066',
   linkedin: 'https://www.linkedin.com/in/jeevaananthan-m/',
   github: 'https://github.com/Jeeva1398',
   resumeFile: 'Jeevaananthan-M-Resume.pdf',
@@ -47,7 +46,7 @@ export const about = {
   },
 }
 
-// track: 'app' (application stack), 'data' (data stack), or 'tools'
+// track: 'app' (application stack), 'data' (data stack), 'ai' (AI stack), or 'tools'
 export const skillGroups = [
   {
     title: 'Backend',
@@ -93,6 +92,22 @@ export const skillGroups = [
     ],
     // listed, but not used in a project yet - shown with their own "learning" tag
     learning: ['Apache Spark', 'PySpark'],
+  },
+  {
+    title: 'AI Engineering',
+    track: 'ai',
+    status: 'building',
+    // each item is used in the chatbot or Eventa
+    items: [
+      'LLM Integration (Groq, Ollama)',
+      'LLM Fine-tuning (QLoRA, Unsloth)',
+      'Prompt Design',
+      'Structured Output (Zod)',
+      'Knowledge-Base Retrieval (BM25)',
+      'Local Inference (llama.cpp, GGUF)',
+      'Model Evaluation',
+      'Hugging Face',
+    ],
   },
   {
     title: 'DevOps & Cloud',
@@ -147,7 +162,7 @@ export const experience = [
 ]
 
 // kind: 'professional' (client/employer work) or 'personal' (own portfolio projects)
-// track: 'app' or 'data' - drives the Projects filter and accent colour
+// track: 'app', 'data' or 'ai' - drives the Projects filter and accent colour
 // status: 'In progress' | 'Completed' | 'Live' | 'Planned' (personal projects only)
 export const projects = [
   {
@@ -227,7 +242,8 @@ export const projects = [
   {
     slug: 'zenithdesk-chatbot',
     kind: 'personal',
-    track: 'app',
+    track: 'ai',
+    alsoTrack: 'app',
     status: 'Live',
     name: 'ZenithDesk Chatbot Widget',
     tagline: 'Multi-org AI support widget - answers from the knowledge base, raises tickets and enquiries, and lets customers track tickets',
@@ -262,10 +278,10 @@ export const projects = [
       },
       {
         heading: 'Deployment',
-        text: 'Deployed to production at chat.zenithdesk.site and embedded on this portfolio. The chat bubble on this page is the live widget.',
+        text: 'Deployed to production at chat.zenithdesk.site and embedded on zenithdesk.site and on this portfolio. The chat bubble on this page is the live widget.',
       },
     ],
-    image: { src: chatbotEmbedded, alt: 'The ZenithDesk chat widget open on this portfolio: a How can we help? home screen with a message box and a Make an enquiry option' },
+    image: { src: chatbotEmbedded, alt: 'The ZenithDesk chat widget open on the zenithdesk.site landing page: a How can we help? home screen with a message box and a Make an enquiry option' },
     gallery: [
       {
         src: chatbotWidget,
@@ -275,12 +291,13 @@ export const projects = [
         caption: 'The widget home screen - theme and options come from the org’s settings in ZenithDesk',
       },
     ],
-    links: { repo: 'https://github.com/Jeeva1398/zenithDesk-chat', demo: null },
+    links: { repo: 'https://github.com/Jeeva1398/zenithDesk-chat', demo: 'https://zenithdesk.site/' },
   },
   {
     slug: 'eventa',
     kind: 'personal',
-    track: 'app',
+    track: 'ai',
+    alsoTrack: 'app',
     status: 'Live',
     name: 'Eventa',
     tagline: 'Offline AI assistant for Node.js & TypeScript - explains crashes, reviews git diffs and pull requests, and audits npm dependencies with a fine-tuned 1 GB model',
