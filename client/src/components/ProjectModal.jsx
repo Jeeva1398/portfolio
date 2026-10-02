@@ -161,6 +161,17 @@ export default function ProjectModal({ project, onClose }) {
                     Live demo
                   </a>
                 )}
+                {project.links.extra?.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center rounded-lg border border-white/15 px-4 py-2 text-sm text-slate-100 hover:border-app/50"
+                  >
+                    {link.label}
+                  </a>
+                ))}
               </div>
             )}
           </motion.div>
