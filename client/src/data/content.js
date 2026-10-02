@@ -51,6 +51,7 @@ export const skillGroups = [
     status: 'proven',
     items: [
       'Node.js',
+      'TypeScript',
       'Express.js',
       'RESTful API Design',
       'Middleware Development',
