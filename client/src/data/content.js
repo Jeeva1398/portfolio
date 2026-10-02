@@ -12,9 +12,9 @@ import eventaReview from '../assets/projects/eventa-review.webp'
 export const profile = {
   name: 'Jeevaananthan M',
   shortName: 'Jeeva',
-  role: 'MERN Stack Developer',
-  headline: 'MERN Full-Stack & Backend Developer | Building in Data Engineering',
-  positioning: 'Backend Developer - building toward Data Engineering & DevOps',
+  role: 'Full-Stack Engineer',
+  headline: 'Full-Stack Engineer | AI Applications & Data Engineering',
+  positioning: 'Full-Stack Engineer - AI applications & data engineering',
   location: 'Chennai / Coimbatore, Tamil Nadu, India',
   email: 'jeevamp0799@gmail.com',
   phone: '+91 94888 16066',
@@ -22,9 +22,9 @@ export const profile = {
   github: 'https://github.com/Jeeva1398',
   resumeFile: 'Jeevaananthan-M-Resume.pdf',
   pitch:
-    "I'm a backend-leaning full-stack developer with about 3 years of experience building and shipping production MERN applications across healthcare, CRM, and e-commerce. I design RESTful APIs, model MongoDB schemas for scale, and I'm now extending that foundation into DevOps (Docker, CI/CD, AWS) and data engineering (ETL, warehousing, orchestration).",
+    "I'm a full-stack engineer with about 3 years of experience building and shipping production MERN applications across healthcare, CRM, and e-commerce. On that backend foundation I build AI features - a multi-org support chatbot and Eventa, an offline AI developer tool with its own fine-tuned model - and data pipelines with Python, Airflow, and dbt.",
   currentlyBuildingTeaser:
-    'Now live: ZenithDesk, a multi-tenant support SaaS with an AI chatbot, and an e-commerce sales data pipeline with a daily-refreshed dashboard.',
+    'Now live: ZenithDesk with its AI chatbot, Eventa on npm, and an e-commerce sales data pipeline with a daily-refreshed dashboard.',
   coreStack: ['Node.js', 'Express.js', 'React.js', 'MongoDB', 'REST APIs'],
   domainExperience: ['Healthcare (EMR/Telehealth)', 'CRM', 'E-commerce'],
 }

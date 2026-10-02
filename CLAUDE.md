@@ -9,8 +9,8 @@ Redesign the existing personal developer portfolio into a modern, premium, inter
 Owner: Jeevaananthan M (goes by Jeeva)
 
 **Headline positioning (use consistently in hero, meta tags, and resume section):**
-`MERN Full-Stack & Backend Developer | Building in Data Engineering`
-(Owner chose this honest version on 2026-09-24, and kept it on 2026-09-30 after the sales pipeline went live. Do not change it unless the owner asks.)
+`Full-Stack Engineer | AI Applications & Data Engineering`
+(Owner changed it on 2026-10-02, after Eventa launched, from `MERN Full-Stack & Backend Developer | Building in Data Engineering`. Employer job titles in Experience stay "MERN Stack Developer". Do not change it unless the owner asks.)
 Both tracks must be equally easy to find. A recruiter for either role should understand the fit within seconds.
 
 ## Decisions (owner-confirmed 2026-09-24)
