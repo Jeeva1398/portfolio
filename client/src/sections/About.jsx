@@ -10,12 +10,12 @@ const facts = [
   { value: '2', label: 'Tracks: application stack + data stack', color: 'text-data' },
 ]
 
-// Pinned to the arch edges: application stack on the left, data stack on the right
+// Sit on the orbit rings: application stack on the left, data stack on the right
 const portraitChips = [
-  { label: 'node.js', className: 'left-0 top-28 border-app/40 text-app', delay: '0s' },
-  { label: 'mongodb', className: 'left-0 top-48 border-app/40 text-app', delay: '-3s' },
-  { label: 'python', className: 'right-0 top-32 border-data/40 text-data', delay: '-1.5s' },
-  { label: 'airflow', className: 'right-0 top-52 border-data/40 text-data', delay: '-4.5s' },
+  { label: 'node.js', className: '-left-10 top-[6%] border-app/40 text-app sm:-left-16', delay: '0s' },
+  { label: 'mongodb', className: '-left-12 top-[66%] border-app/40 text-app sm:-left-20', delay: '-3s' },
+  { label: 'python', className: '-right-10 top-[12%] border-data/40 text-data sm:-right-16', delay: '-1.5s' },
+  { label: 'airflow', className: '-right-12 top-[72%] border-data/40 text-data sm:-right-20', delay: '-4.5s' },
 ]
 
 export default function About() {
@@ -47,18 +47,12 @@ export default function About() {
         <div className="space-y-4">
           <Reveal>
             <figure className="glass relative overflow-hidden rounded-2xl">
-              <div className="relative mx-auto mt-6 h-80 max-w-sm sm:h-96">
-                <div aria-hidden="true" className="portrait-arch absolute inset-x-12 bottom-0 top-20 rounded-t-full sm:inset-x-16 sm:top-24" />
-                <div className="portrait-window absolute inset-x-12 bottom-0 top-0 sm:inset-x-16">
-                  <img
-                    src={profilePhoto}
-                    alt={`${profile.name}, ${profile.role}`}
-                    width="423"
-                    height="590"
-                    loading="lazy"
-                    decoding="async"
-                    className="absolute bottom-0 left-1/2 h-[106%] w-auto max-w-none -translate-x-1/2"
-                  />
+              <div className="portrait-stage relative mx-auto mb-16 mt-20">
+                <div aria-hidden="true" className="portrait-orbit portrait-orbit-outer" />
+                <div aria-hidden="true" className="portrait-orbit portrait-orbit-inner" />
+                <div aria-hidden="true" className="portrait-disc" />
+                <div className="portrait-cutout">
+                  <img src={profilePhoto} alt={`${profile.name}, ${profile.role}`} width="423" height="590" loading="lazy" decoding="async" />
                 </div>
                 {portraitChips.map((chip) => (
                   <span

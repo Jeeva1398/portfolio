@@ -85,7 +85,7 @@ export const skillGroups = [
       'Docker',
     ],
     // listed, but not used in a project yet - shown with their own "learning" tag
-    learning: ['Apache Spark', 'PySpark'],
+    learning: ['Apache Spark', 'PySpark', 'Hadoop', 'HDFS', 'Hive'],
   },
   {
     title: 'DevOps & Cloud',

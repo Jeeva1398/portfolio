@@ -146,35 +146,92 @@ body {
   }
 }
 
-.portrait-arch {
+/* About portrait: the photo sits in a glowing disc (its round bottom hides where the photo's
+   shoulders are cropped) and the head rises above the disc. --s is the disc size. */
+.portrait-stage {
+  --s: 15rem;
+  width: var(--s);
+  height: var(--s);
+}
+
+@media (min-width: 640px) {
+  .portrait-stage {
+    --s: 17rem;
+  }
+}
+
+.portrait-disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
   background:
-    linear-gradient(rgb(148 163 184 / 0.08) 1px, transparent 1px) 0 0 / 22px 22px,
-    linear-gradient(90deg, rgb(148 163 184 / 0.08) 1px, transparent 1px) 0 0 / 22px 22px,
-    radial-gradient(circle at 50% 18%, rgb(34 211 238 / 0.35), transparent 60%),
-    linear-gradient(160deg, rgb(34 211 238 / 0.3), rgb(167 139 250 / 0.3) 55%, rgb(167 139 250 / 0.05));
-  border: 1px solid rgb(255 255 255 / 0.14);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 0 40px -10px rgb(34 211 238 / 0.35);
-  border-bottom: 0;
+    radial-gradient(circle at 50% 30%, rgb(34 211 238 / 0.35), transparent 65%),
+    linear-gradient(160deg, rgb(34 211 238 / 0.28), rgb(167 139 250 / 0.32));
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 0 60px -12px rgb(34 211 238 / 0.45), 0 0 80px -20px rgb(167 139 250 / 0.45);
 }
 
-[data-theme='light'] .portrait-arch {
+.portrait-orbit {
+  position: absolute;
+  border-radius: 9999px;
+  border: 1px dashed rgb(148 163 184 / 0.25);
+  animation: orbit-spin 40s linear infinite;
+}
+
+.portrait-orbit-inner {
+  inset: -9%;
+  border-style: solid;
+  border-color: rgb(34 211 238 / 0.18) transparent rgb(167 139 250 / 0.25) transparent;
+  animation-duration: 24s;
+  animation-direction: reverse;
+}
+
+.portrait-orbit-outer {
+  inset: -20%;
+}
+
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Taller than the disc by 25% above it. The mask shows the disc's circle plus everything above
+   35% of its height, so the head breaks out of the top while the shoulders stay inside the circle. */
+.portrait-cutout {
+  position: absolute;
+  inset: -25% 0 0 0;
+  -webkit-mask-image:
+    radial-gradient(circle calc(var(--s) / 2) at 50% calc(var(--s) * 0.75), #000 99%, transparent 100%),
+    linear-gradient(to bottom, #000 calc(var(--s) * 0.6), transparent 0);
+  mask-image:
+    radial-gradient(circle calc(var(--s) / 2) at 50% calc(var(--s) * 0.75), #000 99%, transparent 100%),
+    linear-gradient(to bottom, #000 calc(var(--s) * 0.6), transparent 0);
+}
+
+.portrait-cutout img {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--s) * 0.25 - var(--s) * 0.1 - var(--s) * 1.45 * 0.19);
+  height: calc(var(--s) * 1.45);
+  width: auto;
+  max-width: none;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 10px 20px rgb(0 0 0 / 0.35));
+}
+
+[data-theme='light'] .portrait-disc {
   background:
-    linear-gradient(rgb(37 99 235 / 0.08) 1px, transparent 1px) 0 0 / 22px 22px,
-    linear-gradient(90deg, rgb(37 99 235 / 0.08) 1px, transparent 1px) 0 0 / 22px 22px,
-    linear-gradient(160deg, rgb(8 145 178 / 0.25), rgb(124 58 237 / 0.2) 55%, rgb(124 58 237 / 0.04));
-  border-color: rgb(15 23 42 / 0.08);
+    radial-gradient(circle at 50% 30%, rgb(255 255 255 / 0.9), transparent 60%),
+    linear-gradient(160deg, rgb(8 145 178 / 0.28), rgb(124 58 237 / 0.25));
+  box-shadow: inset 0 0 0 1px rgb(15 23 42 / 0.08), 0 20px 50px -20px rgb(8 145 178 / 0.45);
 }
 
-/* The photo is clipped to the arch's sides (shoulders end cleanly on its edges) but not its top,
-   so the head rises out of the frame; the bottom fades into the caption. */
-.portrait-window {
-  clip-path: inset(-40% 0 0 0);
-  -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent);
-  mask-image: linear-gradient(to bottom, #000 82%, transparent);
+[data-theme='light'] .portrait-orbit {
+  border-color: rgb(71 85 105 / 0.25);
 }
 
-.portrait-window img {
-  filter: drop-shadow(0 18px 30px rgb(0 0 0 / 0.35));
+[data-theme='light'] .portrait-orbit-inner {
+  border-color: rgb(8 145 178 / 0.25) transparent rgb(124 58 237 / 0.3) transparent;
 }
 
 .portrait-chip {
