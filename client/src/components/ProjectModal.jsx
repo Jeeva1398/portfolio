@@ -67,14 +67,14 @@ export default function ProjectModal({ project, onClose }) {
             <p className="mt-2 text-slate-400">{project.tagline}</p>
 
             {project.image && (
-              <a href={project.links?.demo ?? project.image.src} target="_blank" rel="noreferrer" className="mt-5 block">
+              <a href={project.links?.demoLabel ? project.image.src : (project.links?.demo ?? project.image.src)} target="_blank" rel="noreferrer" className="mt-5 block">
                 <img
                   src={project.image.src}
                   alt={project.image.alt}
                   width="1280"
                   height="800"
                   loading="lazy"
-                  className="w-full rounded-lg border border-white/10"
+                  className="mx-auto h-auto max-h-[36rem] w-auto max-w-full rounded-lg border border-white/10"
                 />
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
@@ -128,7 +128,7 @@ export default function ProjectModal({ project, onClose }) {
                           width={shot.width}
                           height={shot.height}
                           loading="lazy"
-                          className="w-full rounded-lg border border-white/10"
+                          className="mx-auto h-auto max-h-[36rem] w-auto max-w-full rounded-lg border border-white/10"
                         />
                         <span className="sr-only">(opens full size in a new tab)</span>
                       </a>
@@ -158,7 +158,7 @@ export default function ProjectModal({ project, onClose }) {
                     rel="noreferrer"
                     className="inline-flex items-center rounded-lg bg-gradient-to-r from-app to-data px-4 py-2 text-sm font-semibold text-ink"
                   >
-                    Live demo
+                    {project.links.demoLabel ? `${project.links.demoLabel} package` : 'Live demo'}
                   </a>
                 )}
                 {project.links.extra?.map((link) => (

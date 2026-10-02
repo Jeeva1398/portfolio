@@ -1,6 +1,10 @@
 import salesDashboard from '../assets/projects/sales-dashboard.webp'
 import salesAirflowDag from '../assets/projects/sales-airflow-dag.webp'
 import salesMetabase from '../assets/projects/sales-metabase.webp'
+import zenithdeskDashboard from '../assets/projects/zenithdesk-dashboard.webp'
+import zenithdeskTickets from '../assets/projects/zenithdesk-tickets.webp'
+import chatbotEmbedded from '../assets/projects/chatbot-embedded.webp'
+import chatbotWidget from '../assets/projects/chatbot-widget.webp'
 import eventaCard from '../assets/projects/eventa-card.webp'
 import eventaExplain from '../assets/projects/eventa-explain.webp'
 import eventaReview from '../assets/projects/eventa-review.webp'
@@ -83,9 +87,12 @@ export const skillGroups = [
       'Data Warehousing',
       'SQL for Analytics',
       'Docker',
+      'Hadoop',
+      'HDFS',
+      'Hive',
     ],
     // listed, but not used in a project yet - shown with their own "learning" tag
-    learning: ['Apache Spark', 'PySpark', 'Hadoop', 'HDFS', 'Hive'],
+    learning: ['Apache Spark', 'PySpark'],
   },
   {
     title: 'DevOps & Cloud',
@@ -205,6 +212,16 @@ export const projects = [
         text: 'Deployed to production at portal.zenithdesk.site, with the API on api.zenithdesk.site and a landing page at zenithdesk.site.',
       },
     ],
+    image: { src: zenithdeskDashboard, alt: 'ZenithDesk agent dashboard: tickets created and resolved, average first response and resolution time, a created-vs-resolved trend chart, and breakdowns by priority, category, and agent' },
+    gallery: [
+      {
+        src: zenithdeskTickets,
+        width: 1440,
+        height: 900,
+        alt: 'ZenithDesk tickets page: quick views, status totals, filters, and a ticket table with status, priority, SLA, and assignee',
+        caption: 'Agent portal - tickets with status, priority, SLA badges, and assignees (seeded demo data)',
+      },
+    ],
     links: { repo: 'https://github.com/Jeeva1398/zenithDesk', demo: 'https://portal.zenithdesk.site/' },
   },
   {
@@ -246,6 +263,16 @@ export const projects = [
       {
         heading: 'Deployment',
         text: 'Deployed to production at chat.zenithdesk.site and embedded on this portfolio. The chat bubble on this page is the live widget.',
+      },
+    ],
+    image: { src: chatbotEmbedded, alt: 'The ZenithDesk chat widget open on this portfolio: a How can we help? home screen with a message box and a Make an enquiry option' },
+    gallery: [
+      {
+        src: chatbotWidget,
+        width: 394,
+        height: 744,
+        alt: 'Close-up of the ZenithDesk chat widget home screen with Home and Messages tabs',
+        caption: 'The widget home screen - theme and options come from the org’s settings in ZenithDesk',
       },
     ],
     links: { repo: 'https://github.com/Jeeva1398/zenithDesk-chat', demo: null },
@@ -317,11 +344,9 @@ export const projects = [
     ],
     links: {
       repo: 'https://github.com/Jeeva1398/eventa',
-      demo: null,
-      extra: [
-        { label: 'npm package', href: 'https://www.npmjs.com/package/@jeeva1398/eventa' },
-        { label: 'Model on Hugging Face', href: 'https://huggingface.co/jeeva1398/eventa-1.5b-gguf' },
-      ],
+      demo: 'https://www.npmjs.com/package/@jeeva1398/eventa',
+      demoLabel: 'npm',
+      extra: [{ label: 'Model on Hugging Face', href: 'https://huggingface.co/jeeva1398/eventa-1.5b-gguf' }],
     },
   },
   {

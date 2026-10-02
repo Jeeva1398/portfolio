@@ -67,7 +67,7 @@ These come from the owner's current work. Add them as projects/skills only with 
 - **Light/dark theme** (owner request 2026-10-02): `data-theme` on `<html>`, light mode remaps the slate scale and white tints in `index.css`; 3D colours come from `three/palette.js`.
 - **DevPilot** (planned): AI-powered backend engineering assistant (React, Node/Express, Python FastAPI, RAG). Show only as "Planned" if included at all.
 
-**Data Engineering skill group (confirmed):** Python, Apache Spark, PySpark (added 2026-09-28), Apache Airflow, dbt, ETL/ELT, SQL, Docker. Kept from the existing portfolio: Data Warehousing. PostgreSQL removed from the skill lists by the owner (2026-09-28). Apache Spark and PySpark are not used in any project yet: they sit in the group's `learning` list and render with a "learning" tag (owner-confirmed 2026-09-30). Hadoop, HDFS and Hive added to the same `learning` list (owner request 2026-10-02). Not listed as skills (unconfirmed): Metabase, dimensional modeling.
+**Data Engineering skill group (confirmed):** Python, Apache Spark, PySpark (added 2026-09-28), Apache Airflow, dbt, ETL/ELT, SQL, Docker. Kept from the existing portfolio: Data Warehousing. PostgreSQL removed from the skill lists by the owner (2026-09-28). Apache Spark and PySpark are not used in any project yet: they sit in the group's `learning` list and render with a "learning" tag (owner-confirmed 2026-09-30). Hadoop, HDFS and Hive are regular items in the group (owner-confirmed 2026-10-02: already learned). Not listed as skills (unconfirmed): Metabase, dimensional modeling.
 
 ---
 

@@ -1,6 +1,6 @@
 import StatusBadge from './StatusBadge'
 import Tilt from './Tilt'
-import { ArrowIcon } from './Icons'
+import { ArrowIcon, GitHubIcon } from './Icons'
 import { companyLine } from '../lib/projects'
 
 export function PipelineStrip({ steps }) {
@@ -77,14 +77,42 @@ export default function ProjectCard({ project, onSelect }) {
           ))}
         </ul>
 
-        <button
-          type="button"
-          onClick={() => onSelect(project)}
-          className={`mt-auto inline-flex items-center gap-2 self-start pt-6 text-sm font-medium ${accent.text} after:absolute after:inset-0 after:content-['']`}
-        >
-          View details<span className="sr-only">: {project.name}</span>
-          <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-        </button>
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-6">
+          <button
+            type="button"
+            onClick={() => onSelect(project)}
+            className={`inline-flex items-center gap-2 text-sm font-medium ${accent.text} after:absolute after:inset-0 after:content-['']`}
+          >
+            View details<span className="sr-only">: {project.name}</span>
+            <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </button>
+          {(project.links?.demo || project.links?.repo) && (
+            <div className="relative z-10 flex items-center gap-2">
+              {project.links.demo && (
+                <a
+                  href={project.links.demo}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-gradient-to-r from-app to-data px-3 py-1.5 text-xs font-semibold text-ink transition-opacity hover:opacity-90"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-ink/70" aria-hidden="true" />
+                  {project.links.demoLabel ?? 'Live'}<span className="sr-only"> - {project.name} (opens in a new tab)</span>
+                </a>
+              )}
+              {project.links.repo && (
+                <a
+                  href={project.links.repo}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-white/15 px-3 py-1.5 text-xs font-medium text-slate-200 transition-colors hover:border-app/50 hover:text-app"
+                >
+                  <GitHubIcon className="h-3.5 w-3.5" />
+                  Code<span className="sr-only"> for {project.name} on GitHub (opens in a new tab)</span>
+                </a>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </Tilt>
   )
