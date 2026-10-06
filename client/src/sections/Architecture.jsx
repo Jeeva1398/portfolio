@@ -79,14 +79,18 @@ function LayerDetail({ view, layer, index }) {
           <h3 className="mt-2 font-display text-2xl font-semibold text-slate-50">{layer.label}</h3>
           <p className="mt-1 font-mono text-xs text-slate-400">{layer.tech}</p>
           <p className="mt-4 leading-relaxed text-slate-300">{layer.what}</p>
-          <p className="mt-6 font-mono text-[11px] uppercase tracking-wider text-slate-500">Where I&apos;ve used it</p>
-          <ul className="mt-2 flex flex-wrap gap-2">
-            {layer.usedIn.map((name) => (
-              <li key={name} className="chip border border-white/10 bg-white/5 text-slate-200">
-                {name}
-              </li>
-            ))}
-          </ul>
+          {layer.usedIn.length > 0 && (
+            <>
+              <p className="mt-6 font-mono text-[11px] uppercase tracking-wider text-slate-500">Where I&apos;ve used it</p>
+              <ul className="mt-2 flex flex-wrap gap-2">
+                {layer.usedIn.map((name) => (
+                  <li key={name} className="chip border border-white/10 bg-white/5 text-slate-200">
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </motion.div>
       </AnimatePresence>
     </div>

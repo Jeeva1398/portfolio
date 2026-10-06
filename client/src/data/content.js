@@ -1,6 +1,3 @@
-import salesDashboard from '../assets/projects/sales-dashboard.webp'
-import salesAirflowDag from '../assets/projects/sales-airflow-dag.webp'
-import salesMetabase from '../assets/projects/sales-metabase.webp'
 import zenithdeskDashboard from '../assets/projects/zenithdesk-dashboard.webp'
 import zenithdeskTickets from '../assets/projects/zenithdesk-tickets.webp'
 import chatbotEmbedded from '../assets/projects/chatbot-embedded.webp'
@@ -23,7 +20,7 @@ export const profile = {
   pitch:
     "I'm a full-stack engineer with about 3 years of experience building and shipping production MERN applications across healthcare, CRM, and e-commerce. On that backend foundation I build AI features - a multi-org support chatbot and Eventa, an offline AI developer tool with its own fine-tuned model - and data pipelines with Python, Airflow, and dbt.",
   currentlyBuildingTeaser:
-    'Now live: ZenithDesk with its AI chatbot, Eventa on npm, and an e-commerce sales data pipeline with a daily-refreshed dashboard.',
+    'Now live: ZenithDesk with its AI chatbot, and Eventa on npm.',
   coreStack: ['Node.js', 'Express.js', 'React.js', 'MongoDB', 'REST APIs'],
   domainExperience: ['Healthcare (EMR/Telehealth)', 'CRM', 'E-commerce'],
 }
@@ -34,7 +31,7 @@ export const about = {
   domainParagraph:
     "That work has landed me in three different domains - a healthcare EMR/telehealth platform, a CRM with role-based lead management, and an e-commerce platform with an admin panel - so I've had to adapt to different data models and compliance/business constraints rather than build the same CRUD app three times.",
   direction:
-    "I'm now building toward two related but distinct tracks: DevOps (Docker, CI/CD, AWS) as the deployment layer on top of my backend work, and data engineering (ETL, warehousing, orchestration) as a data layer on top of the applications I already build. ZenithDesk, now live in production, is where both of those show up in practice, and the e-commerce sales data pipeline - MySQL into a dbt star schema, scheduled with Airflow locally and GitHub Actions in the cloud - is my first dedicated data engineering build.",
+    "I'm now building toward two related but distinct tracks: DevOps (Docker, CI/CD, AWS) as the deployment layer on top of my backend work, and data engineering (ETL, warehousing, orchestration) as a data layer on top of the applications I already build. ZenithDesk, now live in production, is where both of those show up in practice.",
   pivotNote:
     "Before engineering, I spent 2020–2021 as a Medical Billing Specialist at KMCH, Coimbatore - hands-on exposure to healthcare operations and insurance workflows that now shapes how I think about the EMR/telehealth systems I build as a developer.",
   currently:
@@ -80,6 +77,11 @@ export const skillGroups = [
     status: 'building',
     items: [
       'Python',
+      'Apache Spark',
+      'PySpark',
+      'Databricks',
+      'Azure Data Factory (ADF)',
+      'Azure Data Engineering',
       'Apache Airflow',
       'dbt',
       'ETL / ELT Pipelines',
@@ -90,8 +92,6 @@ export const skillGroups = [
       'HDFS',
       'Hive',
     ],
-    // listed, but not used in a project yet - shown with their own "learning" tag
-    learning: ['Apache Spark', 'PySpark'],
   },
   {
     title: 'AI Engineering',
@@ -127,7 +127,7 @@ export const skillGroups = [
     title: 'Tools & Collaboration',
     track: 'tools',
     status: 'proven',
-    // GitHub Actions sits here, not under DevOps (building): it runs CI for ZenithDesk and the sales pipeline's schedule
+    // GitHub Actions sits here, not under DevOps (building): it runs CI for ZenithDesk
     items: ['Git', 'GitHub', 'GitHub Actions', 'VS Code', 'Postman', 'ClickUp', 'Slack'],
   },
 ]
@@ -367,65 +367,6 @@ export const projects = [
     },
   },
   {
-    slug: 'ecommerce-sales-pipeline',
-    kind: 'personal',
-    track: 'data',
-    status: 'Live',
-    name: 'E-commerce Sales Data Pipeline',
-    tagline: 'Batch ELT pipeline from an operational MySQL database into a dbt star schema, refreshed daily and served on a live dashboard',
-    domain: 'Data Engineering · Portfolio project',
-    stack: ['MySQL', 'Python', 'Apache Airflow', 'dbt', 'PostgreSQL', 'Docker', 'Metabase', 'GitHub Actions', 'Supabase', 'Streamlit'],
-    pipeline: ['MySQL', 'Python', 'Airflow', 'dbt', 'Postgres', 'Dashboard'],
-    highlights: [
-      'dbt star schema with key and relationship tests',
-      'Airflow DAG locally, GitHub Actions in the cloud',
-      'Live dashboard refreshed daily',
-    ],
-    details: [
-      {
-        heading: 'Flow',
-        list: [
-          'Source - normalised OLTP schema in MySQL (categories, customers, products, orders, order items), seeded with Faker',
-          'Extract & load - Python streams each table with a server-side cursor and COPYs it into a raw schema in Postgres, all in one transaction so a failed run leaves the previous load intact',
-          'Transform - dbt staging views, an intermediate order-lines model, and a star schema: fact_orders at order-line grain plus customer, product, and date dimensions',
-          'Quality - dbt tests on keys and referential integrity run after every load',
-          'Dashboard - revenue and order trends, top products, and customer lifetime value',
-        ],
-      },
-      {
-        heading: 'Local stack',
-        text: 'The full version runs in Docker Compose: MySQL, a Postgres warehouse, Apache Airflow (LocalExecutor with its own metadata database) running one DAG - extract, dbt run, dbt test - with retries and failure callbacks, and Metabase with its dashboard provisioned from a script through the Metabase API.',
-      },
-      {
-        heading: 'Cloud deployment',
-        text: 'A free-tier cloud version runs the same extraction and dbt code. A daily GitHub Actions workflow seeds a throwaway MySQL service container, loads the Supabase Postgres warehouse, and runs dbt build and tests. The dashboard is rebuilt in Streamlit on Streamlit Community Cloud, reading only the mart tables.',
-      },
-      {
-        heading: 'Status',
-        text: 'A portfolio project running on generated sample data (about 2,000 customers, 300 products, and 8,000 orders) - there are no real users or production traffic behind it.',
-      },
-    ],
-    image: { src: salesDashboard, alt: 'Streamlit dashboard: revenue, orders, customers and average order value tiles above revenue and order volume by month' },
-    // extra screenshots, shown in the details view only
-    gallery: [
-      {
-        src: salesAirflowDag,
-        width: 670,
-        height: 100,
-        alt: 'Airflow graph view of the ecom_pipeline DAG: extract_to_raw, dbt_run and dbt_test, each marked success',
-        caption: 'Local stack - the Airflow DAG: extract, dbt run, dbt test',
-      },
-      {
-        src: salesMetabase,
-        width: 1080,
-        height: 690,
-        alt: 'Metabase dashboard: revenue and order volume by month, top 10 products by revenue, and a customer lifetime value table',
-        caption: 'Local stack - the Metabase dashboard, provisioned from a script',
-      },
-    ],
-    links: { repo: 'https://github.com/Jeeva1398/E-Commerce-Sales', demo: 'https://jeeva-ecom-sales.streamlit.app/' },
-  },
-  {
     slug: 'emr-telehealth',
     kind: 'professional',
     track: 'app',
@@ -579,43 +520,43 @@ export const architecture = {
         id: 'source',
         label: 'Source Systems',
         tech: 'MySQL · Application DB',
-        what: 'Operational data where it is created - ZenithDesk ticket data in its MySQL OLTP schema, and sales data in MySQL.',
-        usedIn: ['ZenithDesk', 'E-commerce Sales Data Pipeline'],
+        what: 'Operational data where it is created - ZenithDesk ticket data in its MySQL OLTP schema.',
+        usedIn: ['ZenithDesk'],
       },
       {
         id: 'extract',
         label: 'Extract & Load',
         tech: 'Python · Node.js · SQL',
-        what: 'Jobs pull data out of the source database and land it in the warehouse - incrementally from a watermark in ZenithDesk (Node + SQL), and with Python streaming into Postgres via COPY in the sales pipeline.',
-        usedIn: ['ZenithDesk', 'E-commerce Sales Data Pipeline'],
+        what: 'Jobs pull data out of the source database and land it in the warehouse - incrementally from a watermark in ZenithDesk (Node + SQL).',
+        usedIn: ['ZenithDesk'],
       },
       {
         id: 'orchestrate',
         label: 'Orchestration',
         tech: 'Apache Airflow · GitHub Actions · node-cron',
-        what: 'Scheduled, repeatable runs - a node-cron ETL schedule with overlap protection in ZenithDesk, and in the sales pipeline an Airflow DAG locally and a scheduled GitHub Actions workflow in the cloud.',
-        usedIn: ['ZenithDesk', 'E-commerce Sales Data Pipeline'],
+        what: 'Scheduled, repeatable runs - a node-cron ETL schedule with overlap protection in ZenithDesk, or an Airflow DAG / scheduled GitHub Actions workflow for batch pipelines.',
+        usedIn: ['ZenithDesk'],
       },
       {
         id: 'warehouse',
         label: 'Warehouse',
-        tech: 'MySQL star schema · PostgreSQL · Supabase · Docker',
-        what: 'Analytics storage kept apart from operational tables - a MySQL star schema (dimensions + fact_ticket_daily) in ZenithDesk, and a PostgreSQL warehouse for the sales pipeline - in Docker locally, on Supabase in the cloud.',
-        usedIn: ['ZenithDesk', 'E-commerce Sales Data Pipeline'],
+        tech: 'MySQL star schema · Data Warehousing',
+        what: 'Analytics storage kept apart from operational tables - a MySQL star schema (dimensions + fact_ticket_daily) in ZenithDesk.',
+        usedIn: ['ZenithDesk'],
       },
       {
         id: 'transform',
         label: 'Transform',
         tech: 'dbt · SQL',
         what: 'dbt models turn raw loaded tables into clean, analytics-ready tables using version-controlled SQL - staging views, then a fact table and dimensions, with tests on keys and relationships.',
-        usedIn: ['E-commerce Sales Data Pipeline'],
+        usedIn: [],
       },
       {
         id: 'bi',
         label: 'BI Dashboard',
-        tech: 'Metabase · Streamlit · React dashboard',
-        what: 'Dashboards on top of the modelled tables - the part a business user actually looks at. ZenithDesk’s analytics dashboard reads from its warehouse; the sales pipeline uses Metabase locally and a live Streamlit dashboard in the cloud.',
-        usedIn: ['ZenithDesk', 'E-commerce Sales Data Pipeline'],
+        tech: 'React dashboard',
+        what: 'Dashboards on top of the modelled tables - the part a business user actually looks at. ZenithDesk’s analytics dashboard reads from its warehouse.',
+        usedIn: ['ZenithDesk'],
       },
     ],
   },
