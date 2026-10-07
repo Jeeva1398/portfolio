@@ -248,6 +248,57 @@ body {
   }
 }
 
+/* Card border beam: a short gradient arc that circles the card edge while it is hovered.
+   The mask keeps only a 1px ring, so the content underneath is untouched. */
+@property --beam-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes beam-spin {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+
+.beam::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0deg,
+    var(--color-app) 25deg,
+    var(--color-ai) 55deg,
+    var(--color-data) 85deg,
+    transparent 115deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+  animation: beam-spin 4.5s linear infinite paused;
+}
+
+.beam:hover::before,
+.beam:focus-within::before {
+  opacity: 0.9;
+  animation-play-state: running;
+}
+
+/* Skills marquee fades out at both edges */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
 /* Faint blueprint grid behind the whole page */
 .grid-overlay {
   background-image:

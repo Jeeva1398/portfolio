@@ -1,7 +1,13 @@
 import { skillGroups } from '../data/content'
 import SkillGroup from '../components/SkillGroup'
+import TechMarquee from '../components/TechMarquee'
 import Reveal from '../components/Reveal'
 import SectionHeading from '../components/SectionHeading'
+
+// Marquee rows: application + AI skills drift one way, data + workflow skills the other
+const chips = (tracks) =>
+  skillGroups.filter((g) => tracks.includes(g.track)).flatMap((g) => g.items.map((label) => ({ label, track: g.track })))
+const MARQUEE_ROWS = [chips(['app', 'ai']), chips(['data', 'tools'])]
 
 export default function Skills() {
   return (
@@ -19,6 +25,10 @@ export default function Skills() {
           </>
         }
       />
+
+      <div className="mt-10">
+        <TechMarquee rows={MARQUEE_ROWS} />
+      </div>
 
       <div className="mt-8 flex flex-wrap gap-4 font-mono text-xs text-slate-400" aria-hidden="true">
         <span className="flex items-center gap-2">

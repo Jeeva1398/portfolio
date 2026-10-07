@@ -1,5 +1,6 @@
 import { about, profile } from '../data/content'
 import Reveal from '../components/Reveal'
+import ScrollWords from '../components/ScrollWords'
 import SectionHeading from '../components/SectionHeading'
 import Tilt from '../components/Tilt'
 import profilePhoto from '../assets/profile.webp'
@@ -30,9 +31,7 @@ export default function About() {
 
       <div className="mt-12 grid gap-10 lg:grid-cols-[1.25fr_1fr]">
         <div className="space-y-6 leading-relaxed text-slate-300">
-          <Reveal delay={0.05}>
-            <p>{about.summary}</p>
-          </Reveal>
+          <ScrollWords text={about.summary} className="text-lg text-slate-200" />
           <Reveal delay={0.1}>
             <p>{about.domainParagraph}</p>
           </Reveal>

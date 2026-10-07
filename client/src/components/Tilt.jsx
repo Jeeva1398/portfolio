@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion'
 
-// Pointer-driven 3D tilt with a soft glare. Inert for touch and reduced motion.
+// Pointer-driven 3D tilt with a soft glare and a border beam on hover. Inert for touch and reduced motion.
 export default function Tilt({ children, className = '', max = 6, glare = 'rgb(34 211 238 / 0.10)' }) {
   const reduce = useReducedMotion()
   const px = useMotionValue(0.5)
@@ -34,7 +34,7 @@ export default function Tilt({ children, className = '', max = 6, glare = 'rgb(3
         onPointerMove={handleMove}
         onPointerLeave={reset}
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-        className={`relative h-full ${className}`}
+        className={`beam relative h-full ${className}`}
       >
         <motion.div
           aria-hidden="true"

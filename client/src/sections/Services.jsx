@@ -4,6 +4,7 @@ import Reveal from '../components/Reveal'
 import SectionHeading from '../components/SectionHeading'
 import Tilt from '../components/Tilt'
 import Magnetic from '../components/Magnetic'
+import CountUp from '../components/CountUp'
 import { ArrowIcon } from '../components/Icons'
 import { openProject } from '../lib/projects'
 import { setAudience } from '../hooks/useAudience'
@@ -135,7 +136,9 @@ export default function Services() {
             {proofPoints.map((point) => (
               <div key={point.label} className="flex flex-col-reverse">
                 <dt className="mt-1 text-sm leading-snug text-slate-400">{point.label}</dt>
-                <dd className="font-display text-3xl font-semibold text-slate-50">{point.value}</dd>
+                <dd className="font-display text-3xl font-semibold text-slate-50">
+                  <CountUp value={point.value} />
+                </dd>
               </div>
             ))}
           </dl>

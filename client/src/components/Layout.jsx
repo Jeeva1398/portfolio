@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import { MotionConfig } from 'framer-motion'
 import Navbar from './Navbar'
 import Footer from './Footer'
+import Spotlight from './Spotlight'
 import useCapability from '../hooks/useCapability'
 
 const BackgroundScene = lazy(() => import('../three/BackgroundScene'))
@@ -35,8 +36,10 @@ export default function Layout({ children }) {
         </Suspense>
       )}
 
+      <Spotlight />
+
       <Navbar />
-      <main id="main" className="w-full flex-1">
+      <main id="main" className="w-full flex-1 overflow-x-clip">
         {children}
       </main>
       <Footer />

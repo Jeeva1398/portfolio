@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { projects } from '../data/content'
 import ProjectCard from '../components/ProjectCard'
+import ProjectGallery from '../components/ProjectGallery'
 import ProjectModal from '../components/ProjectModal'
 import SectionHeading from '../components/SectionHeading'
 import { OPEN_PROJECT_EVENT } from '../lib/projects'
@@ -35,7 +36,23 @@ function ProjectGrid({ items, onSelect }) {
   )
 }
 
+// The pinned 3D gallery needs room: a large, tall enough screen and motion allowed.
+const GALLERY_QUERY = '(min-width: 1024px) and (min-height: 700px)'
+
+function useGallery() {
+  const reduce = useReducedMotion()
+  const [roomy, setRoomy] = useState(() => window.matchMedia(GALLERY_QUERY).matches)
+  useEffect(() => {
+    const mq = window.matchMedia(GALLERY_QUERY)
+    const update = () => setRoomy(mq.matches)
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+  return roomy && !reduce
+}
+
 export default function Projects() {
+  const gallery = useGallery()
   const [filter, setFilter] = useState('all')
   const [selected, setSelected] = useState(null)
   const close = useCallback(() => setSelected(null), [])
@@ -93,12 +110,21 @@ export default function Projects() {
         ))}
       </div>
 
-      {building.length > 0 && (
-        <div className="mt-10">
-          <h3 className="mb-5 font-mono text-xs uppercase tracking-wider text-build">Products &amp; open source</h3>
-          <ProjectGrid items={building} onSelect={setSelected} />
-        </div>
-      )}
+      {building.length > 0 &&
+        (gallery ? (
+          <div className="mt-6">
+            <ProjectGallery
+              title={<h3 className="font-mono text-xs uppercase tracking-wider text-build">Products &amp; open source</h3>}
+              items={building}
+              onSelect={setSelected}
+            />
+          </div>
+        ) : (
+          <div className="mt-10">
+            <h3 className="mb-5 font-mono text-xs uppercase tracking-wider text-build">Products &amp; open source</h3>
+            <ProjectGrid items={building} onSelect={setSelected} />
+          </div>
+        ))}
 
       {professional.length > 0 && (
         <div className="mt-12">

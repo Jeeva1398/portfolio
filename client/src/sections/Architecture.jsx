@@ -1,5 +1,5 @@
 import { lazy, Suspense, useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useScroll } from 'framer-motion'
 import { architecture } from '../data/content'
 import Reveal from '../components/Reveal'
 import SectionHeading from '../components/SectionHeading'
@@ -103,7 +103,10 @@ export default function Architecture() {
   const [viewId, setViewId] = useState('app')
   const [selection, setSelection] = useState({ app: 'server', data: 'orchestrate' })
   const canvasRef = useRef(null)
+  const panelRef = useRef(null)
   const inView = useInViewport(canvasRef)
+  // 0 → 1 while the panel scrolls from the bottom of the screen to the middle; the 3D layers assemble along it.
+  const { scrollYProgress } = useScroll({ target: panelRef, offset: ['start end', 'center center'] })
 
   const view = VIEWS[viewId]
   const selectedId = selection[viewId]
@@ -147,7 +150,7 @@ export default function Architecture() {
         </div>
       </Reveal>
 
-      <div id="architecture-panel" role="tabpanel" aria-label={view.label} className="mt-6 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+      <div ref={panelRef} id="architecture-panel" role="tabpanel" aria-label={view.label} className="mt-6 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
         <div className="glass overflow-hidden rounded-2xl">
           {use3D ? (
             <>
@@ -160,6 +163,7 @@ export default function Architecture() {
                     selectedId={selectedId}
                     onSelect={select}
                     active={inView}
+                    progress={scrollYProgress}
                   />
                 </Suspense>
               </div>

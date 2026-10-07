@@ -26,23 +26,43 @@ const ACCENTS = {
   ai: { text: 'text-ai', line: 'from-ai/70', glare: 'rgb(244 114 182 / 0.12)', hover: 'hover:border-ai/35' },
 }
 
-export default function ProjectCard({ project, onSelect }) {
+// wide: landscape layout (screenshot left, details right) used by the horizontal gallery
+export default function ProjectCard({ project, onSelect, wide = false }) {
   const accent = ACCENTS[project.track] ?? ACCENTS.app
 
   return (
-    <Tilt className={`group glass flex h-full flex-col rounded-2xl transition-colors ${accent.hover}`} glare={accent.glare} max={4}>
-      <div className={`h-px w-full rounded-t-2xl bg-gradient-to-r ${accent.line} to-transparent`} aria-hidden="true" />
-      {project.image && (
-        <img
-          src={project.image.src}
-          alt={project.image.alt}
-          width="1280"
-          height="800"
-          loading="lazy"
-          decoding="async"
-          className="aspect-[16/9] w-full border-b border-white/10 object-cover object-top"
-        />
-      )}
+    <Tilt
+      className={`group glass h-full rounded-2xl transition-colors ${accent.hover} ${
+        wide && project.image ? 'grid grid-cols-[1.1fr_1fr] overflow-hidden' : 'flex flex-col'
+      }`}
+      glare={accent.glare}
+      max={wide ? 2 : 4}
+    >
+      {!wide && <div className={`h-px w-full rounded-t-2xl bg-gradient-to-r ${accent.line} to-transparent`} aria-hidden="true" />}
+      {project.image &&
+        (wide ? (
+          <div className="relative border-r border-white/10">
+            <img
+              src={project.image.src}
+              alt={project.image.alt}
+              width="1280"
+              height="800"
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover object-left-top"
+            />
+          </div>
+        ) : (
+          <img
+            src={project.image.src}
+            alt={project.image.alt}
+            width="1280"
+            height="800"
+            loading="lazy"
+            decoding="async"
+            className="aspect-[16/9] w-full border-b border-white/10 object-cover object-top"
+          />
+        ))}
       <div className="flex flex-1 flex-col p-6" style={{ transform: 'translateZ(20px)' }}>
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className={`font-mono text-[11px] uppercase tracking-wider ${accent.text}`}>{project.domain}</p>
