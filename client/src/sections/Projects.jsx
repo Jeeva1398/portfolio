@@ -1,9 +1,10 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { projects } from '../data/content'
 import ProjectCard from '../components/ProjectCard'
 import ProjectModal from '../components/ProjectModal'
 import SectionHeading from '../components/SectionHeading'
+import { OPEN_PROJECT_EVENT } from '../lib/projects'
 
 const FILTERS = [
   { id: 'all', label: 'All' },
@@ -39,6 +40,16 @@ export default function Projects() {
   const [selected, setSelected] = useState(null)
   const close = useCallback(() => setSelected(null), [])
 
+  // Services cards open a project's details directly
+  useEffect(() => {
+    const onOpen = (e) => {
+      const project = projects.find((p) => p.slug === e.detail)
+      if (project) setSelected(project)
+    }
+    window.addEventListener(OPEN_PROJECT_EVENT, onOpen)
+    return () => window.removeEventListener(OPEN_PROJECT_EVENT, onOpen)
+  }, [])
+
   const { building, professional } = useMemo(() => {
     const visible = projects.filter((p) => filter === 'all' || p.track === filter || p.alsoTrack === filter)
     return {
@@ -50,11 +61,11 @@ export default function Projects() {
   return (
     <section id="projects" aria-labelledby="projects-title" className="section">
       <SectionHeading
-        index="04"
+        index="05"
         eyebrow="projects"
         id="projects-title"
         title="Production work, and what I'm building next."
-        intro="Professional projects were delivered for clients and employers across healthcare, CRM, and e-commerce. Portfolio projects are my own builds, labelled honestly with their current status."
+        intro="Professional projects were delivered for clients and employers across healthcare, CRM, and e-commerce. My own products, the ZenithDesk SaaS and its AI chatbot, plus open-source tools, are labelled honestly with their current status."
       />
 
       <div role="group" aria-label="Filter projects" className="mt-8 inline-flex rounded-xl border border-white/10 bg-white/5 p-1">
@@ -84,7 +95,7 @@ export default function Projects() {
 
       {building.length > 0 && (
         <div className="mt-10">
-          <h3 className="mb-5 font-mono text-xs uppercase tracking-wider text-build">Portfolio projects</h3>
+          <h3 className="mb-5 font-mono text-xs uppercase tracking-wider text-build">Products &amp; open source</h3>
           <ProjectGrid items={building} onSelect={setSelected} />
         </div>
       )}

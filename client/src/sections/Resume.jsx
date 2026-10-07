@@ -12,7 +12,7 @@ const tracks = [
 export default function Resume() {
   return (
     <section id="resume" aria-labelledby="resume-title" className="section">
-      <SectionHeading index="06" eyebrow="resume" id="resume-title" title="The one-page version." />
+      <SectionHeading index="07" eyebrow="resume" id="resume-title" title="The one-page version." />
 
       <Reveal className="mt-10">
         <div className="glass grid gap-8 rounded-2xl p-6 sm:p-8 lg:grid-cols-3">

@@ -43,6 +43,102 @@ export const about = {
   },
 }
 
+// Copy for the two audiences the site speaks to: recruiters ('hiring') and freelance clients ('client').
+export const audiences = {
+  hiring: {
+    label: 'Hiring for a role',
+    short: 'Hiring',
+    availability: 'Open to full-time full-stack, AI, and data engineering roles',
+    pitch: profile.pitch,
+    contactIntro: 'Open to full-stack, AI, and data engineering roles. Reach out directly or use the form.',
+  },
+  client: {
+    label: 'Have a project',
+    short: 'Project',
+    availability: 'Taking on freelance projects · remote, IST (UTC+5:30)',
+    pitch:
+      'I build web apps, APIs, AI chatbots, and data dashboards for teams that need them to work in production - not just in a demo. About 3 years of shipping MERN products in healthcare, CRM, and e-commerce, plus my own live SaaS, AI chatbot, and open-source AI tool you can try right now.',
+    contactIntro:
+      "Tell me what you want to build, who it is for, and when you need it. I'll reply with questions or a clear next step.",
+  },
+}
+
+// Freelance services. `proof` names project slugs from `projects` below, so every claim links to real work.
+export const services = [
+  {
+    id: 'webapps',
+    track: 'app',
+    title: 'Full-stack web apps & SaaS',
+    summary: 'From an idea or a spec to a deployed React + Node product with accounts, roles, and an admin panel.',
+    deliverables: [
+      'React front-end, Express API, and database design',
+      'Sign-in, user roles, and admin / back-office screens',
+      'Multi-tenant SaaS foundations (one app, many customer orgs)',
+      'Deployed to your server or cloud, with environment setup',
+    ],
+    stack: ['React', 'Node.js', 'Express.js', 'MongoDB', 'MySQL'],
+    proof: ['zenithdesk', 'emr-telehealth', 'ecommerce'],
+  },
+  {
+    id: 'backend',
+    track: 'app',
+    title: 'Backend & REST APIs',
+    summary: 'APIs that a front-end or mobile team can build on: validated, secured, documented by tests.',
+    deliverables: [
+      'REST API design and implementation',
+      'JWT auth, refresh tokens, and role-based access control',
+      'Schema design, indexing, and slow-query fixes',
+      'Automated end-to-end tests run in GitHub Actions CI',
+    ],
+    stack: ['Node.js', 'TypeScript', 'Express.js', 'JWT', 'Playwright'],
+    proof: ['zenithdesk', 'crm'],
+  },
+  {
+    id: 'ai',
+    track: 'ai',
+    title: 'AI chatbots & LLM features',
+    summary: 'Assistants that answer from your own content and hand off to real workflows - tickets, leads, and status checks.',
+    deliverables: [
+      'Embeddable chat widget for any website (one script tag)',
+      'Answers grounded in your knowledge base, with sources',
+      'Structured extraction into your systems (tickets, enquiries)',
+      'Hosted LLMs (Groq) or fully local / offline models',
+    ],
+    stack: ['React', 'Express.js', 'Groq', 'Ollama', 'Zod'],
+    proof: ['zenithdesk-chatbot', 'eventa'],
+  },
+  {
+    id: 'data',
+    track: 'data',
+    title: 'Data pipelines & dashboards',
+    summary: 'Get reporting off your live database: scheduled ETL into a warehouse, and dashboards that read from it.',
+    deliverables: [
+      'Extract and load jobs from your app database',
+      'Star-schema warehouse (dimension and fact tables)',
+      'Scheduled, incremental loads with Airflow or cron',
+      'Analytics dashboards on top of the modelled data',
+    ],
+    stack: ['Python', 'SQL', 'Apache Airflow', 'dbt', 'MySQL'],
+    proof: ['zenithdesk'],
+  },
+]
+
+// How a freelance engagement runs, step by step.
+export const engagement = [
+  { step: 'Discuss', text: 'A short call or email thread about the problem, users, and deadline.' },
+  { step: 'Scope', text: 'A written scope with milestones, so you know what ships when.' },
+  { step: 'Build', text: 'Work in milestones with a working demo at each one - not a big reveal at the end.' },
+  { step: 'Launch', text: 'Deployment, handover of code and credentials, and a walkthrough of how it runs.' },
+]
+
+// Reasons to hire, each backed by something verifiable on this site.
+export const proofPoints = [
+  { value: '~3 yrs', label: 'shipping production MERN apps for two product teams' },
+  { value: '3', label: 'live products you can open today - SaaS, AI chatbot, AI CLI' },
+  { value: '~155', label: 'automated end-to-end tests in CI on ZenithDesk' },
+  { value: '3', label: 'domains: healthcare, CRM, and e-commerce' },
+]
+
 // track: 'app' (application stack), 'data' (data stack), 'ai' (AI stack), or 'tools'
 export const skillGroups = [
   {
@@ -112,7 +208,7 @@ export const skillGroups = [
   {
     title: 'DevOps & Cloud',
     track: 'app',
-    status: 'building',
+    status: 'proven',
     items: [
       'Docker',
       'AWS EC2',
@@ -161,7 +257,7 @@ export const experience = [
   },
 ]
 
-// kind: 'professional' (client/employer work) or 'personal' (own portfolio projects)
+// kind: 'professional' (client/employer work) or 'personal' (own products and open source)
 // track: 'app', 'data' or 'ai' - drives the Projects filter and accent colour
 // status: 'In progress' | 'Completed' | 'Live' | 'Planned' (personal projects only)
 export const projects = [
@@ -175,7 +271,7 @@ export const projects = [
     alsoTrack: 'data',
     name: 'ZenithDesk',
     tagline: 'Multi-tenant customer support SaaS - agent portal, customer portal, knowledge base, and a warehouse-backed analytics dashboard',
-    domain: 'SaaS · Portfolio project',
+    domain: 'SaaS product',
     stack: ['React', 'Vite', 'Tailwind CSS', 'Node.js', 'Express.js', 'MySQL', 'Knex', 'JWT', 'Playwright', 'GitHub Actions'],
     highlights: [
       'Tenancy guard on every query',
@@ -247,7 +343,7 @@ export const projects = [
     status: 'Live',
     name: 'ZenithDesk Chatbot Widget',
     tagline: 'Multi-org AI support widget - answers from the knowledge base, raises tickets and enquiries, and lets customers track tickets',
-    domain: 'AI · Portfolio project',
+    domain: 'AI · Part of the ZenithDesk SaaS',
     stack: ['React', 'Shadow DOM', 'Vite (library build)', 'Express.js', 'Groq', 'Ollama', 'Zod', 'SQLite'],
     highlights: ['GPT-OSS 20B & 120B on Groq, Qwen 2.5 fallback', 'Grounded knowledge-base answers', 'Ticket tracking via email + OTP'],
     details: [
@@ -339,7 +435,7 @@ export const projects = [
       },
       {
         heading: 'Status',
-        text: 'Released as an open-source portfolio project (npm @jeeva1398/eventa). It is newly published, so there is no user base yet.',
+        text: 'Released as an open-source project (npm @jeeva1398/eventa). It is newly published, so there is no user base yet.',
       },
     ],
     image: { src: eventaCard, alt: 'Eventa: offline AI assistant for Node.js and TypeScript, with a terminal showing eventa review flagging a missing await and a SQL injection' },

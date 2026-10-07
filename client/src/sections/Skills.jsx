@@ -7,7 +7,7 @@ export default function Skills() {
   return (
     <section id="skills" aria-labelledby="skills-title" className="section">
       <SectionHeading
-        index="02"
+        index="03"
         eyebrow="skills"
         id="skills-title"
         title="Full-stack, AI, and data - one engineer."

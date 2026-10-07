@@ -59,14 +59,15 @@ Produce an inventory and save it in the "Existing Portfolio Inventory" section b
 These come from the owner's current work. Add them as projects/skills only with the status shown.
 
 - **Domain experience:** healthcare (EMR/telehealth), CRM, e-commerce. Cross-check wording against the old portfolio's Experience section.
-- **ZenithDesk** (MERN, portfolio project): multi-tenant support-ticket SaaS. Vite + React client, Express server, MySQL with Knex, JWT auth, agents/tickets/tags/views, super-admin endpoints, Zendesk-inspired agent dashboard, faker-seeded data. Multi-tenancy via `org_id` on tenant tables. Warehouse/ETL layer is built (verified in repo 2026-09-25): MySQL star schema (dim_organization/agent/category + fact_ticket_daily), incremental Node + SQL ETL on node-cron, dashboard reads from it. Also built: refresh tokens, tenancy guard, macros, SLAs, search, KB, enquiries, attachments, ~155 Playwright E2E tests in GitHub Actions CI. No Docker, no real-time. Repo: github.com/Jeeva1398/zenithDesk.
-- **ZenithDesk chatbot** (companion repo): embeddable chat widget (React, Shadow DOM, Vite library build) with an Express backend, local LLM via Ollama, Zod-validated structured extraction with retry and rule-based fallback, and real ticket-API integration. Verified 2026-09-25: Groq primary + Ollama fallback, intent routing, KB-grounded answers, multi-org via widget key, enquiries, attachments, and ticket tracking via email + OTP are all built. No streaming, no tests. Repo: github.com/Jeeva1398/zenithDesk-chat.
+- **ZenithDesk** (MERN, presented as a **SaaS product**, owner request 2026-10-07; card domain 'SaaS product', no customer/user claims): multi-tenant support-ticket SaaS. Vite + React client, Express server, MySQL with Knex, JWT auth, agents/tickets/tags/views, super-admin endpoints, Zendesk-inspired agent dashboard, faker-seeded data. Multi-tenancy via `org_id` on tenant tables. Warehouse/ETL layer is built (verified in repo 2026-09-25): MySQL star schema (dim_organization/agent/category + fact_ticket_daily), incremental Node + SQL ETL on node-cron, dashboard reads from it. Also built: refresh tokens, tenancy guard, macros, SLAs, search, KB, enquiries, attachments, ~155 Playwright E2E tests in GitHub Actions CI. No Docker, no real-time. Repo: github.com/Jeeva1398/zenithDesk.
+- **ZenithDesk chatbot** (companion repo, presented as part of the ZenithDesk SaaS, owner request 2026-10-07): embeddable chat widget (React, Shadow DOM, Vite library build) with an Express backend, local LLM via Ollama, Zod-validated structured extraction with retry and rule-based fallback, and real ticket-API integration. Verified 2026-09-25: Groq primary + Ollama fallback, intent routing, KB-grounded answers, multi-org via widget key, enquiries, attachments, and ticket tracking via email + OTP are all built. No streaming, no tests. Repo: github.com/Jeeva1398/zenithDesk-chat.
 - **E-commerce sales data pipeline** (removed from the site by the owner on 2026-10-06; do not show it in Projects or Architecture) (Data Engineering, portfolio project, Live since 2026-09-30): MySQL source (Faker-seeded), Python extract via COPY into a Postgres raw schema, dbt staging/intermediate/marts star schema with tests. Local: Docker Compose with Airflow DAG + Metabase. Cloud: daily GitHub Actions workflow (throwaway MySQL service container) into Supabase Postgres, Streamlit dashboard on Streamlit Community Cloud, keep-awake job every 5h. Sample data only, no real users. Repo: github.com/Jeeva1398/E-Commerce-Sales.
 - **Eventa** (open source, Live since 2026-10-02, owner-confirmed): offline AI CLI for Node.js/TypeScript (explain, review, deps) with its own QLoRA fine-tuned Qwen2.5-Coder-1.5B GGUF; published on npm (@jeeva1398/eventa), Hugging Face (jeeva1398/eventa-1.5b-gguf) and as a GitHub Action. Newly published, no user base. Repo: github.com/Jeeva1398/eventa.
 - **TypeScript** added to the Backend skill group (owner-confirmed 2026-10-02; Eventa is written in TypeScript).
 - **AI stack** (owner request 2026-10-02): third skill track `ai` (pink accent `--color-ai`) with an AI Engineering group (status building; items are ones used in the chatbot or Eventa), an AI project filter, and chatbot + Eventa on track `ai` with alsoTrack `app`.
 - **Phone number removed** from the portfolio (owner request 2026-10-02). Do not show it on the site.
 - **Light/dark theme** (owner request 2026-10-02): `data-theme` on `<html>`, light mode remaps the slate scale and white tints in `index.css`; 3D colours come from `three/palette.js`.
+- **Freelance audience** (owner request 2026-10-06): the site speaks to recruiters AND freelance clients. Hero switch "Hiring for a role" / "Have a project" (`hooks/useAudience.js`, remembered per visitor, `?for=clients` opens the client view for freelance profiles) swaps hero pitch/CTAs, the nav button (Resume / Hire me), contact copy, and shows the service/timeline fields in the contact form (owner removed the Job/Freelance/Other topic picker 2026-10-06). New Services section (`services`, `engagement`, `proofPoints` in `content.js`); every service links to real projects. No rates, testimonials, or past freelance clients are shown, since none are confirmed.
 - **DevPilot** (planned): AI-powered backend engineering assistant (React, Node/Express, Python FastAPI, RAG). Show only as "Planned" if included at all.
 
 **Data Engineering skill group (confirmed):** Python, Apache Spark, PySpark (added 2026-09-28), Apache Airflow, dbt, ETL/ELT, SQL, Docker. Kept from the existing portfolio: Data Warehousing. PostgreSQL removed from the skill lists by the owner (2026-09-28). Apache Spark and PySpark are regular items (the "learning" tag was removed by the owner on 2026-10-06). Databricks, Azure Data Factory (ADF) and Azure Data Engineering added to the group (owner request 2026-10-06). Hadoop, HDFS and Hive are regular items in the group (owner-confirmed 2026-10-02: already learned). Not listed as skills (unconfirmed): Metabase, dimensional modeling.
@@ -87,7 +88,7 @@ Suggested color language: one accent for the **application stack** (for example 
 
 ## Site Structure
 
-**Navigation:** sticky, `Home | About | Skills | Experience | Projects | Architecture | Contact`, smooth scroll, becomes translucent/blurred on scroll.
+**Navigation:** sticky, `About | Services | Skills | Experience | Projects | Architecture | Contact` (logo goes home), smooth scroll, becomes translucent/blurred on scroll.
 
 ### Hero
 - Name, headline `MERN Full-Stack Developer | Backend Engineer | Data Engineer`, short intro (from existing content, extended to mention data work only if the owner confirms wording)
@@ -105,7 +106,7 @@ Animated 3D skill cards or a technology constellation (not a plain list). Groups
 - **Databases:** MongoDB, MySQL, PostgreSQL
 - **Frontend:** React, JavaScript, HTML, CSS
 - **Data Engineering:** see the confirmed list above
-- **DevOps / Cloud:** Docker, AWS EC2, AWS S3, Azure, Linux, Nginx, GitHub Actions (confirmed; CI/CD removed from skill lists by the owner 2026-09-28). GitHub Actions is shown under Tools & Collaboration (Proven) since 2026-09-30, because ZenithDesk CI and the sales pipeline both run on it
+- **DevOps / Cloud:** Docker, AWS EC2, AWS S3, Azure, Linux, Nginx, GitHub Actions (confirmed; CI/CD removed from skill lists by the owner 2026-09-28). Group status changed from Building to Proven by the owner 2026-10-06. GitHub Actions is shown under Tools & Collaboration (Proven) since 2026-09-30, because ZenithDesk CI and the sales pipeline both run on it
 - Also keep the existing TypeScript/Tailwind/Bootstrap (Frontend) and Tools & Collaboration items, and the Proven / Building status per group.
 
 ### Experience
@@ -181,7 +182,8 @@ Must work on desktop, laptop, tablet, and mobile. On mobile, simplify the 3D exp
 - PostgreSQL and Data Warehousing were kept from the old portfolio but not in the owner's confirmed list. Confirm or remove.
 - Contact copy said "June/July 2026 cycle", which has passed; replaced with "Open to backend, full-stack, and data engineering roles". Confirm.
 - Contact-form email delivery: handled by ZenithDesk's enquiry alert email (needs RESEND_API_KEY on the ZenithDesk main app and "Send new enquiries to" set in its Settings → Chatbot).
-- Resume PDF (owner will rewrite it themselves): it lacks the sales pipeline, Pentabay and Faces Sync have identical bullets, and its E-commerce section still says "lead tracking".
+- Freelance: confirm the availability line ("Taking on freelance projects · remote, IST"), the 4-step engagement process, and whether to show rates, a booking link, or freelance platform profiles (Upwork etc.).
+- Resume PDF: built from `~/Documents/resume-build.js` (docx package, converted to PDF with Word). Sales pipeline project and its summary mention removed 2026-10-06. Still open: Pentabay and Faces Sync have identical bullets, and the PDF still shows the phone number that was removed from the site.
 
 ## Progress Log
 - [x] Step 0: Inventory existing portfolio

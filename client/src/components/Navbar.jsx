@@ -3,10 +3,11 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { profile } from '../data/content'
 import useActiveSection from '../hooks/useActiveSection'
 import ThemeToggle from './ThemeToggle'
+import useAudience from '../hooks/useAudience'
 
 const links = [
-  { id: 'home', label: 'Home' },
   { id: 'about', label: 'About' },
+  { id: 'services', label: 'Services' },
   { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
@@ -14,12 +15,13 @@ const links = [
   { id: 'contact', label: 'Contact' },
 ]
 
-const sectionIds = links.map((link) => link.id)
+const sectionIds = ['home', ...links.map((link) => link.id)]
 
 export default function Navbar() {
   const activeId = useActiveSection(sectionIds)
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const forClient = useAudience() === 'client'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -74,13 +76,22 @@ export default function Navbar() {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <a
-            href={`/${profile.resumeFile}`}
-            download
-            className="hidden rounded-md border border-white/15 px-3 py-1.5 text-sm font-medium text-slate-200 transition-colors hover:border-app/50 hover:text-app lg:inline-flex"
-          >
-            Resume
-          </a>
+          {forClient ? (
+            <a
+              href="#contact"
+              className="hidden rounded-md bg-gradient-to-r from-ai to-data px-3 py-1.5 text-sm font-semibold text-ink shadow-md shadow-ai/20 transition-shadow hover:shadow-ai/40 lg:inline-flex"
+            >
+              Hire me
+            </a>
+          ) : (
+            <a
+              href={`/${profile.resumeFile}`}
+              download
+              className="hidden rounded-md border border-white/15 px-3 py-1.5 text-sm font-medium text-slate-200 transition-colors hover:border-app/50 hover:text-app lg:inline-flex"
+            >
+              Resume
+            </a>
+          )}
 
           <button
             onClick={() => setMenuOpen((prev) => !prev)}
@@ -119,9 +130,15 @@ export default function Navbar() {
                 </li>
               ))}
               <li>
-                <a href={`/${profile.resumeFile}`} download className="block py-3 text-sm font-medium text-app">
-                  Download Resume
-                </a>
+                {forClient ? (
+                  <a href="#contact" onClick={() => setMenuOpen(false)} className="block py-3 text-sm font-semibold text-ai">
+                    Start a project
+                  </a>
+                ) : (
+                  <a href={`/${profile.resumeFile}`} download className="block py-3 text-sm font-medium text-app">
+                    Download Resume
+                  </a>
+                )}
               </li>
             </ul>
           </motion.div>

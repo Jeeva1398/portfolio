@@ -1,7 +1,9 @@
 import { lazy, Suspense, useRef } from 'react'
-import { motion } from 'framer-motion'
-import { profile } from '../data/content'
+import { AnimatePresence, motion } from 'framer-motion'
+import { audiences, profile, services } from '../data/content'
 import Magnetic from '../components/Magnetic'
+import AudienceSwitch from '../components/AudienceSwitch'
+import useAudience from '../hooks/useAudience'
 import { ArrowIcon, DownloadIcon, GitHubIcon, LinkedInIcon } from '../components/Icons'
 import HeroCoreFallback from '../three/HeroCoreFallback'
 import useCapability from '../hooks/useCapability'
@@ -21,15 +23,21 @@ export default function Hero() {
   const { use3D } = useCapability()
   const visualRef = useRef(null)
   const inView = useInViewport(visualRef)
+  const audience = useAudience()
+  const copy = audiences[audience]
+  const forClient = audience === 'client'
   const [appTrack, dataTrack] = profile.headline.split('|').map((part) => part.trim())
 
   return (
     <section id="home" aria-labelledby="hero-title" className="section flex min-h-svh flex-col justify-center !pt-28 !pb-16">
       <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
         <div>
-          <motion.p {...rise(0)} className="font-mono text-xs tracking-wider text-slate-400">
-            <span className="text-app">~/jeeva</span> <span className="text-slate-600">$</span> whoami
-          </motion.p>
+          <motion.div {...rise(0)} className="flex flex-wrap items-center gap-x-4 gap-y-3">
+            <p className="font-mono text-xs tracking-wider text-slate-400">
+              <span className="text-app">~/jeeva</span> <span className="text-slate-600">$</span> whoami
+            </p>
+            <AudienceSwitch />
+          </motion.div>
 
           <motion.div {...rise(0.05)} className="mt-4 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5">
             <span className="avatar-ring relative grid h-20 w-20 shrink-0 place-items-center rounded-full p-[3px] sm:h-24 sm:w-24">
@@ -60,38 +68,87 @@ export default function Hero() {
             <span className="text-data-soft">{dataTrack}</span>
           </motion.p>
 
-          <motion.p {...rise(0.18)} className="mt-6 max-w-xl leading-relaxed text-slate-300">
-            {profile.pitch}
-          </motion.p>
+          <motion.div {...rise(0.18)} className="mt-6 max-w-xl">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={audience}
+                initial={{ opacity: 0, y: 8, filter: 'blur(4px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, y: -8, filter: 'blur(4px)' }}
+                transition={{ duration: 0.28, ease }}
+              >
+                <p className="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/5 px-3 py-1 text-xs font-medium text-emerald-300">
+                  <span className="relative flex h-1.5 w-1.5" aria-hidden="true">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  </span>
+                  {copy.availability}
+                </p>
+                <p className="mt-4 leading-relaxed text-slate-300">{copy.pitch}</p>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
 
           <motion.div {...rise(0.24)} className="mt-8 flex flex-wrap items-center gap-3">
-            <Magnetic>
-              <a
-                href="#projects"
-                className="group inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-app to-data px-5 py-2.5 text-sm font-semibold text-ink shadow-lg shadow-app/20 transition-shadow hover:shadow-app/40"
-              >
-                View Projects
-                <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </a>
-            </Magnetic>
-            <Magnetic>
-              <a
-                href="#contact"
-                className="inline-flex items-center rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-100 transition-colors hover:border-app/50"
-              >
-                Contact Me
-              </a>
-            </Magnetic>
-            <Magnetic>
-              <a
-                href={`/${profile.resumeFile}`}
-                download
-                className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-100 transition-colors hover:border-data/50"
-              >
-                <DownloadIcon className="h-4 w-4" />
-                Download Resume
-              </a>
-            </Magnetic>
+            {forClient ? (
+              <>
+                <Magnetic>
+                  <a
+                    href="#contact"
+                    className="group inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-ai to-data px-5 py-2.5 text-sm font-semibold text-ink shadow-lg shadow-ai/20 transition-shadow hover:shadow-ai/40"
+                  >
+                    Start a project
+                    <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </a>
+                </Magnetic>
+                <Magnetic>
+                  <a
+                    href="#services"
+                    className="inline-flex items-center rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-100 transition-colors hover:border-ai/50"
+                  >
+                    See services
+                  </a>
+                </Magnetic>
+                <Magnetic>
+                  <a
+                    href="#projects"
+                    className="inline-flex items-center rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-100 transition-colors hover:border-app/50"
+                  >
+                    View live work
+                  </a>
+                </Magnetic>
+              </>
+            ) : (
+              <>
+                <Magnetic>
+                  <a
+                    href="#projects"
+                    className="group inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-app to-data px-5 py-2.5 text-sm font-semibold text-ink shadow-lg shadow-app/20 transition-shadow hover:shadow-app/40"
+                  >
+                    View Projects
+                    <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </a>
+                </Magnetic>
+                <Magnetic>
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-100 transition-colors hover:border-app/50"
+                  >
+                    Contact Me
+                  </a>
+                </Magnetic>
+                <Magnetic>
+                  <a
+                    href={`/${profile.resumeFile}`}
+                    download
+                    className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-100 transition-colors hover:border-data/50"
+                  >
+                    <DownloadIcon className="h-4 w-4" />
+                    Download Resume
+                  </a>
+                </Magnetic>
+              </>
+            )}
             <div className="ml-1 flex items-center gap-1">
               <a
                 href={profile.github}
@@ -140,7 +197,7 @@ export default function Hero() {
               <div
                 className="absolute inset-0"
                 role="img"
-                aria-label="Interactive 3D model: an application stack (React client, Node and Express API, MongoDB and MySQL) linked to a data pipeline (Python, Airflow, dbt) feeding a Postgres warehouse."
+                aria-label="Interactive 3D model: an application stack (React client, Node and Express API, MongoDB and MySQL) linked to an AI core (LLM chatbot and fine-tuned model) and a data pipeline (Python, Airflow, dbt) feeding a warehouse. Hover a node to highlight it."
               >
                 <HeroCore active={inView} />
               </div>
@@ -155,16 +212,18 @@ export default function Hero() {
 
       <motion.dl {...rise(0.4)} className="mt-14 grid gap-4 sm:grid-cols-3">
         <div className="glass rounded-xl p-5">
-          <dt className="font-mono text-[11px] uppercase tracking-wider text-app">Core stack</dt>
-          <dd className="mt-2 text-sm text-slate-300">{profile.coreStack.join(' · ')}</dd>
+          <dt className="font-mono text-[11px] uppercase tracking-wider text-app">{forClient ? 'What I build' : 'Core stack'}</dt>
+          <dd className="mt-2 text-sm text-slate-300">
+            {forClient ? services.map((s) => s.title).join(' · ') : profile.coreStack.join(' · ')}
+          </dd>
         </div>
         <div className="glass rounded-xl p-5">
           <dt className="font-mono text-[11px] uppercase tracking-wider text-data">Domain experience</dt>
           <dd className="mt-2 text-sm text-slate-300">{profile.domainExperience.join(' · ')}</dd>
         </div>
         <div className="glass rounded-xl p-5">
-          <dt className="font-mono text-[11px] uppercase tracking-wider text-slate-400">Based in</dt>
-          <dd className="mt-2 text-sm text-slate-300">{profile.location}</dd>
+          <dt className="font-mono text-[11px] uppercase tracking-wider text-slate-400">{forClient ? 'Based in · works remote' : 'Based in'}</dt>
+          <dd className="mt-2 text-sm text-slate-300">{forClient ? `${profile.location} · IST (UTC+5:30)` : profile.location}</dd>
         </div>
       </motion.dl>
     </section>

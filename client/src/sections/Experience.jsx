@@ -13,7 +13,7 @@ export default function Experience() {
   return (
     <section id="experience" aria-labelledby="experience-title" className="section">
       <SectionHeading
-        index="03"
+        index="04"
         eyebrow="experience"
         id="experience-title"
         title="Two product teams, one release cycle end to end."

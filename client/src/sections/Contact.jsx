@@ -1,4 +1,5 @@
-import { profile } from '../data/content'
+import { audiences, profile } from '../data/content'
+import useAudience from '../hooks/useAudience'
 import ContactForm from '../components/ContactForm'
 import Reveal from '../components/Reveal'
 import SectionHeading from '../components/SectionHeading'
@@ -11,16 +12,17 @@ const channels = [
 ]
 
 export default function Contact() {
+  const audience = useAudience()
   return (
     <section id="contact" aria-labelledby="contact-title" className="section overflow-hidden">
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-1/3 -z-10 mx-auto h-72 max-w-3xl animate-pulse rounded-full bg-gradient-to-r from-app/10 via-transparent to-data/10 blur-3xl [animation-duration:6s]" />
 
       <SectionHeading
-        index="07"
+        index="08"
         eyebrow="contact"
         id="contact-title"
-        title="Let's talk."
-        intro="Open to full-stack, AI, and data engineering roles. Reach out directly or use the form."
+        title={audience === 'client' ? "Let's build something." : "Let's talk."}
+        intro={audiences[audience].contactIntro}
       />
 
       <div className="mt-10 grid gap-10 md:grid-cols-[1fr_1.2fr]">

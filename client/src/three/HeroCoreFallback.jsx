@@ -10,13 +10,13 @@ function Tag({ x, y, color, children }) {
 }
 
 export default function HeroCoreFallback() {
-  const { app: APP, data: DATA, appBody, dataBody } = usePalette()
+  const { app: APP, data: DATA, ai: AI, appBody, dataBody, aiBody } = usePalette()
   return (
     <svg
       viewBox="0 0 420 320"
       className="h-full w-full"
       role="img"
-      aria-label="Diagram: a React client calls a Node and Express API backed by MongoDB and MySQL; application data flows through a Python, Airflow and dbt pipeline into a Postgres warehouse."
+      aria-label="Diagram: a React client calls a Node and Express API backed by MongoDB and MySQL, which talks to an AI core (LLM and fine-tuned model); application data flows through a Python, Airflow and dbt pipeline into a data warehouse."
     >
       <defs>
         <linearGradient id="bridge" x1="0" x2="1">
@@ -32,7 +32,15 @@ export default function HeroCoreFallback() {
         <path d="M270 90 Q 310 110 330 140" stroke={DATA} opacity="0.6" />
         <path d="M280 175 Q 305 170 318 165" stroke={DATA} opacity="0.6" />
         <path d="M265 250 Q 310 235 335 200" stroke={DATA} opacity="0.6" />
+        <path d="M150 106 Q 162 66 188 52" stroke={AI} opacity="0.7" />
+        <path d="M213 50 Q 240 56 252 72" stroke={AI} opacity="0.5" />
       </g>
+
+      {/* AI core */}
+      <circle cx="200" cy="46" r="22" fill={AI} fillOpacity="0.08" stroke={AI} strokeOpacity="0.35" strokeDasharray="2 4" />
+      <circle cx="200" cy="46" r="11" fill={aiBody} stroke={AI} strokeWidth="2" />
+      <circle cx="200" cy="46" r="4" fill={AI} />
+      <Tag x={200} y={16} color={AI}>llm · ai core</Tag>
 
       {/* app cluster */}
       <circle cx="50" cy="52" r="9" fill={appBody} stroke={APP} strokeWidth="2" />
@@ -60,7 +68,7 @@ export default function HeroCoreFallback() {
       <Tag x={258} y={282} color={DATA}>airflow · dbt</Tag>
       <rect x="318" y="135" width="72" height="72" rx="6" fill={DATA} fillOpacity="0.08" stroke={DATA} strokeWidth="1.5" />
       <rect x="340" y="157" width="28" height="28" rx="3" fill={dataBody} stroke={DATA} />
-      <Tag x={354} y={228} color={DATA}>postgres warehouse</Tag>
+      <Tag x={354} y={228} color={DATA}>data warehouse</Tag>
 
       <style>{`@keyframes dash { to { stroke-dashoffset: -40; } }`}</style>
     </svg>

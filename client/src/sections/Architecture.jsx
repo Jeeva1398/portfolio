@@ -113,7 +113,7 @@ export default function Architecture() {
   return (
     <section id="architecture" aria-labelledby="architecture-title" className="section">
       <SectionHeading
-        index="05"
+        index="06"
         eyebrow="architecture"
         id="architecture-title"
         title="How the systems I build fit together."
