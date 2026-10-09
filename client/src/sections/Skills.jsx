@@ -1,52 +1,69 @@
 import { skillGroups } from '../data/content'
-import SkillGroup from '../components/SkillGroup'
-import TechMarquee from '../components/TechMarquee'
-import Reveal from '../components/Reveal'
+import { IconTile, TRACK_ICONS } from '../components/Icons'
 import SectionHeading from '../components/SectionHeading'
+import { Rise3D, Stagger, StaggerItem, Tilt } from '../components/Motion'
 
-// Marquee rows: application + AI skills drift one way, data + workflow skills the other
-const chips = (tracks) =>
-  skillGroups.filter((g) => tracks.includes(g.track)).flatMap((g) => g.items.map((label) => ({ label, track: g.track })))
-const MARQUEE_ROWS = [chips(['app', 'ai']), chips(['data', 'tools'])]
+// Three columns, one per track. Workflow tools sit under the AI column so the columns balance.
+const COLUMNS = [
+  { label: 'Application', tracks: ['app'], icon: 'app' },
+  { label: 'Data', tracks: ['data'], icon: 'db' },
+  { label: 'AI and tooling', tracks: ['ai', 'tools'], icon: 'spark' },
+]
+
+function Group({ group }) {
+  const building = group.status === 'building'
+  return (
+    <div className="border-t border-line pt-5">
+      <h4 className="flex items-baseline justify-between gap-3">
+        <span className="font-medium text-fg">{group.title}</span>
+        <span className={`font-mono text-[0.6875rem] ${building ? 'text-accent' : 'text-subtle'}`}>
+          {building ? 'Building' : 'Proven'}
+        </span>
+      </h4>
+      <Stagger gap={0.03} delay={0.1} className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-[0.9375rem] leading-snug">
+        {group.items.map((item) => (
+          <StaggerItem key={item} y={8}>
+            <span className="inline-block transition-[color,transform] duration-200 hover:-translate-y-0.5 hover:text-fg">{item}</span>
+          </StaggerItem>
+        ))}
+      </Stagger>
+    </div>
+  )
+}
 
 export default function Skills() {
   return (
     <section id="skills" aria-labelledby="skills-title" className="section">
       <SectionHeading
-        index="03"
-        eyebrow="skills"
         id="skills-title"
-        title="Full-stack, AI, and data - one engineer."
+        title="Full-stack, AI and data, in one engineer."
         intro={
           <>
-            Skills marked <span className="text-slate-200">Proven</span> come from shipped, production
-            work. Skills marked <span className="text-build">Building</span> are ones I&apos;m actively developing
-            as I grow in AI, data engineering, and DevOps.
+            <span className="text-fg">Proven</span> skills come from shipped, production work.{' '}
+            <span className="text-accent">Building</span> skills are ones I am actively developing in AI, data
+            engineering and DevOps.
           </>
         }
       />
 
-      <div className="mt-10">
-        <TechMarquee rows={MARQUEE_ROWS} />
-      </div>
-
-      <div className="mt-8 flex flex-wrap gap-4 font-mono text-xs text-slate-400" aria-hidden="true">
-        <span className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-app" /> application stack
-        </span>
-        <span className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-data" /> data stack
-        </span>
-        <span className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-ai" /> AI stack
-        </span>
-      </div>
-
-      <div className="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {skillGroups.map((group, i) => (
-          <Reveal key={group.title} delay={i * 0.05} className="h-full">
-            <SkillGroup group={group} />
-          </Reveal>
+      <div className="mt-16 grid gap-6 md:grid-cols-3 lg:gap-8">
+        {COLUMNS.map((column, i) => (
+          <Rise3D key={column.label} delay={i * 0.08} className="h-full">
+            <Tilt wrapperClassName="h-full" className="panel panel-lift h-full p-6 sm:p-7">
+              {/* the heading sits above the card surface, so it shifts against the list as the card tilts */}
+              <div className="mb-7 flex items-center gap-4 [transform:translateZ(30px)]">
+                <IconTile icon={TRACK_ICONS[column.icon]} />
+                <h3 className="text-lg font-semibold tracking-[-0.01em] text-fg">{column.label}</h3>
+              </div>
+              <div className="space-y-7">
+                {skillGroups
+                  .filter((g) => column.tracks.includes(g.track))
+                  .map((group) => (
+                    <Group key={group.title} group={group} />
+                  ))}
+              </div>
+            </Tilt>
+          </Rise3D>
         ))}
       </div>
     </section>

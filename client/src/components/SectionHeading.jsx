@@ -1,16 +1,16 @@
 import Reveal from './Reveal'
-import Scramble from './Scramble'
+import { RevealWords } from './Motion'
 
-export default function SectionHeading({ index, eyebrow, title, intro, id }) {
+// Headline first, one short line under it. No numbered labels: the nav already says where you are.
+export default function SectionHeading({ title, intro, id, className = '' }) {
   return (
-    <Reveal className="max-w-2xl">
-      <p className="font-mono text-xs tracking-wider text-app/80">
-        <span className="text-slate-500">{index} //</span> <Scramble text={eyebrow} />
-      </p>
-      <h2 id={id} className="mt-3 font-display text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl">
-        {title}
-      </h2>
-      {intro && <p className="mt-4 leading-relaxed text-slate-400">{intro}</p>}
-    </Reveal>
+    <div className={`max-w-3xl ${className}`}>
+      <RevealWords id={id} text={title} className="text-3xl font-semibold tracking-[-0.03em] text-fg sm:text-[2.75rem] sm:leading-[1.08]" />
+      {intro && (
+        <Reveal delay={0.25}>
+          <p className="mt-5 max-w-[62ch] text-[1.0625rem] leading-relaxed text-muted">{intro}</p>
+        </Reveal>
+      )}
+    </div>
   )
 }

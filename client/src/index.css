@@ -1,58 +1,50 @@
 @import "tailwindcss";
-@import "@fontsource-variable/inter";
-@import "@fontsource-variable/space-grotesk";
-@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
 
-/* One accent per stack: cyan = application, violet = data, pink = AI; amber = "building" */
+/* One neutral family and one accent. Dark is the default; [data-theme='light'] swaps the tokens,
+   so components only ever use bg-bg / text-fg / border-line / text-accent and never pick a mode. */
 @theme {
-  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Space Grotesk Variable", "Inter Variable", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: "Geist Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --color-ink: #04060c;
-  --color-panel: #0a0f1c;
-  --color-app: #22d3ee;
-  --color-app-soft: #67e8f9;
-  --color-data: #a78bfa;
-  --color-data-soft: #c4b5fd;
-  --color-build: #fbbf24;
-  --color-ai: #f472b6;
-  --color-ai-soft: #f9a8d4;
+  --color-bg: #0f0f10;
+  --color-surface: #161618;
+  --color-raised: #1d1d20;
+  --color-line: #2a2a2e;
+  --color-line-strong: #3a3a3f;
+  --color-fg: #ededeb;
+  --color-muted: #a3a3a8;
+  --color-subtle: #75757c;
+  --color-accent: #ec6a3c;
+  --color-accent-fg: #1a0b05;
+  --color-accent-soft: rgb(236 106 60 / 0.12);
+  --color-ok: #6fbf8a;
 }
 
+/* Elevation. Shadows are tinted with the page's own neutral, never pure black on light. */
 :root {
   color-scheme: dark;
+  --shadow-panel: inset 0 1px 0 rgb(255 255 255 / 0.04), 0 24px 48px -24px rgb(0 0 0 / 0.7);
+  --shadow-lift: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 40px 70px -30px rgb(0 0 0 / 0.85);
 }
 
-/* Light mode ("day shift"): the slate scale flips and white tints become ink tints, so every
-   text-slate-*, bg-white/5 and border-white/10 in the components adapts without per-class variants. */
 :root[data-theme='light'] {
   color-scheme: light;
-  --color-ink: #f5f7fb;
-  --color-panel: #ffffff;
-  --color-app: #0891b2;
-  --color-app-soft: #0e7490;
-  --color-data: #7c3aed;
-  --color-data-soft: #6d28d9;
-  --color-build: #b45309;
-  --color-ai: #db2777;
-  --color-ai-soft: #be185d;
-  --color-white: #0f172a;
-  --color-slate-50: #020617;
-  --color-slate-100: #0f172a;
-  --color-slate-200: #1e293b;
-  --color-slate-300: #334155;
-  --color-slate-400: #475569;
-  --color-slate-500: #64748b;
-  --color-slate-600: #94a3b8;
-  --color-slate-700: #cbd5e1;
-  --color-slate-800: #e2e8f0;
-  --color-slate-900: #f1f5f9;
-  --color-slate-950: #f8fafc;
-  --color-amber-100: #92400e;
-  --color-emerald-300: #047857;
-  --color-emerald-400: #059669;
-  --color-red-400: #dc2626;
+  --color-bg: #f1f1f3;
+  --color-surface: #fcfcfd;
+  --color-raised: #e7e7ea;
+  --color-line: #dcdce1;
+  --color-line-strong: #c4c4cb;
+  --color-fg: #18181b;
+  --color-muted: #52525b;
+  --color-subtle: #7a7a83;
+  --color-accent: #c2410c;
+  --color-accent-fg: #ffffff;
+  --color-accent-soft: rgb(194 65 12 / 0.08);
+  --color-ok: #2f7d4b;
+  --shadow-panel: 0 1px 2px rgb(39 39 52 / 0.05), 0 18px 40px -18px rgb(39 39 52 / 0.2);
+  --shadow-lift: 0 1px 2px rgb(39 39 52 / 0.06), 0 36px 64px -28px rgb(39 39 52 / 0.32);
 }
 
 ::view-transition-old(root),
@@ -69,8 +61,9 @@ html {
 body {
   margin: 0;
   font-family: var(--font-sans);
-  background: var(--color-ink);
-  color: var(--color-slate-300);
+  font-feature-settings: 'ss01', 'cv11';
+  background: var(--color-bg);
+  color: var(--color-muted);
   transition: background-color 0.3s;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -82,237 +75,404 @@ body {
   flex-direction: column;
 }
 
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
 ::selection {
-  background: rgb(34 211 238 / 0.3);
-  color: var(--color-slate-50);
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-app);
+  outline: 2px solid var(--color-accent);
   outline-offset: 3px;
   border-radius: 6px;
 }
 
+/* Film grain over the whole page: breaks up the flat fills without adding colour. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+[data-theme='light'] .grain {
+  opacity: 0.035;
+}
+
 @layer components {
-  .glass {
-    background: linear-gradient(180deg, rgb(255 255 255 / 0.055), rgb(255 255 255 / 0.02));
-    border: 1px solid rgb(255 255 255 / 0.08);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-
-  [data-theme='light'] .glass {
-    background: linear-gradient(180deg, rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.65));
-    border-color: rgb(15 23 42 / 0.09);
-    box-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -12px rgb(15 23 42 / 0.12);
-  }
-
   .section {
     position: relative;
     margin-inline: auto;
     width: 100%;
-    max-width: 72rem;
-    padding: 6rem 1rem;
+    max-width: 76rem;
+    padding: 7rem 1rem 8rem;
   }
 
   @media (min-width: 640px) {
     .section {
-      padding-inline: 1.5rem;
+      padding-inline: 2rem;
     }
   }
 
-  .chip {
+  /* Radius rule: controls 6px, panels 12px, images 8px. */
+  .btn {
     display: inline-flex;
     align-items: center;
-    border-radius: 0.375rem;
-    padding: 0.25rem 0.625rem;
-    font-size: 0.8125rem;
+    gap: 0.5rem;
+    border-radius: 6px;
+    padding: 0.625rem 1.125rem;
+    font-size: 0.875rem;
+    font-weight: 550;
     line-height: 1.25rem;
+    white-space: nowrap;
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      border-color 0.2s,
+      transform 0.15s;
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn-primary {
+    background: var(--color-accent);
+    color: var(--color-accent-fg);
+  }
+
+  .btn-primary:hover {
+    background: color-mix(in oklab, var(--color-accent) 88%, var(--color-fg));
+  }
+
+  .btn-ghost {
+    border: 1px solid var(--color-line-strong);
+    color: var(--color-fg);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--color-fg);
+  }
+
+  .link {
+    color: var(--color-fg);
+    text-decoration: underline;
+    text-decoration-color: var(--color-line-strong);
+    text-underline-offset: 4px;
+    transition: text-decoration-color 0.2s;
+  }
+
+  .link:hover {
+    text-decoration-color: var(--color-accent);
+  }
+
+  .panel {
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    border-radius: 12px;
+    box-shadow: var(--shadow-panel);
+    transition: box-shadow 0.4s;
+  }
+
+  .panel-lift:hover {
+    box-shadow: var(--shadow-lift);
   }
 }
 
-/* Profile photo: conic ring around the hero avatar, arch frame behind the About portrait */
-.avatar-ring {
-  background: conic-gradient(from var(--ring-angle, 0deg), var(--color-app), var(--color-data), var(--color-build), var(--color-app));
-  animation: ring-spin 8s linear infinite;
-  box-shadow: 0 10px 30px -10px rgb(34 211 238 / 0.45);
-}
-
-@property --ring-angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-
-@keyframes ring-spin {
-  to {
-    --ring-angle: 360deg;
-  }
-}
-
-/* About portrait: the photo sits in a glowing disc (its round bottom hides where the photo's
-   shoulders are cropped) and the head rises above the disc. --s is the disc size. */
-.portrait-stage {
-  --s: 15rem;
-  width: var(--s);
-  height: var(--s);
+/* ---------- Architecture: exploded isometric layer stack (CSS 3D, works on every device) ---------- */
+.iso-stage {
+  --plate: 10.5rem;
+  --t: 10px;
+  position: relative;
+  display: grid;
+  place-items: center;
 }
 
 @media (min-width: 640px) {
-  .portrait-stage {
-    --s: 17rem;
+  .iso-stage {
+    --plate: 14rem;
   }
 }
 
-.portrait-disc {
+.iso {
+  position: relative;
+  width: var(--plate);
+  height: var(--plate);
+  transform: rotateX(58deg) rotateZ(-45deg);
+  transform-style: preserve-3d;
+}
+
+.iso-plate {
   position: absolute;
   inset: 0;
-  border-radius: 9999px;
-  background:
-    radial-gradient(circle at 50% 30%, rgb(34 211 238 / 0.35), transparent 65%),
-    linear-gradient(160deg, rgb(34 211 238 / 0.28), rgb(167 139 250 / 0.32));
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 0 60px -12px rgb(34 211 238 / 0.45), 0 0 80px -20px rgb(167 139 250 / 0.45);
+  transform-style: preserve-3d;
+  cursor: pointer;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.portrait-orbit {
+.iso-top,
+.iso-side-a,
+.iso-side-b {
   position: absolute;
-  border-radius: 9999px;
-  border: 1px dashed rgb(148 163 184 / 0.25);
-  animation: orbit-spin 40s linear infinite;
+  backface-visibility: hidden;
 }
 
-.portrait-orbit-inner {
-  inset: -9%;
-  border-style: solid;
-  border-color: rgb(34 211 238 / 0.18) transparent rgb(167 139 250 / 0.25) transparent;
-  animation-duration: 24s;
+.iso-top {
+  inset: 0;
+  transform: translateZ(var(--t));
+  border-radius: 6px;
+  border: 1px solid var(--color-line-strong);
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.05), transparent 60%),
+    var(--color-raised);
+  transition:
+    background-color 0.3s,
+    border-color 0.3s;
+}
+
+/* front-right and front-left edges give each plate its thickness */
+.iso-side-a {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--t);
+  transform-origin: bottom;
+  transform: rotateX(-90deg);
+  background: color-mix(in oklab, var(--color-raised) 70%, #000);
+}
+
+.iso-side-b {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: var(--t);
+  transform-origin: right;
+  transform: rotateY(90deg);
+  background: color-mix(in oklab, var(--color-raised) 55%, #000);
+}
+
+/* light plates are near-white, so the stage they sit on drops one step darker */
+[data-theme='light'] .iso-stage {
+  background: var(--color-raised);
+}
+
+[data-theme='light'] .iso-top {
+  background: var(--color-surface);
+  box-shadow: 0 10px 24px -14px rgb(39 39 52 / 0.35);
+}
+
+[data-theme='light'] .iso-side-a {
+  background: #c9c9d0;
+}
+
+[data-theme='light'] .iso-side-b {
+  background: #b3b3bb;
+}
+
+.iso-plate[data-active='true'] .iso-top {
+  border-color: var(--color-accent);
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.06), transparent 60%),
+    color-mix(in oklab, var(--color-raised) 82%, var(--color-accent));
+}
+
+.iso-plate[data-active='true'] .iso-side-a,
+.iso-plate[data-active='true'] .iso-side-b {
+  background: color-mix(in oklab, var(--color-accent) 55%, #000);
+}
+
+.iso-label {
+  position: absolute;
+  left: 0.9rem;
+  bottom: 0.8rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--color-subtle);
+  transition: color 0.3s;
+}
+
+.iso-plate[data-active='true'] .iso-label {
+  color: var(--color-fg);
+}
+
+/* ---------- Hero fallback: the hub scene in CSS 3D (same layout as three/HubScene.jsx) ---------- */
+.hub-stage {
+  --u: 2.2rem;
+  --t: 12px;
+  display: grid;
+  height: 100%;
+  place-items: center;
+  perspective: 1600px;
+}
+
+@media (min-width: 640px) {
+  .hub-stage {
+    --u: 3rem;
+    --t: 14px;
+  }
+}
+
+.hub-plane {
+  position: relative;
+  width: calc(var(--u) * 7.5);
+  height: calc(var(--u) * 6.7);
+  transform: rotateX(54deg) rotateZ(17deg);
+  transform-style: preserve-3d;
+}
+
+.hub-cables {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hub-cable,
+.hub-flow {
+  fill: none;
+  stroke-linecap: round;
+  stroke-width: 0.09;
+}
+
+.hub-cable {
+  stroke: var(--color-line-strong);
+}
+
+.hub-flow {
+  stroke: var(--color-accent);
+  stroke-width: 0.11;
+  stroke-dasharray: 18 82;
+  animation: hub-flow 1.6s linear infinite;
+}
+
+.hub-flow[data-reverse='true'] {
   animation-direction: reverse;
 }
 
-.portrait-orbit-outer {
-  inset: -20%;
-}
-
-@keyframes orbit-spin {
+@keyframes hub-flow {
+  from {
+    stroke-dashoffset: 18;
+  }
   to {
-    transform: rotate(360deg);
+    stroke-dashoffset: -100;
   }
 }
 
-/* Taller than the disc by 25% above it. The mask shows the disc's circle plus everything above
-   35% of its height, so the head breaks out of the top while the shoulders stay inside the circle. */
-.portrait-cutout {
+.hub-block {
   position: absolute;
-  inset: -25% 0 0 0;
-  -webkit-mask-image:
-    radial-gradient(circle calc(var(--s) / 2) at 50% calc(var(--s) * 0.75), #000 99%, transparent 100%),
-    linear-gradient(to bottom, #000 calc(var(--s) * 0.6), transparent 0);
-  mask-image:
-    radial-gradient(circle calc(var(--s) / 2) at 50% calc(var(--s) * 0.75), #000 99%, transparent 100%),
-    linear-gradient(to bottom, #000 calc(var(--s) * 0.6), transparent 0);
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.portrait-cutout img {
-  position: absolute;
-  left: 50%;
-  top: calc(var(--s) * 0.25 - var(--s) * 0.1 - var(--s) * 1.45 * 0.19);
-  height: calc(var(--s) * 1.45);
-  width: auto;
-  max-width: none;
-  transform: translateX(-50%);
-  filter: drop-shadow(0 10px 20px rgb(0 0 0 / 0.35));
+.hub-block[data-active='true'] {
+  transform: translateZ(10px);
 }
 
-[data-theme='light'] .portrait-disc {
-  background:
-    radial-gradient(circle at 50% 30%, rgb(255 255 255 / 0.9), transparent 60%),
-    linear-gradient(160deg, rgb(8 145 178 / 0.28), rgb(124 58 237 / 0.25));
-  box-shadow: inset 0 0 0 1px rgb(15 23 42 / 0.08), 0 20px 50px -20px rgb(8 145 178 / 0.45);
+.hub-block .iso-side-a,
+.hub-block .iso-side-b {
+  border-radius: 2px;
 }
 
-[data-theme='light'] .portrait-orbit {
-  border-color: rgb(71 85 105 / 0.25);
-}
-
-[data-theme='light'] .portrait-orbit-inner {
-  border-color: rgb(8 145 178 / 0.25) transparent rgb(124 58 237 / 0.3) transparent;
-}
-
-.portrait-chip {
-  animation: chip-float 6s ease-in-out infinite;
-}
-
-@keyframes chip-float {
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
-/* Card border beam: a short gradient arc that circles the card edge while it is hovered.
-   The mask keeps only a 1px ring, so the content underneath is untouched. */
-@property --beam-angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-
-@keyframes beam-spin {
-  to {
-    --beam-angle: 360deg;
-  }
-}
-
-.beam::before {
-  content: '';
+.hub-top {
   position: absolute;
   inset: 0;
-  z-index: 1;
-  border-radius: inherit;
-  padding: 1px;
-  pointer-events: none;
-  background: conic-gradient(
-    from var(--beam-angle),
-    transparent 0deg,
-    var(--color-app) 25deg,
-    var(--color-ai) 55deg,
-    var(--color-data) 85deg,
-    transparent 115deg,
-    transparent 360deg
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-  opacity: 0;
-  transition: opacity 0.4s ease-out;
-  animation: beam-spin 4.5s linear infinite paused;
+  transform: translateZ(var(--t));
+  border-radius: 8px;
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-raised);
+  transition: border-color 0.3s;
 }
 
-.beam:hover::before,
-.beam:focus-within::before {
-  opacity: 0.9;
-  animation-play-state: running;
+.hub-block[data-active='true'] .hub-top {
+  border-color: var(--color-accent);
 }
 
-/* Skills marquee fades out at both edges */
-.marquee-mask {
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+.hub-card-label {
+  position: absolute;
+  left: 12%;
+  top: 50%;
+  translate: 0 -50%;
+  font-size: calc(var(--u) * 0.3);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-fg);
 }
 
-/* Faint blueprint grid behind the whole page */
-.grid-overlay {
-  background-image:
-    linear-gradient(rgb(148 163 184 / 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(148 163 184 / 0.05) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 75%);
+.hub-icon {
+  width: 56%;
+  height: 56%;
+  fill: var(--color-muted);
+  transition: fill 0.3s;
 }
 
-/* Day shift reads like blueprint paper */
-[data-theme='light'] .grid-overlay {
-  background-image:
-    linear-gradient(rgb(37 99 235 / 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(37 99 235 / 0.07) 1px, transparent 1px);
+.hub-block[data-active='true'] .hub-icon {
+  fill: var(--color-accent);
+}
+
+.hub-core {
+  position: absolute;
+  transform-style: preserve-3d;
+  border-radius: 50%;
+  background: #1c1c20;
+  box-shadow: 0 0 0 calc(var(--u) * 0.06) var(--color-accent) inset;
+}
+
+.hub-core-top {
+  position: absolute;
+  inset: 14%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  transform: translateZ(calc(var(--t) * 2.2));
+  background: #34343b;
+  font-size: calc(var(--u) * 0.45);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  color: #f1f1f3;
+  box-shadow: 0 calc(var(--t) * 0.6) 0 #26262b;
+}
+
+[data-theme='light'] .hub-top {
+  background: var(--color-surface);
+  box-shadow: 0 10px 22px -14px rgb(39 39 52 / 0.35);
+}
+
+[data-theme='light'] .hub-block .iso-side-a {
+  background: #c9c9d0;
+}
+
+[data-theme='light'] .hub-block .iso-side-b {
+  background: #b3b3bb;
+}
+
+/* pieces land one after another, like the WebGL assembly */
+@media (prefers-reduced-motion: no-preference) {
+  .hub-pop {
+    animation: hub-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: calc(var(--i) * 70ms + 150ms);
+  }
+}
+
+@keyframes hub-pop {
+  from {
+    opacity: 0;
+    translate: 0 0 40px;
+    scale: 0.6;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

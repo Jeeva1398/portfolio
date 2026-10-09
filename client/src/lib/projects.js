@@ -4,7 +4,7 @@ import { experience } from '../data/content'
 export function companyLine(project) {
   if (!project.company) return null
   const job = experience.find((j) => j.company === project.company)
-  return job ? `${project.company} · ${job.start} – ${job.end}` : project.company
+  return job ? `${project.company}, ${job.start} to ${job.end}` : project.company
 }
 
 // Opens a project's details from anywhere on the page (the Projects section listens for this).

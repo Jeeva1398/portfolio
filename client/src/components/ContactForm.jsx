@@ -43,10 +43,10 @@ export default function ContactForm() {
   }
 
   const inputClass =
-    'w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-app/50 focus:outline-none focus:ring-2 focus:ring-app/30'
+    'w-full rounded-md border border-line-strong bg-bg px-3 py-2.5 text-[0.9375rem] text-fg placeholder:text-subtle focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25'
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {/* Anti-spam: hidden from people, filled in by bots, and ignored when set. */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
         <label htmlFor="website">Website</label>
@@ -61,7 +61,7 @@ export default function ContactForm() {
         />
       </div>
       <div>
-        <label htmlFor="name" className="mb-1 block text-sm font-medium text-slate-300">
+        <label htmlFor="name" className="mb-1.5 block text-sm text-fg">
           Name
         </label>
         <input
@@ -75,7 +75,7 @@ export default function ContactForm() {
         />
       </div>
       <div>
-        <label htmlFor="email" className="mb-1 block text-sm font-medium text-slate-300">
+        <label htmlFor="email" className="mb-1.5 block text-sm text-fg">
           Email
         </label>
         <input
@@ -91,7 +91,7 @@ export default function ContactForm() {
       {forClient && (
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="service" className="mb-1 block text-sm font-medium text-slate-300">
+            <label htmlFor="service" className="mb-1.5 block text-sm text-fg">
               What do you need?
             </label>
             <select id="service" name="service" value={form.service} onChange={handleChange} className={inputClass}>
@@ -104,8 +104,8 @@ export default function ContactForm() {
             </select>
           </div>
           <div>
-            <label htmlFor="timeline" className="mb-1 block text-sm font-medium text-slate-300">
-              Timeline <span className="font-normal text-slate-500">(optional)</span>
+            <label htmlFor="timeline" className="mb-1.5 block text-sm text-fg">
+              Timeline <span className="text-subtle">(optional)</span>
             </label>
             <select id="timeline" name="timeline" value={form.timeline} onChange={handleChange} className={inputClass}>
               <option value="">Not decided</option>
@@ -119,7 +119,7 @@ export default function ContactForm() {
         </div>
       )}
       <div>
-        <label htmlFor="message" className="mb-1 block text-sm font-medium text-slate-300">
+        <label htmlFor="message" className="mb-1.5 block text-sm text-fg">
           Message
         </label>
         <textarea
@@ -135,14 +135,14 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === 'sending'}
-        className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-app to-data px-5 py-2.5 text-sm font-semibold text-ink transition-transform hover:scale-[1.02] disabled:opacity-60"
+        className="btn btn-primary disabled:opacity-60"
       >
         {status === 'sending' ? 'Sending…' : forClient ? 'Send project details' : 'Send message'}
       </button>
       {status === 'success' && (
-        <p role="status" className="text-sm text-emerald-400">Thanks - your message has been sent. I&apos;ll get back to you soon.</p>
+        <p role="status" className="text-sm text-ok">Thanks, your message has been sent. I&apos;ll get back to you soon.</p>
       )}
-      {status === 'error' && <p role="alert" className="text-sm text-red-400">{errorMsg}</p>}
+      {status === 'error' && <p role="alert" className="text-sm text-accent">{errorMsg}</p>}
     </form>
   )
 }

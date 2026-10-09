@@ -1,10 +1,27 @@
 import { useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import StatusBadge from './StatusBadge'
-import { PipelineStrip } from './ProjectCard'
 import { companyLine } from '../lib/projects'
-import { GitHubIcon } from './Icons'
+import { CloseIcon, ExternalIcon, GitHubIcon } from './Icons'
 
+function PipelineStrip({ steps }) {
+  return (
+    <ol aria-label="Pipeline stages" className="flex flex-wrap items-center gap-y-2 font-mono text-[0.75rem] text-muted">
+      {steps.map((step, i) => (
+        <li key={step} className="flex items-center">
+          <span className="rounded-[4px] border border-line-strong px-2 py-1">{step}</span>
+          {i < steps.length - 1 && (
+            <span aria-hidden="true" className="mx-1.5 text-subtle">
+              &rarr;
+            </span>
+          )}
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+// Slide-over panel from the right: keeps the page visible behind it, closes on Escape or backdrop.
 export default function ProjectModal({ project, onClose }) {
   const closeRef = useRef(null)
 
@@ -24,8 +41,6 @@ export default function ProjectModal({ project, onClose }) {
     }
   }, [project, onClose])
 
-  const accent = { data: 'text-data', ai: 'text-ai' }[project?.track] ?? 'text-app'
-
   return (
     <AnimatePresence>
       {project && (
@@ -33,79 +48,73 @@ export default function ProjectModal({ project, onClose }) {
           role="dialog"
           aria-modal="true"
           aria-labelledby="project-modal-title"
-          className="fixed inset-0 z-40 flex items-center justify-center p-4"
+          className="fixed inset-0 z-40 flex justify-end"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <div className="absolute inset-0 bg-ink/80 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
+          <div className="absolute inset-0 bg-bg/70 backdrop-blur-[2px]" onClick={onClose} aria-hidden="true" />
 
           <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 12, scale: 0.98 }}
-            transition={{ duration: 0.25, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="relative max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-panel p-6 shadow-2xl shadow-black/50 sm:p-8"
+            initial={{ x: 48, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 32, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 30 }}
+            className="relative h-full w-full max-w-2xl overflow-y-auto border-l border-line bg-surface px-6 pb-12 pt-6 sm:px-10"
           >
-            <button
-              ref={closeRef}
-              onClick={onClose}
-              aria-label="Close project details"
-              className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-md text-slate-400 hover:bg-white/5 hover:text-slate-100"
-            >
-              ✕
-            </button>
+            <div className="sticky top-0 -mx-6 flex justify-end bg-surface/90 px-6 py-2 backdrop-blur sm:-mx-10 sm:px-10">
+              <button
+                ref={closeRef}
+                onClick={onClose}
+                aria-label="Close project details"
+                className="grid h-9 w-9 place-items-center rounded-md text-muted hover:bg-raised hover:text-fg"
+              >
+                <CloseIcon className="h-5 w-5" />
+              </button>
+            </div>
 
-            <div className="flex flex-wrap items-center gap-3 pr-10">
-              <p className={`font-mono text-[11px] uppercase tracking-wider ${accent}`}>{project.domain}</p>
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-sm text-subtle">{project.domain}</p>
               <StatusBadge status={project.kind === 'professional' ? 'Professional' : project.status} />
             </div>
-            <h3 id="project-modal-title" className="mt-3 font-display text-2xl font-semibold text-slate-50">
+            <h3 id="project-modal-title" className="mt-3 text-3xl font-semibold tracking-[-0.02em] text-fg">
               {project.name}
             </h3>
-            {project.company && <p className="mt-1 text-sm text-slate-500">{companyLine(project)}</p>}
-            <p className="mt-2 text-slate-400">{project.tagline}</p>
+            {project.company && <p className="mt-1 text-sm text-subtle">{companyLine(project)}</p>}
+            <p className="mt-4 leading-relaxed">{project.tagline}</p>
 
             {project.image && (
-              <a href={project.links?.demoLabel ? project.image.src : (project.links?.demo ?? project.image.src)} target="_blank" rel="noreferrer" className="mt-5 block">
+              <a href={project.image.src} target="_blank" rel="noreferrer" className="mt-8 block">
                 <img
                   src={project.image.src}
                   alt={project.image.alt}
-                  width="1280"
-                  height="800"
+                  width="1440"
+                  height="810"
                   loading="lazy"
-                  className="mx-auto h-auto max-h-[36rem] w-auto max-w-full rounded-lg border border-white/10"
+                  className="h-auto w-full rounded-lg border border-line"
                 />
-                <span className="sr-only">(opens in a new tab)</span>
+                <span className="sr-only">(opens full size in a new tab)</span>
               </a>
             )}
 
             {project.pipeline && (
-              <div className="mt-5">
+              <div className="mt-6">
                 <PipelineStrip steps={project.pipeline} />
               </div>
             )}
 
-            <ul className="mt-5 flex flex-wrap gap-2" aria-label="Technologies">
-              {project.stack.map((tech) => (
-                <li key={tech} className="rounded bg-white/5 px-2 py-1 font-mono text-xs text-slate-300">
-                  {tech}
-                </li>
-              ))}
-            </ul>
+            <p className="mt-6 font-mono text-[0.8125rem] leading-relaxed text-subtle">{project.stack.join(', ')}</p>
 
-            <div className="mt-8 space-y-6">
+            <div className="mt-10 space-y-9">
               {project.details.map((block) => (
                 <div key={block.heading}>
-                  <h4 className="font-mono text-xs uppercase tracking-wider text-slate-200">{block.heading}</h4>
-                  {block.text && <p className="mt-2 leading-relaxed text-slate-300">{block.text}</p>}
+                  <h4 className="font-medium text-fg">{block.heading}</h4>
+                  {block.text && <p className="mt-2 leading-relaxed">{block.text}</p>}
                   {block.list && (
-                    <ul className="mt-2 space-y-2 text-slate-300">
+                    <ul className="mt-3 space-y-2.5">
                       {block.list.map((item) => (
-                        <li key={item} className="flex gap-2">
-                          <span aria-hidden="true" className={accent}>
-                            ›
-                          </span>
+                        <li key={item} className="flex gap-3 leading-relaxed">
+                          <span aria-hidden="true" className="mt-[0.75em] h-px w-3 shrink-0 bg-accent" />
                           {item}
                         </li>
                       ))}
@@ -116,9 +125,9 @@ export default function ProjectModal({ project, onClose }) {
             </div>
 
             {project.gallery && (
-              <div className="mt-8">
-                <h4 className="font-mono text-xs uppercase tracking-wider text-slate-200">Screenshots</h4>
-                <div className="mt-3 space-y-5">
+              <div className="mt-10">
+                <h4 className="font-medium text-fg">Screenshots</h4>
+                <div className="mt-4 space-y-6">
                   {project.gallery.map((shot) => (
                     <figure key={shot.caption}>
                       <a href={shot.src} target="_blank" rel="noreferrer" className="block">
@@ -128,11 +137,11 @@ export default function ProjectModal({ project, onClose }) {
                           width={shot.width}
                           height={shot.height}
                           loading="lazy"
-                          className="mx-auto h-auto max-h-[36rem] w-auto max-w-full rounded-lg border border-white/10"
+                          className="mx-auto h-auto max-h-[36rem] w-auto max-w-full rounded-lg border border-line"
                         />
                         <span className="sr-only">(opens full size in a new tab)</span>
                       </a>
-                      <figcaption className="mt-2 text-sm text-slate-400">{shot.caption}</figcaption>
+                      <figcaption className="mt-2 text-sm text-subtle">{shot.caption}</figcaption>
                     </figure>
                   ))}
                 </div>
@@ -140,35 +149,20 @@ export default function ProjectModal({ project, onClose }) {
             )}
 
             {(project.links?.repo || project.links?.demo) && (
-              <div className="mt-8 flex flex-wrap gap-3 border-t border-white/10 pt-6">
+              <div className="mt-10 flex flex-wrap gap-3 border-t border-line pt-8">
+                {project.links.demo && (
+                  <a href={project.links.demo} target="_blank" rel="noreferrer" className="btn btn-primary">
+                    {project.links.demoLabel ? `${project.links.demoLabel} package` : 'Open live'}
+                    <ExternalIcon className="h-4 w-4" />
+                  </a>
+                )}
                 {project.links.repo && (
-                  <a
-                    href={project.links.repo}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-4 py-2 text-sm text-slate-100 hover:border-app/50"
-                  >
+                  <a href={project.links.repo} target="_blank" rel="noreferrer" className="btn btn-ghost">
                     <GitHubIcon className="h-4 w-4" /> Source code
                   </a>
                 )}
-                {project.links.demo && (
-                  <a
-                    href={project.links.demo}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center rounded-lg bg-gradient-to-r from-app to-data px-4 py-2 text-sm font-semibold text-ink"
-                  >
-                    {project.links.demoLabel ? `${project.links.demoLabel} package` : 'Live demo'}
-                  </a>
-                )}
                 {project.links.extra?.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center rounded-lg border border-white/15 px-4 py-2 text-sm text-slate-100 hover:border-app/50"
-                  >
+                  <a key={link.href} href={link.href} target="_blank" rel="noreferrer" className="btn btn-ghost">
                     {link.label}
                   </a>
                 ))}

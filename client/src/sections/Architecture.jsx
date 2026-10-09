@@ -1,185 +1,139 @@
-import { lazy, Suspense, useRef, useState } from 'react'
-import { AnimatePresence, motion, useScroll } from 'framer-motion'
+import { useRef, useState } from 'react'
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { architecture } from '../data/content'
 import Reveal from '../components/Reveal'
 import SectionHeading from '../components/SectionHeading'
-import useCapability from '../hooks/useCapability'
-import useInViewport from '../hooks/useInViewport'
-import usePalette from '../three/palette'
+import { Tilt } from '../components/Motion'
 
-const ArchitectureScene = lazy(() => import('../three/ArchitectureScene'))
+const VIEWS = { app: architecture.app, data: architecture.data }
 
-const VIEWS = {
-  app: { ...architecture.app, tone: 'app', text: 'text-app', border: 'border-app', bg: 'bg-app' },
-  data: { ...architecture.data, tone: 'data', text: 'text-data', border: 'border-data', bg: 'bg-data' },
-}
-
-// The layer list is both the keyboard-accessible control and the 2D diagram on mobile / reduced motion.
-function LayerFlow({ view, selectedId, onSelect, compact }) {
+// One plate of the exploded stack. `gap` is a motion value: the plates spread apart as the
+// section scrolls in, so the stack visibly comes apart into its layers.
+function Plate({ layer, depth, gap, active, onSelect }) {
+  const transform = useTransform(gap, (g) => `translateZ(${depth * g}px) translateX(${active ? 26 : 0}px)`)
   return (
-    <ol
-      className={compact ? 'flex flex-wrap items-center gap-y-2' : 'relative space-y-2'}
-      aria-label={`${view.label} layers`}
+    <motion.div
+      className="iso-plate"
+      data-active={active}
+      style={{ transform }}
+      onClick={() => onSelect(layer.id)}
+      onPointerEnter={() => onSelect(layer.id)}
     >
-      {!compact && (
-        <span aria-hidden="true" className={`absolute left-[17px] top-4 bottom-4 w-px ${view.bg} opacity-30`} />
-      )}
-      {view.layers.map((layer, i) => {
-        const selected = layer.id === selectedId
-        return (
-          <li key={layer.id} className={compact ? 'flex items-center' : 'relative'}>
-            <button
-              type="button"
-              onClick={() => onSelect(layer.id)}
-              aria-pressed={selected}
-              className={`flex items-center gap-3 rounded-lg border text-left transition-colors ${
-                compact ? 'px-2.5 py-1.5' : 'w-full px-2 py-2'
-              } ${
-                selected
-                  ? `${view.border} bg-white/10 text-slate-50`
-                  : 'border-white/10 bg-ink/60 text-slate-400 hover:border-white/25 hover:text-slate-100'
-              }`}
-            >
-              <span
-                className={`grid shrink-0 place-items-center rounded-md border font-mono text-[11px] ${
-                  compact ? 'h-5 w-5 border-transparent' : 'h-6 w-6'
-                } ${selected ? `${view.border} ${view.text}` : 'border-white/15 text-slate-500'}`}
-              >
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <span className="text-sm font-medium">{layer.label}</span>
-              {!compact && <span className="ml-auto hidden font-mono text-[11px] text-slate-500 sm:inline">{layer.tech}</span>}
-            </button>
-            {compact && i < view.layers.length - 1 && (
-              <span aria-hidden="true" className={`mx-1.5 ${view.text} opacity-60`}>
-                →
-              </span>
-            )}
-          </li>
-        )
-      })}
-    </ol>
+      <div className="iso-side-a" />
+      <div className="iso-side-b" />
+      <div className="iso-top">
+        <span className="iso-label">{layer.label}</span>
+      </div>
+    </motion.div>
   )
 }
 
-function LayerDetail({ view, layer, index }) {
+function Stack({ view, selectedId, onSelect }) {
+  const ref = useRef(null)
+  const reduce = useReducedMotion()
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'center 60%'] })
+  const eased = useSpring(scrollYProgress, { stiffness: 90, damping: 22 })
+  const gap = useTransform(eased, [0, 1], reduce ? [48, 48] : [10, 48])
+  const n = view.layers.length
+
   return (
-    <div aria-live="polite">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={layer.id}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.22 }}
-        >
-          <p className={`font-mono text-[11px] uppercase tracking-wider ${view.text}`}>
-            Layer {String(index + 1).padStart(2, '0')} of {String(view.layers.length).padStart(2, '0')}
-          </p>
-          <h3 className="mt-2 font-display text-2xl font-semibold text-slate-50">{layer.label}</h3>
-          <p className="mt-1 font-mono text-xs text-slate-400">{layer.tech}</p>
-          <p className="mt-4 leading-relaxed text-slate-300">{layer.what}</p>
-          {layer.usedIn.length > 0 && (
-            <>
-              <p className="mt-6 font-mono text-[11px] uppercase tracking-wider text-slate-500">Where I&apos;ve used it</p>
-              <ul className="mt-2 flex flex-wrap gap-2">
-                {layer.usedIn.map((name) => (
-                  <li key={name} className="chip border border-white/10 bg-white/5 text-slate-200">
-                    {name}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-        </motion.div>
-      </AnimatePresence>
+    <div ref={ref} aria-hidden="true" className="iso-stage h-[25rem] sm:h-[34rem]">
+      <div className="iso translate-y-[5.5rem] sm:translate-y-[7.5rem]">
+        {view.layers.map((layer, i) => (
+          <Plate key={layer.id} layer={layer} depth={n - 1 - i} gap={gap} active={layer.id === selectedId} onSelect={onSelect} />
+        ))}
+      </div>
     </div>
   )
 }
 
 export default function Architecture() {
-  const palette = usePalette()
-  const { use3D } = useCapability()
   const [viewId, setViewId] = useState('app')
-  const [selection, setSelection] = useState({ app: 'server', data: 'orchestrate' })
-  const canvasRef = useRef(null)
-  const panelRef = useRef(null)
-  const inView = useInViewport(canvasRef)
-  // 0 → 1 while the panel scrolls from the bottom of the screen to the middle; the 3D layers assemble along it.
-  const { scrollYProgress } = useScroll({ target: panelRef, offset: ['start end', 'center center'] })
+  const [selection, setSelection] = useState({ app: 'server', data: 'warehouse' })
 
   const view = VIEWS[viewId]
   const selectedId = selection[viewId]
-  const index = view.layers.findIndex((l) => l.id === selectedId)
+  const layer = view.layers.find((l) => l.id === selectedId)
   const select = (id) => setSelection((prev) => ({ ...prev, [viewId]: id }))
 
   return (
     <section id="architecture" aria-labelledby="architecture-title" className="section">
       <SectionHeading
-        index="06"
-        eyebrow="architecture"
         id="architecture-title"
         title="How the systems I build fit together."
-        intro="Two views of the same engineer: the application stack I ship in production, and the data pipeline I'm building on top of it. Select any layer to see what it does and where I've used it."
+        intro="Two views of the same engineer: the application stack I ship in production, and the data pipeline I build on top of it. Pick a layer to see what it does and where I have used it."
       />
 
-      <Reveal className="mt-8">
-        <div role="tablist" aria-label="Architecture view" className="inline-flex rounded-xl border border-white/10 bg-white/5 p-1">
-          {Object.entries(VIEWS).map(([id, v]) => (
-            <button
-              key={id}
-              role="tab"
-              type="button"
-              aria-selected={viewId === id}
-              aria-controls="architecture-panel"
-              onClick={() => setViewId(id)}
-              className={`relative rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
-                viewId === id ? 'text-ink' : 'text-slate-400 hover:text-slate-100'
-              }`}
-            >
-              {viewId === id && (
-                <motion.span
-                  layoutId="arch-view"
-                  className={`absolute inset-0 rounded-lg ${v.bg}`}
-                  transition={{ type: 'spring', stiffness: 400, damping: 32 }}
-                />
-              )}
-              <span className="relative">{v.short}</span>
-            </button>
-          ))}
-        </div>
-      </Reveal>
+      <div className="mt-14 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+        <Reveal className="order-2 lg:order-1">
+          <Tilt max={5} className="panel overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.div key={viewId} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
+              <Stack view={view} selectedId={selectedId} onSelect={select} />
+            </motion.div>
+          </AnimatePresence>
+          </Tilt>
+        </Reveal>
 
-      <div ref={panelRef} id="architecture-panel" role="tabpanel" aria-label={view.label} className="mt-6 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-        <div className="glass overflow-hidden rounded-2xl">
-          {use3D ? (
-            <>
-              <div ref={canvasRef} className="relative h-[380px]">
-                <Suspense fallback={null}>
-                  <ArchitectureScene
-                    key={viewId}
-                    layers={view.layers}
-                    color={palette[view.tone]}
-                    selectedId={selectedId}
-                    onSelect={select}
-                    active={inView}
-                    progress={scrollYProgress}
-                  />
-                </Suspense>
-              </div>
-              <div className="border-t border-white/10 p-4">
-                <LayerFlow view={view} selectedId={selectedId} onSelect={select} compact />
-              </div>
-            </>
-          ) : (
-            <div className="p-4 sm:p-6">
-              <LayerFlow view={view} selectedId={selectedId} onSelect={select} />
+        <div className="order-1 lg:order-2">
+          <div role="tablist" aria-label="Architecture view" className="inline-flex rounded-lg border border-line p-1">
+            {Object.entries(VIEWS).map(([id, v]) => (
+              <button
+                key={id}
+                role="tab"
+                type="button"
+                aria-selected={viewId === id}
+                aria-controls="architecture-panel"
+                onClick={() => setViewId(id)}
+                className={`relative rounded-md px-3.5 py-1.5 text-sm transition-colors ${viewId === id ? 'text-fg' : 'text-subtle hover:text-fg'}`}
+              >
+                {viewId === id && (
+                  <motion.span layoutId="arch-view" className="absolute inset-0 rounded-md bg-raised" transition={{ type: 'spring', stiffness: 400, damping: 34 }} />
+                )}
+                <span className="relative">{v.short}</span>
+              </button>
+            ))}
+          </div>
+
+          <div id="architecture-panel" role="tabpanel" aria-label={view.label}>
+            <ol className="mt-8 border-t border-line" aria-label={`${view.label} layers`}>
+              {view.layers.map((l) => {
+                const on = l.id === selectedId
+                return (
+                  <li key={l.id} className="border-b border-line">
+                    <button
+                      type="button"
+                      onClick={() => select(l.id)}
+                      aria-pressed={on}
+                      className="flex w-full items-baseline justify-between gap-4 py-3 text-left"
+                    >
+                      <span className={`text-[0.9375rem] transition-colors ${on ? 'text-accent' : 'text-fg hover:text-accent'}`}>{l.label}</span>
+                      <span className="hidden font-mono text-[0.75rem] text-subtle sm:inline">{l.tech.replaceAll(" · ", ", ")}</span>
+                    </button>
+                  </li>
+                )
+              })}
+            </ol>
+
+            <div aria-live="polite" className="mt-8 min-h-[12rem]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`${viewId}-${layer.id}`}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <p className="leading-relaxed text-fg">{layer.what}</p>
+                  {layer.usedIn.length > 0 && (
+                    <p className="mt-4 text-sm text-subtle">
+                      Used in: <span className="text-muted">{layer.usedIn.join(', ')}</span>
+                    </p>
+                  )}
+                </motion.div>
+              </AnimatePresence>
             </div>
-          )}
-        </div>
-
-        <div className="glass rounded-2xl p-6 sm:p-7">
-          <LayerDetail view={view} layer={view.layers[index]} index={index} />
+          </div>
         </div>
       </div>
     </section>

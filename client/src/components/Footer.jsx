@@ -2,22 +2,28 @@ import { profile } from '../data/content'
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-white/10 bg-ink/60">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm text-slate-500 sm:flex-row sm:px-6">
+    <footer className="border-t border-line">
+      <div className="mx-auto flex max-w-[76rem] flex-col gap-4 px-4 py-10 text-sm text-subtle sm:flex-row sm:items-center sm:justify-between sm:px-8">
         <p>
-          &copy; {new Date().getFullYear()} {profile.name}
+          &copy; {new Date().getFullYear()} {profile.name}. Built with React and three.js.
         </p>
-        <div className="flex items-center gap-4">
-          <a href={`mailto:${profile.email}`} className="hover:text-slate-200">
-            Email
-          </a>
-          <a href={profile.linkedin} target="_blank" rel="noreferrer" className="hover:text-slate-200">
-            LinkedIn
-          </a>
-          <a href={profile.github} target="_blank" rel="noreferrer" className="hover:text-slate-200">
-            GitHub
-          </a>
-        </div>
+        <ul className="flex items-center gap-6">
+          <li>
+            <a href={`mailto:${profile.email}`} className="transition-colors hover:text-fg">
+              Email
+            </a>
+          </li>
+          <li>
+            <a href={profile.linkedin} target="_blank" rel="noreferrer" className="transition-colors hover:text-fg">
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a href={profile.github} target="_blank" rel="noreferrer" className="transition-colors hover:text-fg">
+              GitHub
+            </a>
+          </li>
+        </ul>
       </div>
     </footer>
   )

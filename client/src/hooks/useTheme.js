@@ -13,7 +13,7 @@ function subscribe(callback) {
 
 function apply(theme) {
   root().dataset.theme = theme
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f5f7fb' : '#04060c')
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f1f1f3' : '#0f0f10')
   try {
     localStorage.setItem(KEY, theme)
   } catch {

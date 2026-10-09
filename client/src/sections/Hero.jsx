@@ -1,231 +1,191 @@
-import { lazy, Suspense, useRef } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { audiences, profile, services } from '../data/content'
-import Magnetic from '../components/Magnetic'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
+import { audiences, profile, stackUnits } from '../data/content'
 import AudienceSwitch from '../components/AudienceSwitch'
 import useAudience from '../hooks/useAudience'
-import { ArrowIcon, DownloadIcon, GitHubIcon, LinkedInIcon } from '../components/Icons'
-import HeroCoreFallback from '../three/HeroCoreFallback'
+import { ArrowIcon, DownloadIcon } from '../components/Icons'
+import HubFallback from '../three/HubFallback'
 import useCapability from '../hooks/useCapability'
 import useInViewport from '../hooks/useInViewport'
-import profilePhoto from '../assets/profile.webp'
 
-const HeroCore = lazy(() => import('../three/HeroCore'))
+const HubScene = lazy(() => import('../three/HubScene'))
 
-const ease = [0.21, 0.47, 0.32, 0.98]
 const rise = (delay) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 18 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.7, delay, ease },
+  transition: { type: 'spring', stiffness: 80, damping: 20, delay },
 })
 
+// Which layer is lit in the hub: follows the pointer, and otherwise steps through the three
+// layers slowly so a visitor who never hovers still sees all of them.
+function useActiveUnit(running) {
+  const [index, setIndex] = useState(0)
+  const [held, setHeld] = useState(false)
+  useEffect(() => {
+    if (!running || held) return
+    const id = setInterval(() => setIndex((i) => (i + 1) % stackUnits.length), 3600)
+    return () => clearInterval(id)
+  }, [running, held])
+  const hover = (i) => {
+    setHeld(true)
+    setIndex(i)
+  }
+  return { index, hover, release: () => setHeld(false) }
+}
+
 export default function Hero() {
-  const { use3D } = useCapability()
+  const { use3D, reducedMotion } = useCapability()
   const visualRef = useRef(null)
   const inView = useInViewport(visualRef)
   const audience = useAudience()
   const copy = audiences[audience]
   const forClient = audience === 'client'
-  const [appTrack, dataTrack] = profile.headline.split('|').map((part) => part.trim())
+  const { index, hover, release } = useActiveUnit(inView && !reducedMotion)
+
+  // Leaving the hero, the copy lifts away faster than the hub, and the hub tips back and sinks:
+  // two planes at different depths, so the first scroll already feels three-dimensional.
+  const sectionRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] })
+  const copyY = useTransform(scrollYProgress, [0, 1], [0, -120])
+  const copyOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
+  const visualRotate = useTransform(scrollYProgress, [0, 1], [0, 22])
+  const visualScale = useTransform(scrollYProgress, [0, 1], [1, 0.86])
+  const visualY = useTransform(scrollYProgress, [0, 1], [0, 60])
+  const depth = !reducedMotion
 
   return (
-    <section id="home" aria-labelledby="hero-title" className="section flex min-h-svh flex-col justify-center !pt-28 !pb-16">
-      <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
-        <div>
-          <motion.div {...rise(0)} className="flex flex-wrap items-center gap-x-4 gap-y-3">
-            <p className="font-mono text-xs tracking-wider text-slate-400">
-              <span className="text-app">~/jeeva</span> <span className="text-slate-600">$</span> whoami
-            </p>
+    <section ref={sectionRef} id="home" aria-labelledby="hero-title" className="section flex min-h-[100dvh] flex-col justify-center !pb-16 !pt-28">
+      <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-8">
+        <motion.div style={depth ? { y: copyY, opacity: copyOpacity } : undefined}>
+          <motion.div {...rise(0)}>
             <AudienceSwitch />
           </motion.div>
 
-          <motion.div {...rise(0.05)} className="mt-4 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5">
-            <span className="avatar-ring relative grid h-20 w-20 shrink-0 place-items-center rounded-full p-[3px] sm:h-24 sm:w-24">
-              <span className="relative h-full w-full overflow-hidden rounded-full bg-gradient-to-b from-app/30 via-panel to-data/30">
-                <img
-                  src={profilePhoto}
-                  alt={`Portrait of ${profile.name}`}
-                  width="423"
-                  height="590"
-                  fetchPriority="high"
-                  className="absolute left-1/2 top-[-20%] w-[135%] max-w-none -translate-x-1/2"
-                />
+          <motion.h1
+            {...rise(0.05)}
+            id="hero-title"
+            className="mt-8 text-[2.75rem] leading-[1.02] font-semibold tracking-[-0.045em] text-fg sm:text-6xl lg:text-[4.25rem]"
+          >
+            {profile.name}
+            {profile.headline.split(' | ').map((part) => (
+              <span key={part} className="block text-[0.4em] leading-[1.3] font-normal tracking-[-0.02em] text-muted first-of-type:mt-4">
+                {part}
               </span>
-            </span>
-            <h1
-              id="hero-title"
-              className="font-display text-[2.5rem] leading-[1.05] font-semibold tracking-tight text-slate-50 sm:text-5xl lg:text-[2.75rem] xl:text-5xl"
-            >
-              {profile.name}
-            </h1>
-          </motion.div>
+            ))}
+          </motion.h1>
 
-          <motion.p {...rise(0.12)} className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 font-display text-lg sm:text-xl">
-            <span className="text-app-soft">{appTrack}</span>
-            <span aria-hidden="true" className="text-slate-600">
-              /
-            </span>
-            <span className="text-data-soft">{dataTrack}</span>
-          </motion.p>
-
-          <motion.div {...rise(0.18)} className="mt-6 max-w-xl">
+          <motion.div {...rise(0.12)} className="mt-7 max-w-[34rem]">
             <AnimatePresence mode="wait" initial={false}>
-              <motion.div
+              <motion.p
                 key={audience}
-                initial={{ opacity: 0, y: 8, filter: 'blur(4px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, y: -8, filter: 'blur(4px)' }}
-                transition={{ duration: 0.28, ease }}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.22 }}
+                className="text-lg leading-relaxed text-muted"
               >
-                <p className="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/5 px-3 py-1 text-xs font-medium text-emerald-300">
-                  <span className="relative flex h-1.5 w-1.5" aria-hidden="true">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  </span>
-                  {copy.availability}
-                </p>
-                <p className="mt-4 leading-relaxed text-slate-300">{copy.pitch}</p>
-              </motion.div>
+                {copy.intro}
+              </motion.p>
             </AnimatePresence>
           </motion.div>
 
-          <motion.div {...rise(0.24)} className="mt-8 flex flex-wrap items-center gap-3">
+          <motion.div {...rise(0.18)} className="mt-9 flex flex-wrap items-center gap-3">
             {forClient ? (
               <>
-                <Magnetic>
-                  <a
-                    href="#contact"
-                    className="group inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-ai to-data px-5 py-2.5 text-sm font-semibold text-ink shadow-lg shadow-ai/20 transition-shadow hover:shadow-ai/40"
-                  >
-                    Start a project
-                    <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                  </a>
-                </Magnetic>
-                <Magnetic>
-                  <a
-                    href="#services"
-                    className="inline-flex items-center rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-100 transition-colors hover:border-ai/50"
-                  >
-                    See services
-                  </a>
-                </Magnetic>
-                <Magnetic>
-                  <a
-                    href="#projects"
-                    className="inline-flex items-center rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-100 transition-colors hover:border-app/50"
-                  >
-                    View live work
-                  </a>
-                </Magnetic>
+                <a href="#contact" className="btn btn-primary group">
+                  Start a project
+                  <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </a>
+                <a href="#services" className="btn btn-ghost">
+                  See services
+                </a>
               </>
             ) : (
               <>
-                <Magnetic>
-                  <a
-                    href="#projects"
-                    className="group inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-app to-data px-5 py-2.5 text-sm font-semibold text-ink shadow-lg shadow-app/20 transition-shadow hover:shadow-app/40"
-                  >
-                    View Projects
-                    <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                  </a>
-                </Magnetic>
-                <Magnetic>
-                  <a
-                    href="#contact"
-                    className="inline-flex items-center rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-100 transition-colors hover:border-app/50"
-                  >
-                    Contact Me
-                  </a>
-                </Magnetic>
-                <Magnetic>
-                  <a
-                    href={`/${profile.resumeFile}`}
-                    download
-                    className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-100 transition-colors hover:border-data/50"
-                  >
-                    <DownloadIcon className="h-4 w-4" />
-                    Download Resume
-                  </a>
-                </Magnetic>
+                <a href="#projects" className="btn btn-primary group">
+                  View projects
+                  <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </a>
+                <a href="#contact" className="btn btn-ghost">
+                  Contact me
+                </a>
               </>
             )}
-            <div className="ml-1 flex items-center gap-1">
-              <a
-                href={profile.github}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="GitHub profile (opens in a new tab)"
-                className="rounded-md p-2 text-slate-400 transition-colors hover:text-slate-100"
-              >
-                <GitHubIcon className="h-5 w-5" />
-              </a>
-              <a
-                href={profile.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn profile (opens in a new tab)"
-                className="rounded-md p-2 text-slate-400 transition-colors hover:text-slate-100"
-              >
-                <LinkedInIcon className="h-5 w-5" />
-              </a>
-            </div>
           </motion.div>
 
-          <motion.a
-            {...rise(0.3)}
-            href="#projects"
-            className="mt-8 inline-flex items-center gap-2 text-sm text-slate-400 transition-colors hover:text-build"
-          >
-            <span className="relative flex h-2 w-2" aria-hidden="true">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-build opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-build" />
-            </span>
-            {profile.currentlyBuildingTeaser}
-          </motion.a>
-        </div>
-
-        <motion.div
-          ref={visualRef}
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9, delay: 0.2, ease }}
-          className="relative mx-auto aspect-[4/3] w-full max-w-xl lg:aspect-square"
-        >
-          <div aria-hidden="true" className="absolute inset-8 rounded-full bg-gradient-to-br from-app/10 to-data/10 blur-3xl" />
-          {use3D ? (
-            <Suspense fallback={<HeroCoreFallback />}>
-              <div
-                className="absolute inset-0"
-                role="img"
-                aria-label="Interactive 3D model: an application stack (React client, Node and Express API, MongoDB and MySQL) linked to an AI core (LLM chatbot and fine-tuned model) and a data pipeline (Python, Airflow, dbt) feeding a warehouse. Hover a node to highlight it."
-              >
-                <HeroCore active={inView} />
-              </div>
-            </Suspense>
-          ) : (
-            <div className="absolute inset-0 p-2">
-              <HeroCoreFallback />
-            </div>
-          )}
+          <motion.ul {...rise(0.24)} className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-subtle">
+            <li>
+              <a href={`/${profile.resumeFile}`} download className="inline-flex items-center gap-1.5 transition-colors hover:text-fg">
+                <DownloadIcon className="h-4 w-4" />
+                Resume (PDF)
+              </a>
+            </li>
+            <li>
+              <a href={profile.github} target="_blank" rel="noreferrer" className="transition-colors hover:text-fg">
+                GitHub
+              </a>
+            </li>
+            <li>
+              <a href={profile.linkedin} target="_blank" rel="noreferrer" className="transition-colors hover:text-fg">
+                LinkedIn
+              </a>
+            </li>
+          </motion.ul>
         </motion.div>
-      </div>
 
-      <motion.dl {...rise(0.4)} className="mt-14 grid gap-4 sm:grid-cols-3">
-        <div className="glass rounded-xl p-5">
-          <dt className="font-mono text-[11px] uppercase tracking-wider text-app">{forClient ? 'What I build' : 'Core stack'}</dt>
-          <dd className="mt-2 text-sm text-slate-300">
-            {forClient ? services.map((s) => s.title).join(' · ') : profile.coreStack.join(' · ')}
-          </dd>
-        </div>
-        <div className="glass rounded-xl p-5">
-          <dt className="font-mono text-[11px] uppercase tracking-wider text-data">Domain experience</dt>
-          <dd className="mt-2 text-sm text-slate-300">{profile.domainExperience.join(' · ')}</dd>
-        </div>
-        <div className="glass rounded-xl p-5">
-          <dt className="font-mono text-[11px] uppercase tracking-wider text-slate-400">{forClient ? 'Based in · works remote' : 'Based in'}</dt>
-          <dd className="mt-2 text-sm text-slate-300">{forClient ? `${profile.location} · IST (UTC+5:30)` : profile.location}</dd>
-        </div>
-      </motion.dl>
+        <motion.figure
+          ref={visualRef}
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 60, damping: 18, delay: 0.15 }}
+          className="relative"
+          onPointerLeave={release}
+        >
+          <motion.div
+            style={depth ? { rotateX: visualRotate, scale: visualScale, y: visualY, transformPerspective: 1200, transformOrigin: '50% 100%' } : undefined}
+            className="relative h-[19rem] sm:h-[24rem] lg:h-[28rem]"
+          >
+            {use3D ? (
+              <Suspense fallback={<HubFallback units={stackUnits} activeIndex={index} />}>
+                <div
+                  className="absolute inset-0"
+                  role="img"
+                  aria-label="3D diagram: a core wired to three layer cards (application, AI, data) and to the tools behind each layer. Pointing at a layer lights its connections."
+                >
+                  <HubScene units={stackUnits} activeIndex={index} onHover={hover} onLeave={release} active={inView} />
+                </div>
+              </Suspense>
+            ) : (
+              <HubFallback units={stackUnits} activeIndex={index} onHover={hover} />
+            )}
+          </motion.div>
+
+          <figcaption>
+            <ul className="mx-auto grid max-w-md gap-px overflow-hidden rounded-xl border border-line bg-line">
+              {stackUnits.map((unit, i) => {
+                const active = i === index
+                return (
+                  <li key={unit.id}>
+                    <button
+                      type="button"
+                      onPointerEnter={() => hover(i)}
+                      onFocus={() => hover(i)}
+                      onBlur={release}
+                      aria-pressed={active}
+                      className="flex w-full items-baseline gap-4 bg-bg px-4 py-3 text-left transition-colors hover:bg-surface"
+                    >
+                      <span className={`w-24 shrink-0 text-sm font-medium transition-colors ${active ? 'text-accent' : 'text-fg'}`}>
+                        {unit.label}
+                      </span>
+                      <span className="text-[0.8125rem] text-subtle">{unit.detail}</span>
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          </figcaption>
+        </motion.figure>
+      </div>
     </section>
   )
 }

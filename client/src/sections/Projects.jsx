@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { projects } from '../data/content'
-import ProjectCard from '../components/ProjectCard'
-import ProjectGallery from '../components/ProjectGallery'
+import { ProductCard, WorkRow } from '../components/ProjectCard'
 import ProjectModal from '../components/ProjectModal'
+import Reveal from '../components/Reveal'
 import SectionHeading from '../components/SectionHeading'
 import { OPEN_PROJECT_EVENT } from '../lib/projects'
 
@@ -14,50 +14,19 @@ const FILTERS = [
   { id: 'data', label: 'Data Engineering' },
 ]
 
-function ProjectGrid({ items, onSelect }) {
-  return (
-    <motion.ul layout className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-      <AnimatePresence mode="popLayout">
-        {items.map((project) => (
-          <motion.li
-            key={project.slug}
-            layout
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.97 }}
-            transition={{ duration: 0.3 }}
-            className={project.featured ? 'md:col-span-2 lg:col-span-1' : undefined}
-          >
-            <ProjectCard project={project} onSelect={onSelect} />
-          </motion.li>
-        ))}
-      </AnimatePresence>
-    </motion.ul>
-  )
-}
-
-// The pinned 3D gallery needs room: a large, tall enough screen and motion allowed.
-const GALLERY_QUERY = '(min-width: 1024px) and (min-height: 700px)'
-
-function useGallery() {
-  const reduce = useReducedMotion()
-  const [roomy, setRoomy] = useState(() => window.matchMedia(GALLERY_QUERY).matches)
-  useEffect(() => {
-    const mq = window.matchMedia(GALLERY_QUERY)
-    const update = () => setRoomy(mq.matches)
-    mq.addEventListener('change', update)
-    return () => mq.removeEventListener('change', update)
-  }, [])
-  return roomy && !reduce
+const fade = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0 },
+  transition: { duration: 0.25 },
 }
 
 export default function Projects() {
-  const gallery = useGallery()
   const [filter, setFilter] = useState('all')
   const [selected, setSelected] = useState(null)
   const close = useCallback(() => setSelected(null), [])
 
-  // Services cards open a project's details directly
+  // Services rows open a project's details directly
   useEffect(() => {
     const onOpen = (e) => {
       const project = projects.find((p) => p.slug === e.detail)
@@ -67,71 +36,78 @@ export default function Projects() {
     return () => window.removeEventListener(OPEN_PROJECT_EVENT, onOpen)
   }, [])
 
-  const { building, professional } = useMemo(() => {
+  const { featured, products, professional } = useMemo(() => {
     const visible = projects.filter((p) => filter === 'all' || p.track === filter || p.alsoTrack === filter)
+    const own = visible.filter((p) => p.kind === 'personal')
+    const lead = own.find((p) => p.featured) ?? null
     return {
-      building: visible.filter((p) => p.kind === 'personal'),
+      featured: lead,
+      products: own.filter((p) => p !== lead),
       professional: visible.filter((p) => p.kind === 'professional'),
     }
   }, [filter])
 
   return (
     <section id="projects" aria-labelledby="projects-title" className="section">
-      <SectionHeading
-        index="05"
-        eyebrow="projects"
-        id="projects-title"
-        title="Production work, and what I'm building next."
-        intro="Professional projects were delivered for clients and employers across healthcare, CRM, and e-commerce. My own products, the ZenithDesk SaaS and its AI chatbot, plus open-source tools, are labelled honestly with their current status."
-      />
-
-      <div role="group" aria-label="Filter projects" className="mt-8 inline-flex rounded-xl border border-white/10 bg-white/5 p-1">
-        {FILTERS.map((f) => (
-          <button
-            key={f.id}
-            type="button"
-            onClick={() => setFilter(f.id)}
-            aria-pressed={filter === f.id}
-            className={`relative rounded-lg px-3 py-1.5 text-sm font-medium transition-colors sm:px-4 ${
-              filter === f.id ? 'text-ink' : 'text-slate-400 hover:text-slate-100'
-            }`}
-          >
-            {filter === f.id && (
-              <motion.span
-                layoutId="project-filter"
-                className={`absolute inset-0 rounded-lg ${
-                  f.id === 'data' ? 'bg-data' : f.id === 'app' ? 'bg-app' : f.id === 'ai' ? 'bg-ai' : 'bg-slate-100'
-                }`}
-                transition={{ type: 'spring', stiffness: 400, damping: 32 }}
-              />
-            )}
-            <span className="relative">{f.label}</span>
-          </button>
-        ))}
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <SectionHeading
+          id="projects-title"
+          title="Production work, and what I'm building next."
+          intro="Client and employer work in healthcare, CRM and e-commerce, plus my own products: the ZenithDesk SaaS, its AI chatbot, and an open-source AI tool. Each one is labelled with its real status."
+        />
+        <div role="group" aria-label="Filter projects" className="flex shrink-0 flex-wrap gap-x-1 gap-y-2">
+          {FILTERS.map((f) => {
+            const on = filter === f.id
+            return (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => setFilter(f.id)}
+                aria-pressed={on}
+                className={`relative rounded-md px-3 py-1.5 text-sm transition-colors ${on ? 'text-fg' : 'text-subtle hover:text-fg'}`}
+              >
+                {on && (
+                  <motion.span
+                    layoutId="project-filter"
+                    className="absolute inset-0 rounded-md border border-line-strong"
+                    transition={{ type: 'spring', stiffness: 400, damping: 34 }}
+                  />
+                )}
+                <span className="relative">{f.label}</span>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
-      {building.length > 0 &&
-        (gallery ? (
-          <div className="mt-6">
-            <ProjectGallery
-              title={<h3 className="font-mono text-xs uppercase tracking-wider text-build">Products &amp; open source</h3>}
-              items={building}
-              onSelect={setSelected}
-            />
-          </div>
-        ) : (
-          <div className="mt-10">
-            <h3 className="mb-5 font-mono text-xs uppercase tracking-wider text-build">Products &amp; open source</h3>
-            <ProjectGrid items={building} onSelect={setSelected} />
-          </div>
-        ))}
+      <AnimatePresence mode="wait">
+        <motion.div key={filter} {...fade}>
+          {featured && (
+            <div className="mt-16">
+              <ProductCard project={featured} onSelect={setSelected} large />
+            </div>
+          )}
 
-      {professional.length > 0 && (
-        <div className="mt-12">
-          <h3 className="mb-5 font-mono text-xs uppercase tracking-wider text-slate-400">Professional work</h3>
-          <ProjectGrid items={professional} onSelect={setSelected} />
-        </div>
-      )}
+          {products.length > 0 && (
+            <div className="mt-20 grid gap-16 md:grid-cols-2 md:gap-10">
+              {products.map((project) => (
+                <ProductCard key={project.slug} project={project} onSelect={setSelected} />
+              ))}
+            </div>
+          )}
+
+          {professional.length > 0 && (
+            <Reveal className="mt-24">
+              <h3 className="text-sm text-subtle">Client and employer work</h3>
+              <ul className="mt-4 border-b border-line">
+                {professional.map((project) => (
+                  <WorkRow key={project.slug} project={project} onSelect={setSelected} />
+                ))}
+              </ul>
+            </Reveal>
+          )}
+        </motion.div>
+      </AnimatePresence>
 
       <ProjectModal project={selected} onClose={close} />
     </section>

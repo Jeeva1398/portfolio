@@ -33,13 +33,13 @@ export const about = {
   direction:
     "I'm now building toward two related but distinct tracks: DevOps (Docker, CI/CD, AWS) as the deployment layer on top of my backend work, and data engineering (ETL, warehousing, orchestration) as a data layer on top of the applications I already build. ZenithDesk, now live in production, is where both of those show up in practice.",
   pivotNote:
-    "Before engineering, I spent 2020–2021 as a Medical Billing Specialist at KMCH, Coimbatore - hands-on exposure to healthcare operations and insurance workflows that now shapes how I think about the EMR/telehealth systems I build as a developer.",
+    "Before engineering, I spent 2020-2021 as a Medical Billing Specialist at KMCH, Coimbatore - hands-on exposure to healthcare operations and insurance workflows that now shapes how I think about the EMR/telehealth systems I build as a developer.",
   currently:
     'MERN Stack Developer at Pentabay Softwares, Chennai - designing REST APIs, Express middleware, and MongoDB schemas, and owning deployment for production releases.',
   education: {
     institution: 'Hindustan College of Arts and Science, Coimbatore',
     degree: 'Bachelor of Commerce (Corporate Secretaryship)',
-    years: '2015 – 2018',
+    years: '2015-2018',
   },
 }
 
@@ -51,6 +51,8 @@ export const audiences = {
     availability: 'Open to full-time full-stack, AI, and data engineering roles',
     pitch: profile.pitch,
     contactIntro: 'Open to full-stack, AI, and data engineering roles. Reach out directly or use the form.',
+    // hero line: kept under 20 words so the hero fits one screen
+    intro: 'About 3 years shipping MERN products in healthcare, CRM and e-commerce. Now building AI features and data pipelines on top.',
   },
   client: {
     label: 'Have a project',
@@ -60,8 +62,33 @@ export const audiences = {
       'I build web apps, APIs, AI chatbots, and data dashboards for teams that need them to work in production - not just in a demo. About 3 years of shipping MERN products in healthcare, CRM, and e-commerce, plus my own live SaaS, AI chatbot, and open-source AI tool you can try right now.',
     contactIntro:
       "Tell me what you want to build, who it is for, and when you need it. I'll reply with questions or a clear next step.",
+    intro: 'Web apps, APIs, AI chatbots and data dashboards, built to run in production. Three live products you can open today.',
   },
 }
+
+// The three units of the hero rack, top to bottom. Each line only names skills listed in skillGroups.
+// The hero hub scene: one card per layer, and `tools` become logo tiles wired into the core.
+// Tool names must have a logo in `three/toolIcons.js` (Simple Icons); dbt has none, so it is not a tile.
+export const stackUnits = [
+  {
+    id: 'app',
+    label: 'Application',
+    detail: 'React, Node.js, Express, MongoDB, MySQL',
+    tools: ['React', 'Node.js', 'Express', 'TypeScript', 'MongoDB', 'MySQL'],
+  },
+  {
+    id: 'ai',
+    label: 'AI',
+    detail: 'LLM features, a fine-tuned code model, local inference',
+    tools: ['Ollama', 'Hugging Face'],
+  },
+  {
+    id: 'data',
+    label: 'Data',
+    detail: 'Python, SQL, dbt, Spark, warehousing',
+    tools: ['Python', 'Apache Spark', 'Databricks', 'Docker'],
+  },
+]
 
 // Freelance services. `proof` names project slugs from `projects` below, so every claim links to real work.
 export const services = [
@@ -115,10 +142,10 @@ export const services = [
     deliverables: [
       'Extract and load jobs from your app database',
       'Star-schema warehouse (dimension and fact tables)',
-      'Scheduled, incremental loads with Airflow or cron',
+      'Scheduled, incremental loads',
       'Analytics dashboards on top of the modelled data',
     ],
-    stack: ['Python', 'SQL', 'Apache Airflow', 'dbt', 'MySQL'],
+    stack: ['Python', 'SQL', 'dbt', 'MySQL'],
     proof: ['zenithdesk'],
   },
 ]
@@ -178,7 +205,8 @@ export const skillGroups = [
       'Databricks',
       'Azure Data Factory (ADF)',
       'Azure Data Engineering',
-      'Apache Airflow',
+      'Azure Data Lake Storage Gen2 (ADLS)',
+      'Azure Synapse Analytics',
       'dbt',
       'ETL / ELT Pipelines',
       'Data Warehousing',

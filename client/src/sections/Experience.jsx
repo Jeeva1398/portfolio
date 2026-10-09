@@ -1,65 +1,55 @@
 import { useRef } from 'react'
 import { motion, useScroll, useSpring } from 'framer-motion'
 import { experience } from '../data/content'
-import Reveal from '../components/Reveal'
 import SectionHeading from '../components/SectionHeading'
-import Tilt from '../components/Tilt'
+import { Dash, Rise3D, Stagger, StaggerItem } from '../components/Motion'
 
 export default function Experience() {
-  const timelineRef = useRef(null)
-  const { scrollYProgress } = useScroll({ target: timelineRef, offset: ['start 75%', 'end 60%'] })
-  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 24 })
+  const listRef = useRef(null)
+  // The accent rail fills down the timeline as you read through it
+  const { scrollYProgress } = useScroll({ target: listRef, offset: ['start 75%', 'end 60%'] })
+  const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 28, mass: 0.4 })
 
   return (
     <section id="experience" aria-labelledby="experience-title" className="section">
-      <SectionHeading
-        index="04"
-        eyebrow="experience"
-        id="experience-title"
-        title="Two product teams, one release cycle end to end."
-      />
+      <SectionHeading id="experience-title" title="Two product teams, one release cycle end to end." />
 
-      <ol ref={timelineRef} className="relative mt-12 max-w-4xl space-y-10 pl-8 sm:pl-12">
-        <span aria-hidden="true" className="absolute left-[7px] top-2 bottom-2 w-px bg-white/10 sm:left-[15px]" />
+      <ol ref={listRef} className="relative mt-16 pl-8 md:pl-10">
+        <span aria-hidden="true" className="absolute inset-y-0 left-[3px] w-px bg-line" />
         <motion.span
           aria-hidden="true"
-          style={{ scaleY: progress }}
-          className="absolute left-[7px] top-2 bottom-2 w-px origin-top bg-gradient-to-b from-app via-app to-data sm:left-[15px]"
+          style={{ scaleY: fill }}
+          className="absolute inset-y-0 left-[3px] w-px origin-top bg-accent"
         />
-
         {experience.map((job, i) => (
-          <li key={job.company} className="relative">
-            <span
+          <Rise3D as="li" key={job.company} delay={i * 0.06} tilt={10} className="relative grid gap-6 border-t border-line py-10 md:grid-cols-[14rem_1fr] md:gap-12">
+            <motion.span
               aria-hidden="true"
-              className="absolute -left-8 top-6 grid h-4 w-4 place-items-center rounded-full border border-app/50 bg-ink sm:-left-12 sm:h-8 sm:w-8"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-app shadow-[0_0_12px] shadow-app sm:h-2 sm:w-2" />
-            </span>
-
-            <Reveal delay={i * 0.08}>
-              <Tilt className="group glass rounded-2xl p-6 sm:p-7" max={3}>
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <div>
-                    <h3 className="font-display text-xl font-semibold text-slate-50">{job.company}</h3>
-                    <p className="mt-1 text-sm text-slate-400">
-                      {job.role} · {job.location}
-                    </p>
-                  </div>
-                  <p className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-xs text-slate-300">
-                    <time>{job.start}</time> – <time>{job.end}</time>
-                  </p>
-                </div>
-                <ul className="mt-5 space-y-3 text-sm leading-relaxed text-slate-300">
-                  {job.bullets.map((bullet) => (
-                    <li key={bullet} className="flex gap-3">
-                      <span aria-hidden="true" className="mt-2 h-1 w-3 shrink-0 rounded-full bg-app/60" />
-                      {bullet}
-                    </li>
-                  ))}
-                </ul>
-              </Tilt>
-            </Reveal>
-          </li>
+              className="absolute -left-8 top-11 h-[7px] w-[7px] rounded-full border border-accent bg-bg md:-left-10"
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1, backgroundColor: 'var(--color-accent)' }}
+              viewport={{ once: true, margin: '-45% 0px -45% 0px' }}
+              transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+            />
+            <div>
+              <p className="font-mono text-[0.8125rem] text-subtle tabular-nums">
+                <time>{job.start}</time> to <time>{job.end}</time>
+              </p>
+              <p className="mt-1 text-sm text-subtle">{job.location}</p>
+            </div>
+            <div>
+              <h3 className="text-2xl font-semibold tracking-[-0.02em] text-fg">{job.company}</h3>
+              <p className="mt-1 text-muted">{job.role}</p>
+              <Stagger gap={0.08} delay={0.15} className="mt-6 max-w-[68ch] space-y-3 leading-relaxed">
+                {job.bullets.map((bullet) => (
+                  <StaggerItem key={bullet} x={-8} y={0} className="flex gap-3">
+                    <Dash className="bg-line-strong" />
+                    {bullet}
+                  </StaggerItem>
+                ))}
+              </Stagger>
+            </div>
+          </Rise3D>
         ))}
       </ol>
     </section>

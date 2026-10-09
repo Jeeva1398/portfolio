@@ -2,72 +2,61 @@ import { audiences, profile } from '../data/content'
 import useAudience from '../hooks/useAudience'
 import ContactForm from '../components/ContactForm'
 import Reveal from '../components/Reveal'
-import SectionHeading from '../components/SectionHeading'
-import { DownloadIcon, GitHubIcon, LinkedInIcon, MailIcon } from '../components/Icons'
+import { RevealWords, Rise3D } from '../components/Motion'
+import { ExternalIcon } from '../components/Icons'
 
 const channels = [
-  { label: 'Email', value: profile.email, href: `mailto:${profile.email}`, Icon: MailIcon },
-  { label: 'LinkedIn', value: 'linkedin.com/in/jeevaananthan-m', href: profile.linkedin, Icon: LinkedInIcon, external: true },
-  { label: 'GitHub', value: 'github.com/Jeeva1398', href: profile.github, Icon: GitHubIcon, external: true },
+  { label: 'LinkedIn', value: 'linkedin.com/in/jeevaananthan-m', href: profile.linkedin },
+  { label: 'GitHub', value: 'github.com/Jeeva1398', href: profile.github },
 ]
 
 export default function Contact() {
   const audience = useAudience()
   return (
-    <section id="contact" aria-labelledby="contact-title" className="section overflow-hidden">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-1/3 -z-10 mx-auto h-72 max-w-3xl animate-pulse rounded-full bg-gradient-to-r from-app/10 via-transparent to-data/10 blur-3xl [animation-duration:6s]" />
+    <section id="contact" aria-labelledby="contact-title" className="section">
+      <div className="grid gap-16 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+        <Reveal>
+          <RevealWords
+            key={audience}
+            id="contact-title"
+            text={audience === 'client' ? "Let's build something." : "Let's talk."}
+            className="text-4xl font-semibold tracking-[-0.035em] text-fg sm:text-6xl"
+          />
+          <p className="mt-5 max-w-[46ch] text-[1.0625rem] leading-relaxed">{audiences[audience].contactIntro}</p>
 
-      <SectionHeading
-        index="08"
-        eyebrow="contact"
-        id="contact-title"
-        title={audience === 'client' ? "Let's build something." : "Let's talk."}
-        intro={audiences[audience].contactIntro}
-      />
+          <a
+            href={`mailto:${profile.email}`}
+            className="mt-10 inline-block text-xl text-fg underline decoration-line-strong underline-offset-[6px] transition-colors hover:decoration-accent sm:text-2xl"
+          >
+            {profile.email}
+          </a>
 
-      <div className="mt-10 grid gap-10 md:grid-cols-[1fr_1.2fr]">
-        <Reveal delay={0.05}>
-          <ul className="space-y-3">
-            {channels.map(({ label, value, href, Icon, external }) => (
-              <li key={label}>
-                <a
-                  href={href}
-                  {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
-                  className="glass group flex items-center gap-4 rounded-xl p-4 transition-colors hover:border-app/40"
-                >
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/5 text-slate-300 group-hover:text-app">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block font-mono text-[11px] uppercase tracking-wider text-slate-500">{label}</span>
-                    <span className="block truncate text-sm text-slate-100">{value}</span>
+          <ul className="mt-10 border-t border-line">
+            {channels.map(({ label, value, href }) => (
+              <li key={label} className="border-b border-line">
+                <a href={href} target="_blank" rel="noreferrer" className="group flex items-baseline justify-between gap-4 py-4">
+                  <span className="text-sm text-subtle">{label}</span>
+                  <span className="inline-flex items-center gap-1.5 text-fg group-hover:text-accent">
+                    {value}
+                    <ExternalIcon className="h-3.5 w-3.5" />
                   </span>
                 </a>
               </li>
             ))}
-            <li>
-              <a
-                href={`/${profile.resumeFile}`}
-                download
-                className="glass group flex items-center gap-4 rounded-xl p-4 transition-colors hover:border-data/40"
-              >
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/5 text-slate-300 group-hover:text-data">
-                  <DownloadIcon className="h-5 w-5" />
-                </span>
-                <span>
-                  <span className="block font-mono text-[11px] uppercase tracking-wider text-slate-500">Resume</span>
-                  <span className="block text-sm text-slate-100">Download PDF</span>
-                </span>
+            <li className="border-b border-line">
+              <a href={`/${profile.resumeFile}`} download className="group flex items-baseline justify-between gap-4 py-4">
+                <span className="text-sm text-subtle">Resume</span>
+                <span className="text-fg group-hover:text-accent">Download PDF</span>
               </a>
             </li>
           </ul>
         </Reveal>
 
-        <Reveal delay={0.1}>
-          <div className="glass rounded-2xl p-6 sm:p-8">
+        <Rise3D delay={0.08} tilt={12}>
+          <div className="panel p-6 sm:p-8">
             <ContactForm />
           </div>
-        </Reveal>
+        </Rise3D>
       </div>
     </section>
   )
